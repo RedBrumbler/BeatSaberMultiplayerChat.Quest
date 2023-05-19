@@ -12,11 +12,33 @@
 #include "Installers/MenuInstaller.hpp"
 #include "Installers/MultiplayerInstaller.hpp"
 
+#include <fstream>
+
 ModInfo modInfo{MOD_ID, VERSION};
 
 Logger& getLogger() {
     static auto logger = new Logger(modInfo, LoggerOptions(false, true));
     return *logger;
+}
+
+void write_bytes(std::string_view path, std::span<uint8_t> data) {
+    std::ofstream file;
+    file.open(path, std::ios::binary | std::ios::out);
+    file.write((const char*)data.data(), data.size());
+    file.close();
+}
+
+#define WRITE_SOUND(identifier) \
+    INFO("Writing out sound '"  #identifier ".ogg'"); \
+    write_bytes("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/" #identifier ".ogg", IncludedAssets::identifier##_ogg)
+
+void ExportSoundFiles() {
+    mkpath("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/");
+    WRITE_SOUND(ClubPing);
+    WRITE_SOUND(ClubPing2);
+    WRITE_SOUND(ClubPing3);
+    WRITE_SOUND(MicOn);
+    WRITE_SOUND(MicOff);
 }
 
 extern "C" void setup(ModInfo& info) {
@@ -26,6 +48,9 @@ extern "C" void setup(ModInfo& info) {
 extern "C" void load() {
     if (!LoadConfig())
         SaveConfig();
+
+    if (!config.exportedSoundFilesBefore) ExportSoundFiles();
+
     il2cpp_functions::Init();
 
     auto& logger = getLogger();

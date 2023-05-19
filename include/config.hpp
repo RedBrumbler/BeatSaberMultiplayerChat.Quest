@@ -38,6 +38,7 @@ static inline VoiceKeybindController operator |(VoiceKeybindController first, Vo
 }
 
 struct Config {
+    bool exportedSoundFilesBefore = false;
 #pragma region Text
     bool enableTextchat = true;
     bool enablePlayerBubbles = true;

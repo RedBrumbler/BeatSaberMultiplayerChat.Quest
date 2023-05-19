@@ -59,6 +59,7 @@ void SaveConfig() {
     auto allocator = cfg.GetAllocator();
     cfg.RemoveAllMembers();
     cfg.SetObject();
+    ADD(exportedSoundFilesBefore);
     // Text
     ADD(enableTextchat);
     ADD(enablePlayerBubbles);
@@ -164,6 +165,8 @@ bool LoadConfig() {
     INFO("Loading Config...");
     bool foundEverything = true;
     auto& cfg = get_config().config;
+
+    GET(exportedSoundFilesBefore);
 
     // Text
     GET(enableTextchat);
