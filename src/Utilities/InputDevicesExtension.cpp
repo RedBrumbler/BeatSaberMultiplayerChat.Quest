@@ -43,7 +43,7 @@ namespace MultiplayerChat::Utilities {
 
     uint64_t InputDevicesExtension::GetDeviceIdAtXRNode(UnityEngine::XR::XRNode node) {
         using GetDeviceIdAtXRNode_fun = function_ptr_t<uint64_t, UnityEngine::XR::XRNode>;
-        static auto getDeviceIdAtXRNode = reinterpret_cast<GetDeviceIdAtXRNode_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::GetDeviceIdAtXRNode"));
+        static auto getDeviceIdAtXRNode = reinterpret_cast<GetDeviceIdAtXRNode_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputTracking::GetDeviceIdAtXRNode"));
         return getDeviceIdAtXRNode(node);
     }
 
