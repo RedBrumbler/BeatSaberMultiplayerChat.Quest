@@ -1,9 +1,14 @@
 #include "UI/Lobby/ChatViewController.hpp"
 
+#include "assets.hpp"
+#include "bsml/shared/BSML.hpp"
+
 #include "custom-types/shared/delegate.hpp"
 #include "UnityEngine/Events/UnityAction.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
+#include "UnityEngine/UI/LayoutElement.hpp"
+#include "UnityEngine/UI/ContentSizeFitter.hpp"
 #include "UnityEngine/UI/Button.hpp"
 #include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 #include "UnityEngine/UI/HorizontalLayoutGroup.hpp"
@@ -28,7 +33,7 @@ namespace MultiplayerChat::UI::Lobby {
 #pragma region Core Events
     void ChatViewController::PostParse() {
         if (scrollableContainer)
-            scrollableContainerContent = scrollableContainer->get_transform()->Find("ViewPort/Content Wrapper");
+            scrollableContainerContent = scrollableContainer->get_transform()->Find("Viewport/Content Wrapper");
 
         _bsmlReady = true;
 
@@ -46,6 +51,8 @@ namespace MultiplayerChat::UI::Lobby {
     }
 
     void ChatViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
+        BSML::parse_and_construct(IncludedAssets::ChatViewController_bsml, get_transform(), this);
+
         if (!_bsmlReady || firstActivation) return;
 
         FillChat();
@@ -53,19 +60,29 @@ namespace MultiplayerChat::UI::Lobby {
     }
 
     void ChatViewController::HandleKeyboardInput(StringW input) {
-        // TODO: wait a bit and then ResetChatInputText, perhaps a coroutine that does it next frame?
-        // ResetChatInputText();
+        // because on enter is not an event, we have to call what it would normally call
+        chatInput->modalKeyboard->OnEnter(input);
 
+        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(HandleKeyboardInputRoutine(input)));
+    }
+
+    custom_types::Helpers::Coroutine ChatViewController::HandleKeyboardInputRoutine(StringW input) {
+        co_yield nullptr;
+
+        ResetChatInputText();
         input = input->Trim();
 
-        if (Il2CppString::IsNullOrWhiteSpace(input)) return;
+        if (Il2CppString::IsNullOrWhiteSpace(input)) co_return;
 
         _chatManager->SendTextChat(input);
+
+        co_return;
     }
 
     void ChatViewController::Update() {
-        if (scrollableContainer && _chatLockedToBottom)
-            scrollableContainer->ScrollTo(std::numeric_limits<float>::max(), false);
+        // TODO: remove bsml log or just do this differently, its spamming logs a lot
+        // if (scrollableContainer && _chatLockedToBottom)
+        //     scrollableContainer->ScrollTo(std::numeric_limits<float>::max(), false);
     }
 
 #pragma endregion // Core Events
@@ -73,6 +90,11 @@ namespace MultiplayerChat::UI::Lobby {
 #pragma region Core UI
     void ChatViewController::ApplyUIMutations() {
         if (!chatViewBg || !chatInput) return;
+
+        // Remove skew from main chat background
+        auto bgImage = chatViewBg->GetComponent<HMUI::ImageView*>();
+        bgImage->skew = 0;
+        bgImage->__Refresh();
 
         // Make the keyboard input look nice
         // > Remove the label
@@ -174,7 +196,9 @@ namespace MultiplayerChat::UI::Lobby {
         if (!scrollableContainer) return;
 
         auto text = AddTextObject();
-        text->set_text(message.FormatMessage());
+        auto messageText = message.FormatMessage();
+
+        text->set_text(messageText);
         text->ForceMeshUpdate();
 
         _chatLockedToBottom = true;
@@ -183,6 +207,8 @@ namespace MultiplayerChat::UI::Lobby {
     TMPro::TextMeshProUGUI* ChatViewController::AddTextObject() {
         auto layoutGo = BSML::HorizontalTag().CreateObject(scrollableContainerContent);
         auto layout = layoutGo->GetComponent<UnityEngine::UI::HorizontalLayoutGroup*>();
+        auto layoutElement = layoutGo->GetComponent<UnityEngine::UI::LayoutElement*>();
+        layoutElement->set_preferredWidth(120);
 
         auto textGo = BSML::TextTag().CreateObject(layoutGo->get_transform());
         auto textComponent = textGo->GetComponent<TMPro::TextMeshProUGUI*>();
@@ -191,6 +217,9 @@ namespace MultiplayerChat::UI::Lobby {
         textComponent->set_fontSize(3.4f);
         textComponent->set_richText(true);
         return textComponent;
+
+        // auto parser = BSML::parse_and_construct("<horizontal min-width='120' bg='round-rect-panel'><text tags='textcomponent' text='yourmom' font-size='3.4' rich-text='true'/></horizontal>", scrollableContainerContent, nullptr);
+        // return parser->parserParams->GetObjectsWithTag("textcomponent").front()->GetComponent<TMPro::TextMeshProUGUI*>();
     }
 
 #pragma endregion // Messages data/rendering

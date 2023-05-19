@@ -43,6 +43,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
 
 
         void HandleKeyboardInput(StringW input);
+        custom_types::Helpers::Coroutine HandleKeyboardInputRoutine(StringW input);
 
         void ApplyUIMutations();
         void ResetChatInputText();

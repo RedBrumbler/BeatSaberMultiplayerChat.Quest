@@ -1,6 +1,5 @@
-<vertical pref-width="120" pref-height="60" horizontal-fit="PreferredSize" vertical-fit="PreferredSize"
-          id="ChatViewRoot">
-    <horizontal pad-left="5" bg="panel-top" id="chatViewBg" skew='0'>
+<vertical pref-width="120" pref-height="60" horizontal-fit="PreferredSize" vertical-fit="PreferredSize">
+    <horizontal pad-left="5" bg="panel-top" id="chatViewBg">
         <vertical pref-width="120" pref-height="60" pad="3" pad-right="13">
                 <scrollable-container id="scrollableContainer" size-delta-x="0" spacing="0.1" align-bottom="true">
                     <!-- Messages go here -->
@@ -18,7 +17,7 @@
     <horizontal>
         <horizontal>
             <image preserve-aspect="true" preferred-width="7" preferred-height="7" max-width="7"
-                   max-height="7" source="mpchat_keyboard"/>
+                   max-height="7" source="MultiplayerChat_keyboard"/>
         </horizontal>
         <horizontal pad-left="8">
             <!-- TODO: replace with input field? could be neater... -->
