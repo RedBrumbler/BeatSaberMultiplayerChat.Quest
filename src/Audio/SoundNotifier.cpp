@@ -8,6 +8,7 @@
 #include "UnityEngine/Networking/DownloadHandlerAudioClip.hpp"
 #include "UnityEngine/Networking/UnityWebRequestMultimedia.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
+#include "UnityEngine/Networking/UnityWebRequestAsyncOperation.hpp"
 
 #include <filesystem>
 
@@ -64,13 +65,12 @@ namespace MultiplayerChat::Audio {
 
         if (!clipName.ends_with(".ogg")) clipName += ".ogg";
 
-        UnityEngine::AudioClip* audioClip = nullptr;
-        if (!_loadedClips->TryGetValue(clipName, byref(audioClip))) {
+        if (!_loadedClips->ContainsKey(clipName)) {
             WARNING("Can't play audio clip because it's not loaded: {}", clipName);
             return;
         }
 
-        _audioSource->PlayOneShot(audioClip, config.soundNotificationVolume);
+        _audioSource->PlayOneShot(_loadedClips->get_Item(clipName), config.soundNotificationVolume);
     }
 
     void SoundNotifier::LoadClipIfNeeded(std::string clipName) {
@@ -127,9 +127,17 @@ namespace MultiplayerChat::Audio {
             co_return;
         }
 
+        DEBUG("Attempting to load audio clip @ {}", clipPath);
         using namespace UnityEngine::Networking;
+
         auto req = UnityWebRequestMultimedia::GetAudioClip(fmt::format("file://{}", clipPath), UnityEngine::AudioType::OGGVORBIS);
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
+        auto webreq = req->SendWebRequest();
+        if (!webreq) {
+            ERROR("Could not acquire web request for getting the audio clip, returning!");
+            co_return;
+        }
+        while(!webreq->get_isDone()) co_yield nullptr;
+        DEBUG("request for '{}' is marked done", clipName);
 
         if (!Il2CppString::IsNullOrEmpty(req->get_error())) {
             ERROR("Error trying to load {}: {}", clipPath, req->get_error());
