@@ -13,15 +13,15 @@ namespace MultiplayerChat::Utilities {
     }
 
     bool InputDevicesExtension::TryGetFeatureValue(UnityEngine::XR::InputDevice& device, UnityEngine::XR::InputFeatureUsage usage, float& value) {
-        using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, UnityEngine::XR::InputFeatureUsage*, float*>;
+        using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, StringW, float*>;
         static auto tryGetFeatureValue = reinterpret_cast<TryGetFeatureValue_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::TryGetFeatureValue_float"));
-        return tryGetFeatureValue(device.get_deviceId(), &usage, &value);
+        return tryGetFeatureValue(device.get_deviceId(), usage.m_Name, &value);
     }
 
     bool InputDevicesExtension::TryGetFeatureValue(UnityEngine::XR::InputDevice& device, UnityEngine::XR::InputFeatureUsage usage, bool& value) {
-        using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, UnityEngine::XR::InputFeatureUsage*, bool*>;
+        using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, StringW, bool*>;
         static auto tryGetFeatureValue = reinterpret_cast<TryGetFeatureValue_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::TryGetFeatureValue_bool"));
-        return tryGetFeatureValue(device.get_deviceId(), &usage, &value);
+        return tryGetFeatureValue(device.get_deviceId(), usage.m_Name, &value);
     }
 
     StringW InputDevicesExtension::GetDeviceName(UnityEngine::XR::InputDevice device) {
