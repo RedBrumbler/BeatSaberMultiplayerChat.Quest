@@ -30,7 +30,7 @@
 struct Hook_GameServerPlayerTableCell_SetData;
 struct Hook_MultiplayerLobbyAvatarManager_AddPlayer;
 struct Hook_LobbySetupViewController_DidActivate;
-struct Hook_ViewController_DidDeactivate;
+struct Hook_ViewController_Deactivate;
 struct Hook_GameServerLobbyFlowCoordinator_SetTitle;
 
 DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, LobbyIntegrator, Il2CppObject, std::vector<Il2CppClass*>({ classof(Zenject::IInitializable*), classof(System::IDisposable*)}),
@@ -80,7 +80,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, LobbyIntegrator, Il2CppO
 
         friend Hook_LobbySetupViewController_DidActivate;
         void PostfixLobbySetupActivation();
-        friend Hook_ViewController_DidDeactivate;
+        friend Hook_ViewController_Deactivate;
         void PostfixLobbySetupDeactivation();
         void HandleChatTitleButtonClick();
         friend Hook_GameServerLobbyFlowCoordinator_SetTitle;

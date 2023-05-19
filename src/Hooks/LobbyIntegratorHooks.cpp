@@ -30,8 +30,8 @@ MAKE_AUTO_HOOK_MATCH(LobbySetupViewController_DidActivate, &::GlobalNamespace::L
         integrator->PostfixLobbySetupActivation();
 }
 
-MAKE_AUTO_HOOK_MATCH(ViewController_DidDeactivate, &::HMUI::ViewController::DidDeactivate, void, HMUI::ViewController* self, bool removedFromHierarchy, bool screenSystemDisabling) {
-    ViewController_DidDeactivate(self, removedFromHierarchy, screenSystemDisabling);
+MAKE_AUTO_HOOK_MATCH(ViewController_Deactivate, &::HMUI::ViewController::__Deactivate, void, HMUI::ViewController* self, bool removedFromHierarchy, bool deactivateGameObject, bool screenSystemDisabling) {
+    ViewController_Deactivate(self, removedFromHierarchy, deactivateGameObject, screenSystemDisabling);
     auto integrator = MultiplayerChat::Core::LobbyIntegrator::get_instance();
     if (integrator)
         integrator->PostfixLobbySetupDeactivation();
