@@ -12,6 +12,15 @@
 
 DEFINE_TYPE(MultiplayerChat::Core, LobbyIntegrator);
 
+template<typename T, typename U, typename V = System::Collections::Generic::Dictionary_2<U, T>*>
+static inline bool TryGetValue(V dict, T key, U& out) {
+    if (dict->ContainsKey(key)) {
+        out = dict->get_Item(key);
+        return true;
+    }
+    return false;
+}
+
 namespace MultiplayerChat::Core {
     LobbyIntegrator* LobbyIntegrator::instance;
     LobbyIntegrator* LobbyIntegrator::get_instance() { return instance; }
@@ -100,7 +109,7 @@ namespace MultiplayerChat::Core {
         // Player bubble
         auto showPlayerBubble = config.enablePlayerBubbles && !message.get_senderIsHost() && !message.get_senderIsMe();
         UI::ChatBubble* userBubble = nullptr;
-        if (showPlayerBubble && _perUserBubbles->TryGetValue(message.get_userId(), byref(userBubble)) && userBubble && userBubble->m_CachedPtr.m_value) {
+        if (showPlayerBubble && TryGetValue(_perUserBubbles, StringW(message.get_userId()), userBubble) && userBubble && userBubble->m_CachedPtr.m_value) {
             if (userBubble->get_isShowing())
                 userBubble->HideImmediate();
 
@@ -174,7 +183,7 @@ namespace MultiplayerChat::Core {
         if (!chatPlayer->isMuted) return;
 
         UI::ChatBubble* userBubble = nullptr;
-        if (_perUserBubbles->TryGetValue(userId, byref(userBubble)) && userBubble)
+        if (TryGetValue(_perUserBubbles, StringW(userId), userBubble) && userBubble)
             userBubble->HideAnimated();
 
         _voiceManager->HandlePlayerMuted(userId);
@@ -188,7 +197,7 @@ namespace MultiplayerChat::Core {
 
     void LobbyIntegrator::UpdatePlayerListState(std::string userId, const Models::ChatPlayer* chatPlayer) {
         UnityEngine::UI::Button* muteButton = nullptr;
-        if (!_playerListButtons->TryGetValue(userId, byref(muteButton))) return;
+        if (!TryGetValue(_playerListButtons, StringW(userId), muteButton)) return;
 
         auto muteButtonIcon = muteButton->get_transform()->Find("Icon")->GetComponent<HMUI::ImageView*>();
 
@@ -237,12 +246,12 @@ namespace MultiplayerChat::Core {
     void LobbyIntegrator::PostFixLobbyAvatarAddPlayer(GlobalNamespace::IConnectedPlayer* player, PlayerAvatarDict* playerIdToAvatarMap) {
         GlobalNamespace::MultiplayerLobbyAvatarController* playerAvatarController = nullptr;
         auto userId = player->get_userId();
-        if (!playerIdToAvatarMap->TryGetValue(player->get_userId(), byref(playerAvatarController))) return;
+        if (!TryGetValue(playerIdToAvatarMap, player->get_userId(), playerAvatarController)) return;
 
         _playerAvatars->set_Item(userId, playerAvatarController);
 
         UI::ChatBubble* previousBubble = nullptr;
-        if (_perUserBubbles->TryGetValue(userId, byref(previousBubble)))
+        if (TryGetValue(_perUserBubbles, userId, previousBubble))
             UnityEngine::Object::Destroy(previousBubble->get_gameObject());
 
         auto avatarCaption = playerAvatarController->get_transform()->Find("AvatarCaption");

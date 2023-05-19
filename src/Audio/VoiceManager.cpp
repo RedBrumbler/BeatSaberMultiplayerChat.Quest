@@ -10,6 +10,15 @@
 
 DEFINE_TYPE(MultiplayerChat::Audio, VoiceManager);
 
+template<typename T, typename U, typename V = System::Collections::Generic::Dictionary_2<U, T>*>
+static inline bool TryGetValue(V dict, T key, U& out) {
+    if (dict->ContainsKey(key)) {
+        out = dict->get_Item(key);
+        return true;
+    }
+    return false;
+}
+
 namespace MultiplayerChat::Audio {
     void VoiceManager::ctor() {
         INVOKE_CTOR();
@@ -211,7 +220,7 @@ namespace MultiplayerChat::Audio {
 
     void VoiceManager::HandlePlayerMuted(StringW userId) {
         PlayerVoicePlayer* voicePlayer = nullptr;
-        if (_voicePlayers->TryGetValue(userId, byref(voicePlayer)))
+        if (TryGetValue(_voicePlayers, userId, voicePlayer))
             voicePlayer->StopImmediate();
     }
 
@@ -247,7 +256,7 @@ namespace MultiplayerChat::Audio {
 
     PlayerVoicePlayer* VoiceManager::EnsurePlayerVoicePlayer(StringW userId) {
         PlayerVoicePlayer* voicePlayer = nullptr;
-        if (!_voicePlayers->TryGetValue(userId, byref(voicePlayer))) {
+        if (!TryGetValue(_voicePlayers, userId, voicePlayer)) {
             voicePlayer = PlayerVoicePlayer::New_ctor(userId, config.jitterBufferMs, config.spatialBlend);
 
             voicePlayer->startPlaybackEvent += {&VoiceManager::HandleVoicePlaybackStart, this};
