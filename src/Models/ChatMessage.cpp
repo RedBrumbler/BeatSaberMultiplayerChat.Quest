@@ -2,20 +2,33 @@
 #include <fmt/core.h>
 
 #include "Network/MpcTextChatPacket.hpp"
+#include "bsml/shared/Helpers/utilities.hpp"
 
 namespace MultiplayerChat::Models {
     std::string ChatMessage::FormatMessage(bool inPlayerBubble) const {
-        // TODO: check for emotes actually working... might require a sprite instead
         if (inPlayerBubble)
-            return fmt::format("💬 <i>{}</i>", text);
+            return fmt::format("\t<i>{}</i>", text);
         else if (type == ChatMessageType::SystemMessage)
-            return fmt::format("🔔 <i><color=#f1c40f>[System]</color> <color=#ecf0f1>{}</color></i>", text);
+            return fmt::format("\t<i><color=#f1c40f>[System]</color> <color=#ecf0f1>{}</color></i>", text);
         else if (senderIsHost)
-            return fmt::format("📢 <i><color=#2ecc71>[Server]</color> {}</i>", text);
+            return fmt::format("\t<i><color=#2ecc71>[Server]</color> {}</i>", text);
         else if (senderIsMe)
-            return fmt::format("💬 <i><color=#95a5a6>[{}]</color> {}</i>", userName, text);
+            return fmt::format("\t<i><color=#95a5a6>[{}]</color> {}</i>", userName, text);
         else
-            return fmt::format("💬 <i><color=#3498db>[{}]</color> {}</i>", userName, text);
+            return fmt::format("\t<i><color=#3498db>[{}]</color> {}</i>", userName, text);
+    }
+
+    UnityEngine::Sprite* ChatMessage::SpriteForMessage(bool inPlayerBubble) const {
+        if (inPlayerBubble)
+            return BSML::Utilities::FindSpriteCached("PlayerIcon");
+        else if (type == ChatMessageType::SystemMessage)
+            return BSML::Utilities::FindSpriteCached("NoFailIcon");
+        else if (senderIsHost)
+            return BSML::Utilities::FindSpriteCached("GlobalIcon");
+        else if (senderIsMe)
+            return BSML::Utilities::FindSpriteCached("PlayerIcon");
+        else
+            return BSML::Utilities::FindSpriteCached("PlayerIcon");
     }
 
     std::string ChatMessage::StripTags(const std::string& input) {

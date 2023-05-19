@@ -15,6 +15,7 @@
 #include "HMUI/CurvedTextMeshPro.hpp"
 
 #define protected public
+#include "bsml/shared/BSML/Tags/ImageTag.hpp"
 #include "bsml/shared/BSML/Tags/HorizontalTag.hpp"
 #include "bsml/shared/BSML/Tags/TextTag.hpp"
 #undef protected
@@ -195,31 +196,46 @@ namespace MultiplayerChat::UI::Lobby {
 
         if (!scrollableContainer) return;
 
-        auto text = AddTextObject();
-        auto messageText = message.FormatMessage();
+        auto [text, image] = AddMessageObject();
 
-        text->set_text(messageText);
+        // FIXME: messages that are too long without newlines seem to spill over into the next message, find a way to prevent that (or add newlines)
+        text->set_text(message.FormatMessage());
         text->ForceMeshUpdate();
+
+        image->set_sprite(message.SpriteForMessage());
 
         _chatLockedToBottom = true;
     }
 
-    TMPro::TextMeshProUGUI* ChatViewController::AddTextObject() {
+    std::pair<TMPro::TextMeshProUGUI*, HMUI::ImageView*> ChatViewController::AddMessageObject() {
         auto layoutGo = BSML::HorizontalTag().CreateObject(scrollableContainerContent);
         auto layout = layoutGo->GetComponent<UnityEngine::UI::HorizontalLayoutGroup*>();
-        auto layoutElement = layoutGo->GetComponent<UnityEngine::UI::LayoutElement*>();
-        layoutElement->set_preferredWidth(120);
 
+        auto imageGo = BSML::ImageTag().CreateObject(layoutGo->get_transform());
+        auto imageRect = reinterpret_cast<UnityEngine::RectTransform*>(imageGo->get_transform());
+        imageRect->set_pivot({0, 1});
+        imageRect->set_anchorMin({0, 1});
+        imageRect->set_anchorMax({0, 1});
+        imageRect->set_sizeDelta({5, 5});
+
+        auto layoutElement = imageGo->GetComponent<UnityEngine::UI::LayoutElement*>();
+        layoutElement->set_ignoreLayout(true);
+
+        // set image data
+        auto imageView = imageGo->GetComponent<HMUI::ImageView*>();
+        imageView->set_preserveAspect(true);
+        imageView->skew = 0;
+        imageView->__Refresh();
+
+        // create text
         auto textGo = BSML::TextTag().CreateObject(layoutGo->get_transform());
         auto textComponent = textGo->GetComponent<TMPro::TextMeshProUGUI*>();
 
         textComponent->set_text("");
         textComponent->set_fontSize(3.4f);
         textComponent->set_richText(true);
-        return textComponent;
-
-        // auto parser = BSML::parse_and_construct("<horizontal min-width='120' bg='round-rect-panel'><text tags='textcomponent' text='yourmom' font-size='3.4' rich-text='true'/></horizontal>", scrollableContainerContent, nullptr);
-        // return parser->parserParams->GetObjectsWithTag("textcomponent").front()->GetComponent<TMPro::TextMeshProUGUI*>();
+        textComponent->set_enableWordWrapping(true);
+        return {textComponent, imageView};
     }
 
 #pragma endregion // Messages data/rendering

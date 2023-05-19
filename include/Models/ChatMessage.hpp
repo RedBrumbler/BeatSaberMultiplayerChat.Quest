@@ -2,6 +2,7 @@
 
 #include <string>
 #include "GlobalNamespace/IConnectedPlayer.hpp"
+#include "UnityEngine/Sprite.hpp"
 
 namespace MultiplayerChat::Network {
     class MpcTextChatPacket;
@@ -38,7 +39,9 @@ namespace MultiplayerChat::Models {
             senderIsHost(senderIsHost),
             senderIsMe(senderIsMe) {}
 
+        UnityEngine::Sprite* SpriteForMessage(bool inPlayerBubble = false) const;
         std::string FormatMessage(bool inPlayerBubble = false) const;
+
         static std::string StripTags(const std::string& input);
         static ChatMessage CreateForLocalPlayer(GlobalNamespace::IConnectedPlayer* player, std::string text);
         static ChatMessage CreateFromPacket(GlobalNamespace::IConnectedPlayer* sender, Network::MpcTextChatPacket* packet);

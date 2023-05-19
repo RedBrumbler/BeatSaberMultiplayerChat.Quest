@@ -7,6 +7,7 @@
 #include "HMUI/ViewController_AnimationType.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
+#include "HMUI/ImageView.hpp"
 
 #include "bsml/shared/BSML/Components/Backgroundable.hpp"
 #include "bsml/shared/BSML/Components/ScrollableContainer.hpp"
@@ -49,7 +50,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
         void ResetChatInputText();
 
         void FillChat();
-        TMPro::TextMeshProUGUI* AddTextObject();
+        std::pair<TMPro::TextMeshProUGUI*, HMUI::ImageView*> AddMessageObject();
 
         void HandleScrollablePageUp();
         void HandleScrollablePageDown();
