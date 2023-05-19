@@ -1,0 +1,11 @@
+build/
+mod.json
+extern.cmake
+extern/
+qpm_defines.cmake
+
+*.txt
+!CMakeLists.txt
+tombstone_*
+*.log
+.vscode/

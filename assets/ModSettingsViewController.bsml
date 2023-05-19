@@ -1,0 +1,116 @@
+<vertical child-control-height='false'>
+    <vertical child-control-height='false' spacing="2" pad-top="1">
+
+        <tab-selector tab-tag='tabs' />
+
+        <!-- Voice -->
+        <tab tab-name="Voice Chat" tags="tabs">
+            <vertical child-control-height='false' spacing="1" pad-top="1">
+
+                <checkbox-setting id="toggleVoice" text="Enable voice chat" value="enableVoiceChat"
+                    apply-on-change="true"
+                    hover-hint="Globally enable/disable all voice chat functionality" />
+
+                <dropdown-list-setting id="dropdownMic" text="Microphone"
+                    options="microphoneOptions"
+                    value="recordingDevice" apply-on-change="true"
+                    hover-hint="Select your input device for talking in voice chat" />
+
+                <!-- Mic test -->
+
+                <horizontal max-height="8.5" child-expand-width="true" pad-left="15">
+                    <!-- Padding -->
+                    <text text="" font-size="4" preferred-width="15" />
+                    <image id="imgTestMic" preserve-aspect="true" preferred-width="5"
+                        preferred-height="5" max-width="5"
+                        max-height="5" />
+                    <button id="btnTestMic" text="Test mic" on-click="HandleBtnTestMicClick" font-size="4"
+                        preferred-width="35" preferred-height="8.5" align="Center"
+                        hover-hint="Toggle microphone test (listen to selected device)" />
+                </horizontal>
+
+                <!-- Voice activation -->
+
+                <dropdown-list-setting id="dropdownActivation" text="Activation mode"
+                    options="activationOptions"
+                    value="voiceActivationMode" apply-on-change="true"
+                    hover-hint="How is outgoing voice chat activated?" />
+
+                <dropdown-list-setting id="dropdownKeybind" text="Activation button"
+                    options="keybindOptions"
+                    value="voiceKeybind" apply-on-change="true"
+                    hover-hint="What button toggles or triggers voice chat?" />
+
+                <dropdown-list-setting id="dropdownController" text="Activation controller"
+                    options="controllerOptions"
+                    value="voiceKeybindController" apply-on-change="true"
+                    hover-hint="What controller does the activation button apply to?" />
+
+                <!-- Voice activation explainer -->
+
+                <vertical pad-top="3">
+                    <text id="activationText" italics="true" text="!ActivationText!"
+                        font-color="#95a5a6"
+                        font-size="3.5" />
+                </vertical>
+
+            </vertical>
+        </tab>
+
+        <!-- Text -->
+        <tab tab-name="Text Chat" tags="tabs">
+            <vertical child-control-height='false' spacing="1" pad-top="1">
+
+                <checkbox-setting text="Enable text chat" value="enableTextChat"
+                    apply-on-change="true"
+                    hover-hint="Globally enable/disable all text chat functionality" />
+
+                <dropdown-list-setting id="dropdownNotification" text="Notification sound"
+                    options="soundNotificationOptions"
+                    value="soundNotification" apply-on-change="true"
+                    hover-hint="Notification sound for chat messages in the lobby" />
+
+                <checkbox-setting id="togglePlayerBubbles" text="Enable overhead bubbles"
+                    value="enablePlayerBubbles" apply-on-change="true"
+                    hover-hint="Show a chat bubble over an avatar's head when they send a message (lobby only)" />
+
+                <checkbox-setting id="toggleCenterBubbles" text="Enable center bubbles"
+                    value="enableCenterBubbles" apply-on-change="true"
+                    hover-hint="Show a chat bubble over the center menu when a message is received (lobby only)" />
+
+            </vertical>
+        </tab>
+
+        <!-- HUD -->
+        <tab tab-name="HUD" tags="tabs">
+            <vertical child-control-height='false' spacing="1" pad-top="1">
+
+                <checkbox-setting id="toggleHud" text="Enable microphone indicator"
+                    value="enableHud" apply-on-change="true"
+                    hover-hint="Enable floating microphone indicator HUD while in multiplayer" />
+
+                <slider-setting id="sliderHudOpacity" text="Opacity" value="hudOpacity"
+                    min="0.0" max="1.0" increment="0.1" apply-on-change="true" />
+
+                <slider-setting id="sliderHudOffsetCamX" text="Camera Offset X"
+                    value="hudOffsetCamX"
+                    min="0.0" max="1.0" increment="0.01" apply-on-change="true" />
+
+                <slider-setting id="sliderHudOffsetCamY" text="Camera Offset Y"
+                    value="hudOffsetCamY"
+                    min="0.0" max="1.0" increment="0.01" apply-on-change="true" />
+
+                <slider-setting id="sliderHudOffsetCamZ" text="Camera Offset Z"
+                    value="hudOffsetCamZ"
+                    min="0.0" max="1.0" increment="0.01" apply-on-change="true" />
+
+                <button id="btnResetHudOffset" text="Reset HUD to default"
+                    on-click="HandleBtnResetHudOffsetClick" font-size="4"
+                    preferred-width="35" preferred-height="8.5" align="Center"
+                    hover-hint="Reset the HUD settings to their default values" />
+
+            </vertical>
+        </tab>
+
+    </vertical>
+</vertical>

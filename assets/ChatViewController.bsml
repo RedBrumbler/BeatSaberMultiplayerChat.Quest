@@ -1,0 +1,29 @@
+<vertical pref-width="120" pref-height="60" horizontal-fit="PreferredSize" vertical-fit="PreferredSize"
+          id="ChatViewRoot">
+    <horizontal pad-left="5" bg="panel-top" id="chatViewBg" skew='0'>
+        <vertical pref-width="120" pref-height="60" pad="3" pad-right="13">
+                <scrollable-container id="scrollableContainer" size-delta-x="0" spacing="0.1" align-bottom="true">
+                    <!-- Messages go here -->
+                </scrollable-container>
+        </vertical>
+        <vertical pref-height="50" min-width="3" pad-top="0" pad-left="-5">
+            <page-button direction="Up" tags="PageUpFor:scrollableContainer" pref-width="3" pref-height="3"/>
+            <vertical pref-width="1.25" pref-height="11">
+                <vertical-scroll-indicator tags="IndicatorFor:scrollableContainer" handle-color="#fff"/>
+            </vertical>
+            <page-button direction="Down" tags="PageDownFor:scrollableContainer" pref-width="3" pref-height="3"/>
+        </vertical>
+    </horizontal>
+    <vertical pref-height="10" min-height="10"/> <!-- pad -->
+    <horizontal>
+        <horizontal>
+            <image preserve-aspect="true" preferred-width="7" preferred-height="7" max-width="7"
+                   max-height="7" source="mpchat_keyboard"/>
+        </horizontal>
+        <horizontal pad-left="8">
+            <!-- TODO: replace with input field? could be neater... -->
+            <string-setting id="chatInput" font-color="#666" text="Send message"/>
+        </horizontal>
+    </horizontal>
+
+</vertical>
