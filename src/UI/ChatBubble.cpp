@@ -67,6 +67,8 @@ namespace MultiplayerChat::UI {
         _rectTransform->set_localRotation({0, 0, 0, 1});
 
         _canvasGroup->set_alpha(0);
+
+        get_gameObject()->SetActive(true);
         if (!get_gameObject()->get_activeInHierarchy()) return;
 
         _textMesh->set_text(text);
