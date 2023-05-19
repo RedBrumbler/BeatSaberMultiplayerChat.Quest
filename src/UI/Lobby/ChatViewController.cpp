@@ -199,7 +199,7 @@ namespace MultiplayerChat::UI::Lobby {
         auto [text, image] = AddMessageObject();
 
         // FIXME: messages that are too long without newlines seem to spill over into the next message, find a way to prevent that (or add newlines)
-        text->set_text(message.FormatMessage());
+        text->set_text(message.FormatMessage(false, true));
         text->ForceMeshUpdate();
 
         image->set_sprite(message.SpriteForMessage());

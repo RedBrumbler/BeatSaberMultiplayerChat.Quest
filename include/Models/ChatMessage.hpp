@@ -40,7 +40,7 @@ namespace MultiplayerChat::Models {
             senderIsMe(senderIsMe) {}
 
         UnityEngine::Sprite* SpriteForMessage(bool inPlayerBubble = false) const;
-        std::string FormatMessage(bool inPlayerBubble = false) const;
+        std::string FormatMessage(bool inPlayerBubble = false, bool extraIconSpacing = false) const;
 
         static std::string StripTags(const std::string& input);
         static ChatMessage CreateForLocalPlayer(GlobalNamespace::IConnectedPlayer* player, std::string text);
