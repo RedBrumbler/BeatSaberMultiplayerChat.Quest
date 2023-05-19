@@ -38,8 +38,11 @@ namespace MultiplayerChat::Core {
         ));
 
         // TODO: check if we shouldn't be using the static methods for this
-        UnityEngine::XR::InputDevices::_get_deviceConnected()->CombineImpl(_deviceConnectedAction);
-        UnityEngine::XR::InputDevices::_get_deviceDisconnected()->CombineImpl(_deviceDisconnectedAction);
+        auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
+        UnityEngine::XR::InputDevices::_set_deviceConnected(combinedConnectedAction);
+
+        auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
+        UnityEngine::XR::InputDevices::_set_deviceDisconnected(combinedDisconnectedAction);
 
         PreloadSounds();
 
@@ -51,8 +54,11 @@ namespace MultiplayerChat::Core {
     }
 
     void InputManager::Dispose() {
-        UnityEngine::XR::InputDevices::_get_deviceConnected()->RemoveImpl(_deviceConnectedAction);
-        UnityEngine::XR::InputDevices::_get_deviceDisconnected()->RemoveImpl(_deviceDisconnectedAction);
+        auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
+        UnityEngine::XR::InputDevices::_set_deviceConnected(unCombinedConnectedAction);
+
+        auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
+        UnityEngine::XR::InputDevices::_set_deviceDisconnected(unCombinedDisconnectedAction);
 
         _triggerConditionIsActive = false;
         _debugKeyIsDown = false;
