@@ -37,7 +37,6 @@ namespace MultiplayerChat::Core {
             std::bind(&InputManager::HandleInputDeviceDisconnected, this, std::placeholders::_1)
         ));
 
-        // TODO: check if we shouldn't be using the static methods for this
         auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
         UnityEngine::XR::InputDevices::_set_deviceConnected(combinedConnectedAction);
 

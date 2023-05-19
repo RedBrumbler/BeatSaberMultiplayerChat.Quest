@@ -20,7 +20,6 @@
                    max-height="7" source="MultiplayerChat_keyboard"/>
         </horizontal>
         <horizontal pad-left="8">
-            <!-- TODO: replace with input field? could be neater... -->
             <string-setting id="chatInput" font-color="#666" text="Send message"/>
         </horizontal>
     </horizontal>

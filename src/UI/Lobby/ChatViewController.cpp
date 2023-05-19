@@ -80,12 +80,6 @@ namespace MultiplayerChat::UI::Lobby {
         co_return;
     }
 
-    void ChatViewController::Update() {
-        // TODO: remove bsml log or just do this differently, its spamming logs a lot
-        // if (scrollableContainer && _chatLockedToBottom)
-        //     scrollableContainer->ScrollTo(std::numeric_limits<float>::max(), false);
-    }
-
 #pragma endregion // Core Events
 
 #pragma region Core UI
@@ -177,7 +171,6 @@ namespace MultiplayerChat::UI::Lobby {
         auto contentT = scrollableContainerContent->get_transform();
         int childCount = contentT->get_childCount();
 
-        // TODO: come at it from GetChild(0) or something, might be better
         for (int i = childCount - 1; i >= 0; i--)
             UnityEngine::Object::DestroyImmediate(contentT->GetChild(i)->get_gameObject());
 

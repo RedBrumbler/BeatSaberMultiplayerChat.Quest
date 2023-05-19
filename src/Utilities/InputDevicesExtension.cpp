@@ -36,7 +36,6 @@ namespace MultiplayerChat::Utilities {
 
     UnityEngine::XR::InputDevice InputDevicesExtension::GetDeviceAtXRNode(UnityEngine::XR::XRNode node) {
         auto device = UnityEngine::XR::InputDevice();
-        // TODO: check that this works, it seems sketch...
         il2cpp_utils::RunMethod(device, ".ctor", GetDeviceIdAtXRNode(node));
         return device;
     }

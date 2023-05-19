@@ -24,7 +24,6 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Transform*, scrollableContainerContent);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::StringSetting*, chatInput);
 
-    DECLARE_INSTANCE_METHOD(void, Update);
     DECLARE_INSTANCE_METHOD(void, PostParse);
 
     DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
@@ -41,7 +40,6 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
         bool _bsmlReady = false;
         bool _chatLockedToBottom = true;
         std::vector<Models::ChatMessage> _messageBuffer;
-
 
         void HandleKeyboardInput(StringW input);
         custom_types::Helpers::Coroutine HandleKeyboardInputRoutine(StringW input);
