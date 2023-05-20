@@ -57,7 +57,6 @@ namespace MultiplayerChat::Audio {
             auto destStart = wBlock + wPos;
             auto srcStart = buf.begin() + ofs + count - left;
 
-            // TODO: check if correct
             memcpy(destStart, srcStart, toWrite * sizeof(float));
 
             wPos += toWrite;
@@ -107,7 +106,6 @@ namespace MultiplayerChat::Audio {
             auto destStart = buf.begin() + ofs + count - sizeLeft;
             auto srcStart = blocks.at(currentBlock) + tempBlockPos;
 
-            // TODO: check if correct
             memcpy(destStart, srcStart, toFeed * sizeof(float));
 
             sizeLeft -= toFeed;
