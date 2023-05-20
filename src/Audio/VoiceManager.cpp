@@ -137,10 +137,14 @@ namespace MultiplayerChat::Audio {
 
             if (get_isLoopbackTesting()) {
                 HandleVoicePacket(voicePacket, nullptr);
+                voicePacket->Release();
                 return;
             }
 
-            if (!_sessionManager->get_isConnected() || !_sessionManager->get_isSyncTimeInitialized() || !get_isTransmitting()) return;
+            if (!_sessionManager->get_isConnected() || !_sessionManager->get_isSyncTimeInitialized() || !get_isTransmitting()) {
+                voicePacket->Release();
+                return;
+            }
 
             _packetSerializer->SendUnreliable(voicePacket);
         } catch(const std::runtime_error& e) {
