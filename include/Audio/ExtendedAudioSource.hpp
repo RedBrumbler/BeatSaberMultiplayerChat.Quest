@@ -8,7 +8,7 @@ namespace MultiplayerChat::Audio {
             void set_timeSamples(int samples) {
                 // TODO: verify icall correctness
                 using SetTimeSamples_fun = function_ptr_t<void, UnityEngine::AudioSource*, int>;
-                static auto SetTimeSamples = reinterpret_cast<SetTimeSamples_fun>(il2cpp_functions::resolve_icall("UnityEngine.AudioSource::SetSamplePosition"));
+                static auto SetTimeSamples = reinterpret_cast<SetTimeSamples_fun>(il2cpp_functions::resolve_icall("UnityEngine.AudioSource::set_timeSamples"));
                 SetTimeSamples(this, samples);
             }
 
