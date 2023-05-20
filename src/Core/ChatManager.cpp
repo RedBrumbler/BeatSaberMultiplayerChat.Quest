@@ -105,7 +105,11 @@ namespace MultiplayerChat::Core {
 
 #pragma region Voice Chat API
     void ChatManager::SetLocalPlayerIsSpeaking(bool isSpeaking) {
-        SetPlayerIsSpeaking(_sessionManager->get_localPlayer()->get_userId(), isSpeaking);
+        auto player = _sessionManager->get_localPlayer();
+        if (player)
+            SetPlayerIsSpeaking(player->get_userId(), isSpeaking);
+        else
+            ERROR("Couldn't set local player speaking as false because the player was null!");
     }
 
     void ChatManager::SetPlayerIsSpeaking(std::string userId, bool isSpeaking) {
