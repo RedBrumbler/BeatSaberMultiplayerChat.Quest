@@ -117,13 +117,15 @@ namespace MultiplayerChat::UI {
             auto avatarCaptionBg = parentTransform->Find("BG")->GetComponent<HMUI::ImageView*>();
             _bg->set_material(avatarCaptionBg->get_material());
 
-            auto avatarCaptionText = parentTransform->Find("Name")->GetComponent<HMUI::CurvedTextMeshPro*>();
-            if (!avatarCaptionText)
+            auto avatarCaptionName = parentTransform->Find("Name");
+            if (!avatarCaptionName)
                 // MpEx nests Name onto BG, see if we can find it there
-                avatarCaptionText = avatarCaptionBg->get_transform()->Find("Name")->GetComponent<HMUI::CurvedTextMeshPro*>();
+                auto avatarCaptionName = avatarCaptionBg->get_transform()->Find("Name");
 
-            if (avatarCaptionText)
+            if (avatarCaptionName) {
+                auto avatarCaptionText = avatarCaptionBg->get_transform()->Find("Name")->GetComponent<HMUI::CurvedTextMeshPro*>();
                 _textMesh->set_fontMaterial(avatarCaptionText->get_fontMaterial());
+            }
         }
 
         _textMesh->set_fontStyle(TMPro::FontStyles::Normal);
