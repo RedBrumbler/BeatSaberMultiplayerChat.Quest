@@ -156,7 +156,7 @@ namespace MultiplayerChat::Core {
                 _nativeIconSpeakerSound = spriteSwap->normalStateSprite;
 
             if (!_nativeIconMuted || !_nativeIconMuted->m_CachedPtr.m_value)
-                _nativeIconSpeakerSound = spriteSwap->pressedStateSprite;
+                _nativeIconMuted = spriteSwap->pressedStateSprite;
 
             spriteSwap->set_enabled(false);
         }
