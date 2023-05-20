@@ -4,6 +4,13 @@
 
 #include "custom-types/shared/delegate.hpp"
 #include "UnityEngine/Transform.hpp"
+#include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/CanvasRenderer.hpp"
+#include "UnityEngine/Canvas.hpp"
+#include "UnityEngine/RenderMode.hpp"
+#include "UnityEngine/CanvasGroup.hpp"
+#include "UnityEngine/UI/CanvasScaler.hpp"
+#include "HMUI/CurvedCanvasSettings.hpp"
 #include "UnityEngine/Camera_MonoOrStereoscopicEye.hpp"
 
 DEFINE_TYPE(MultiplayerChat::UI::Hud, HudVoiceIndicator);
@@ -39,7 +46,39 @@ namespace MultiplayerChat::UI::Hud {
     }
 
     void HudVoiceIndicator::Awake() {
+        auto gameObject = get_gameObject();
+        gameObject->set_layer(5); // UI
 
+        auto canvas = gameObject->AddComponent<UnityEngine::Canvas*>();
+        canvas->set_renderMode(UnityEngine::RenderMode::WorldSpace);
+        canvas->set_scaleFactor(1);
+        canvas->set_referencePixelsPerUnit(1);
+
+        using SetPlaneDistance_fun = function_ptr_t<void, UnityEngine::Canvas*, float>;
+        static auto SetPlaneDistance = reinterpret_cast<SetPlaneDistance_fun>(il2cpp_functions::resolve_icall("UnityEngine.Canvas::set_planeDistance"));
+        SetPlaneDistance(canvas, 100.0f);
+
+        gameObject->AddComponent<UnityEngine::CanvasRenderer*>();
+        gameObject->AddComponent<UnityEngine::UI::CanvasScaler*>();
+        gameObject->AddComponent<HMUI::CurvedCanvasSettings*>();
+
+        _canvasGroup = gameObject->AddComponent<UnityEngine::CanvasGroup*>();
+        _canvasGroup->set_alpha(0);
+
+        auto bg = UnityEngine::GameObject::New_ctor("BG");
+        bg->get_transform()->SetParent(get_transform());
+        bg->AddComponent<UnityEngine::CanvasRenderer*>();
+
+        _bgImage = bg->AddComponent<UnityEngine::UI::Image*>();
+        _bgImage->set_sprite(_spriteManager->get_micOnIcon());
+        _bgImage->set_color(MpcColors::Red);
+
+        get_transform()->set_localScale({.0005f, .0005f, .0005f});
+
+        _currentDisplayState = DisplayState::Hidden;
+        _targetDisplayState = DisplayState::Hidden;
+
+        _mainCamera = UnityEngine::Camera::get_main();
     }
 
     void HudVoiceIndicator::OnEnable() {
