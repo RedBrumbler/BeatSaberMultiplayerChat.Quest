@@ -187,7 +187,7 @@ namespace MultiplayerChat::Audio {
 
     int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::OpusFrequency; }
 
-    int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::OpusFrequency; }
+    int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::FrameLength; }
 
     ArrayW<float> PlayerVoicePlayer::get_emptyClipSamples() {
         static SafePtr<Array<float>> emptyClipSamples;
