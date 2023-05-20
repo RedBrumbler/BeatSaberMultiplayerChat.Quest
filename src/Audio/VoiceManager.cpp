@@ -23,8 +23,9 @@ namespace MultiplayerChat::Audio {
     void VoiceManager::ctor() {
         INVOKE_CTOR();
 
+        // WARN: the encoder needs to be set to 16000 because of https://issuetracker.unity3d.com/issues/mobile-incorrect-values-returned-from-microphone-dot-getdevicecaps
         _opusEncoder = UnityOpus::Encoder::New_ctor(
-            OpusFrequency, OpusChannels, UnityOpus::OpusApplication::VoIP
+            UnityOpus::SamplingFrequency::Frequency_16000, OpusChannels, UnityOpus::OpusApplication::VoIP
         );
         _opusEncoder->set_Bitrate(Bitrate);
         _opusEncoder->set_Complexity(OpusComplexity);
