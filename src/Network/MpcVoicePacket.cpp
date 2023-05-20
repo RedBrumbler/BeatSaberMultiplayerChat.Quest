@@ -53,11 +53,9 @@ namespace MultiplayerChat::Network {
         get_pool()->Release(this);
     }
 
-    Zenject::ArrayPool_1<uint8_t>* MpcVoicePacket::get_bytePool() {
-        static SafePtr<Zenject::ArrayPool_1<uint8_t>> pool;
-        if (!pool || !pool.ptr())
-            pool = Zenject::ArrayPool_1<uint8_t>::GetPool(Audio::VoiceManager::FrameByteSize);
-        return pool.ptr();
+    Pooling::ArrayPool<uint8_t>*  MpcVoicePacket::get_bytePool() {
+        static Pooling::ArrayPool<uint8_t> pool(Audio::VoiceManager::FrameByteSize);
+        return &pool;
     }
 
     void MpcVoicePacket::AllocatePooledBuffer(std::size_t encodedSize) {

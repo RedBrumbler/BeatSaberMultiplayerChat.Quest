@@ -6,6 +6,7 @@
 #include "GlobalNamespace/IPoolablePacket.hpp"
 #include "GlobalNamespace/PacketPool_1.hpp"
 #include "Zenject/ArrayPool_1.hpp"
+#include "Pooling/ArrayPool.hpp"
 
 DECLARE_CLASS_CUSTOM_INTERFACES(MultiplayerChat::Network, MpcVoicePacket, MpcBasePacket, std::vector<Il2CppClass*>({classof(GlobalNamespace::IPoolablePacket*)}),
     DECLARE_INSTANCE_FIELD(ArrayW<uint8_t>, data);
@@ -25,7 +26,7 @@ DECLARE_CLASS_CUSTOM_INTERFACES(MultiplayerChat::Network, MpcVoicePacket, MpcBas
         void ReturnPooledBuffer();
     private:
         static GlobalNamespace::PacketPool_1<MpcVoicePacket*>* get_pool();
-        static Zenject::ArrayPool_1<uint8_t>* get_bytePool();
+        static Pooling::ArrayPool<uint8_t>* get_bytePool();
 
         bool isRentedBuffer = false;
         std::optional<int> bufferContentSize = std::nullopt;
