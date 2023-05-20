@@ -119,7 +119,7 @@ namespace MultiplayerChat::Audio {
         _loopbackVoicePlayer->StopImmediate();
 
         memset(_encodeSampleBuffer.begin(), 0, _encodeSampleBuffer.size() * sizeof(float));
-        memset(_encodeOutputBuffer.begin(), 0, _encodeOutputBuffer.size());
+        memset(_encodeOutputBuffer.begin(), 0, _encodeOutputBuffer.size() * sizeof(uint8_t));
     }
 
     void VoiceManager::HandleEncodedFrame(int encodedLength) {
