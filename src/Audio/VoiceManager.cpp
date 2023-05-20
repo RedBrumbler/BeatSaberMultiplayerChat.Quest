@@ -51,7 +51,6 @@ namespace MultiplayerChat::Audio {
         _sessionManager = sessionManager;
     }
 
-
     void VoiceManager::Initialize() {
         _microphoneManager->onFragmentReadyEvent += {&VoiceManager::HandleMicrophoneFragment, this};
         _microphoneManager->onCaptureEndEvent += {&VoiceManager::HandleMicrophoneEnd, this};
@@ -207,7 +206,7 @@ namespace MultiplayerChat::Audio {
         if (!get_isTransmitting()) return true;
 
         _microphoneManager->StopCapture();
-        _isTransmitting = true;
+        _isTransmitting = false;
 
         if (_sessionManager->get_isConnected()) {
             auto endPacket = Network::MpcVoicePacket::Obtain();
