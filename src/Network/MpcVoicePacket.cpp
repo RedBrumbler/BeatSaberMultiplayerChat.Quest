@@ -17,7 +17,7 @@ namespace MultiplayerChat::Network {
     void MpcVoicePacket::Serialize(LiteNetLib::Utils::NetDataWriter* writer) {
         MpcBasePacket::Serialize(writer);
 
-        if (!data || bufferContentSize.value_or(0) == 0) {
+        if (!data || (bufferContentSize.has_value() && bufferContentSize.value() == 0)) {
             writer->Put(0);
             return;
         }
