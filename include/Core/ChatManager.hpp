@@ -35,6 +35,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, ChatManager, Il2CppObjec
 
     DECLARE_CTOR(ctor, GlobalNamespace::IMultiplayerSessionManager* sessionManager, MultiplayerCore::Networking::MpPacketSerializer* packetSerializer, Audio::MicrophoneManager* microphoneManager, InputManager* inputManager);
     public:
+        constexpr const char CommandPrefix = '/';
+
         UnorderedEventCallback<const Models::ChatMessage&> chatMessageEvent;
         UnorderedEventCallback<> chatClearEvent;
         UnorderedEventCallback<const Models::ChatPlayer&> chatPlayerUpdateEvent;

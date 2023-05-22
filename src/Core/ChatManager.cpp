@@ -80,13 +80,16 @@ namespace MultiplayerChat::Core {
     }
 
     void ChatManager::SendTextChat(std::string text) {
-        if (!get_textChatEnabled() || !get_sessionConnected()) return;
+        if (!get_textChatEnabled() || !get_sessionConnected() || text.empty()) return;
 
         auto textPacket = Network::MpcTextChatPacket::New_ctor(); {
             textPacket->text = text;
         }
-
-        _packetSerializer->Send(textPacket);
+        bool isCommand = text[0] == CommandPrefix;
+        if (isCommand)
+            _sessionManager->SendToPlayer(textPacket->i_INetSerializable(), _sessionManager->get_connectionOwner());
+        else
+            _packetSerializer->Send(textPacket);
 
         chatMessageEvent.invoke(Models::ChatMessage::CreateForLocalPlayer(_sessionManager->get_localPlayer(), text));
     }
