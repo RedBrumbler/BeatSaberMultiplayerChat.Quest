@@ -6,7 +6,7 @@
 #include "System/Collections/Generic/Stack_1.hpp"
 
 namespace MultiplayerChat::Pooling {
-    template<typename T>
+    template<typename T, std::size_t MaxPoolSize = 32>
     struct ArrayPool {
         using PooledArrayW = ArrayW<T>;
         using PooledArray = Array<T>;
@@ -15,6 +15,7 @@ namespace MultiplayerChat::Pooling {
 
         void Despawn(PooledArrayW arr) {
             std::lock_guard<std::mutex> lock(selfmutex);
+            if (_pool->get_Count() > MaxPoolSize) return;
             _pool->Push(arr);
         }
 
