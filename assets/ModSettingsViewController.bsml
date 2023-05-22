@@ -50,6 +50,10 @@
                     value="voiceKeybindController" apply-on-change="true"
                     hover-hint="What controller does the activation button apply to?" />
 
+                <dropdown-list-setting id="dropdownControllerAlt" text="Activation controller"
+                    options="controllerOptionsAlt"
+                    value="voiceKeybindController" apply-on-change="true"
+                    hover-hint="What controller does the activation button apply to?"/>
                 <!-- Voice activation explainer -->
 
                 <vertical pad-top="3">

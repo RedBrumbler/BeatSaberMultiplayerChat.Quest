@@ -35,6 +35,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownActivation);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownKeybind);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownController);
+    DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownControllerAlt);
     DECLARE_INSTANCE_FIELD_PRIVATE(HMUI::CurvedTextMeshPro*, activationText);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::ToggleSetting*, togglePlayerBubbles);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::ToggleSetting*, toggleCenterBubbles);
@@ -71,6 +72,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_activationOptions);
     DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_keybindOptions);
     DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_controllerOptions);
+    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_controllerOptionsAlt);
 
     DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
     DECLARE_OVERRIDE_METHOD(void, DidDeactivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidDeactivate>::get(), bool removedFromHierarchy, bool screenSystemDisabling);

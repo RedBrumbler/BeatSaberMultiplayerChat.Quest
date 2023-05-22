@@ -93,6 +93,10 @@ namespace MultiplayerChat::UI::ModSettings {
         dropdownActivation->set_interactable(keybindsInteractable);
         dropdownKeybind->set_interactable(keybindsInteractable);
         dropdownController->set_interactable(keybindsInteractable);
+        dropdownControllerAlt->set_interactable(keybindsInteractable);
+
+        dropdownController->get_transform()->get_parent()->get_gameObject()->SetActive(config.voiceKeybind != VoiceKeybind::Trigger);
+        dropdownControllerAlt->get_transform()->get_parent()->get_gameObject()->SetActive(config.voiceKeybind == VoiceKeybind::Trigger);
 
         if (_voiceManager->get_isLoopbackTesting()) {
             btnTestMic->set_interactable(true);
@@ -199,6 +203,12 @@ namespace MultiplayerChat::UI::ModSettings {
     StringW ModSettingsViewController::get_voiceKeyBind() { return fmt::format("{}", config.voiceKeybind); }
     void ModSettingsViewController::set_voiceKeyBind(StringW value) {
         config.voiceKeybind = parse_VoiceKeybind(value);
+
+        // in trigger mode you must not have either selected to avoid getting stuck in settings
+        if (config.voiceKeybind == VoiceKeybind::Trigger &&
+            config.voiceKeybindController == VoiceKeybindController::Either) {
+            config.voiceKeybindController = VoiceKeybindController::Left;
+        }
         SaveConfig();
         RefreshUIState();
     }
@@ -208,6 +218,9 @@ namespace MultiplayerChat::UI::ModSettings {
         config.voiceKeybindController = parse_VoiceKeyBindController(value);
         SaveConfig();
         RefreshUIState();
+
+        dropdownController->ReceiveValue();
+        dropdownControllerAlt->ReceiveValue();
     }
 
     bool ModSettingsViewController::get_enableHud() { return config.enableHud; }
@@ -299,6 +312,14 @@ namespace MultiplayerChat::UI::ModSettings {
         list->Add(StringW("Left"));
         list->Add(StringW("Right"));
         list->Add(StringW("Either"));
+        return list;
+    }
+
+    ListWrapper<Il2CppObject*> ModSettingsViewController::get_controllerOptionsAlt() {
+        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+        list->EnsureCapacity(3);
+        list->Add(StringW("Left"));
+        list->Add(StringW("Right"));
         return list;
     }
 
