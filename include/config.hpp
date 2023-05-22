@@ -51,6 +51,7 @@ struct Config {
     bool enableVoiceChat = true;
     // is this needed on quest? there's only 1 mic
     std::string microphoneDevice = "";
+    float microphoneGain = 2.0f;
     int jitterBufferMs = 50;
     float spatialBlend = 0.1f;
     VoiceActivationMode voiceActivationMode = VoiceActivationMode::Hold;

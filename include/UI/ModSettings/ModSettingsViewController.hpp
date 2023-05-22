@@ -30,6 +30,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownNotification);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::ToggleSetting*, toggleVoice);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownMic);
+    DECLARE_INSTANCE_FIELD_PRIVATE(BSML::SliderSetting*, sliderMicGain);
     DECLARE_INSTANCE_FIELD_PRIVATE(HMUI::ImageView*, imgTestMic);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownActivation);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownKeybind);
@@ -55,6 +56,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_BSML_PROPERTY(bool, enableCenterBubbles);
     DECLARE_BSML_PROPERTY(bool, enableVoiceChat);
     DECLARE_BSML_PROPERTY(StringW, recordingDevice);
+    DECLARE_BSML_PROPERTY(float, micGain);
     DECLARE_BSML_PROPERTY(StringW, voiceActivationMode);
     DECLARE_BSML_PROPERTY(StringW, voiceKeyBind);
     DECLARE_BSML_PROPERTY(StringW, voiceKeyBindController);

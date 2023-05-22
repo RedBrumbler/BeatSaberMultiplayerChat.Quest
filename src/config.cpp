@@ -70,6 +70,7 @@ void SaveConfig() {
     // Voice
     ADD(enableVoiceChat);
     ADD(microphoneDevice);
+    ADD(microphoneGain);
     ADD(jitterBufferMs);
     ADD(spatialBlend);
     ADD(voiceActivationMode);
@@ -178,6 +179,7 @@ bool LoadConfig() {
     // Voice
     GET(enableVoiceChat);
     GET(microphoneDevice);
+    GET(microphoneGain);
     GET(jitterBufferMs);
     GET(spatialBlend);
     GET(voiceActivationMode);

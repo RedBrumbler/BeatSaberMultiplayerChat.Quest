@@ -39,6 +39,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityOpus::Decoder*, _opusDecoder);
 
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _encodeSampleBuffer);
+    DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _resampleBuffer);
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<uint8_t>, _encodeOutputBuffer);
     DECLARE_INSTANCE_FIELD_PRIVATE(int, _encodeSampleIndex);
 
@@ -90,7 +91,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
         MicrophoneManager* _microphoneManager;
 
         void HandleSessionDisconnected(GlobalNamespace::DisconnectedReason reason);
-        void HandleMicrophoneFragment(ArrayW<float> samples);
+        void HandleMicrophoneFragment(ArrayW<float> samples, int captureFrequency);
         void HandleMicrophoneEnd();
         void HandleVoicePacket(Network::MpcVoicePacket* packet, GlobalNamespace::IConnectedPlayer* source);
 

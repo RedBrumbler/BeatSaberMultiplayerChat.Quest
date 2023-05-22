@@ -88,6 +88,7 @@ namespace MultiplayerChat::UI::ModSettings {
         toggleVoice->set_interactable(!_voiceManager->get_isLoopbackTesting());
         dropdownMic->set_interactable(get_enableVoiceChat() && !_voiceManager->get_isLoopbackTesting());
 
+        sliderMicGain->set_interactable(get_enableVoiceChat());
         bool keybindsInteractable = get_enableVoiceChat() && !_voiceManager->get_isLoopbackTesting() && _microphoneManager->get_haveSelectedDevice();
         dropdownActivation->set_interactable(keybindsInteractable);
         dropdownKeybind->set_interactable(keybindsInteractable);
@@ -172,6 +173,13 @@ namespace MultiplayerChat::UI::ModSettings {
         selectedDevice = selectedDevice ? selectedDevice : "Default";
 
         return get_microphoneOptions()->Contains(selectedDevice) ? selectedDevice : "None";
+    }
+
+    float ModSettingsViewController::get_micGain() { return config.microphoneGain; }
+    void ModSettingsViewController::set_micGain(float value) {
+        config.microphoneGain = value;
+        SaveConfig();
+        RefreshUIState();
     }
 
     void ModSettingsViewController::set_recordingDevice(StringW value) {

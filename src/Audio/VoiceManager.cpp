@@ -1,5 +1,7 @@
 #include "Audio/VoiceManager.hpp"
 #include "Audio/MicrophoneManager.hpp"
+#include "Audio/AudioGain.hpp"
+#include "Audio/AudioResample.hpp"
 #include "Core/ChatManager.hpp"
 
 #include "config.hpp"
@@ -25,7 +27,7 @@ namespace MultiplayerChat::Audio {
 
         // WARN: the encoder needs to be set to 16000 because of https://issuetracker.unity3d.com/issues/mobile-incorrect-values-returned-from-microphone-dot-getdevicecaps
         _opusEncoder = UnityOpus::Encoder::New_ctor(
-            UnityOpus::SamplingFrequency::Frequency_16000, OpusChannels, UnityOpus::OpusApplication::VoIP
+            OpusFrequency, OpusChannels, UnityOpus::OpusApplication::VoIP
         );
         _opusEncoder->set_Bitrate(Bitrate);
         _opusEncoder->set_Complexity(OpusComplexity);
@@ -34,6 +36,7 @@ namespace MultiplayerChat::Audio {
         _opusDecoder = UnityOpus::Decoder::New_ctor(OpusFrequency, OpusChannels);
 
         _encodeSampleBuffer = ArrayW<float>(il2cpp_array_size_t(FrameLength));
+        _resampleBuffer = ArrayW<float>(il2cpp_array_size_t(FrameLength));
         _encodeOutputBuffer = ArrayW<uint8_t>(il2cpp_array_size_t(FrameByteSize));
         _encodeSampleIndex = 0;
 
@@ -103,9 +106,26 @@ namespace MultiplayerChat::Audio {
         StopLoopbackTest();
     }
 
-    void VoiceManager::HandleMicrophoneFragment(ArrayW<float> samples) {
-        for (auto sample : samples) {
-            _encodeSampleBuffer[_encodeSampleIndex++] = sample;
+    void VoiceManager::HandleMicrophoneFragment(ArrayW<float> samples, int captureFrequency) {
+        // Apply Gain
+        Audio::AudioGain::Apply(samples, config.microphoneGain);
+
+        // if frequency does not match target, resample audio
+        auto outputFrequency = (int)OpusFrequency;
+
+        float* copySrcBuffer;
+        int copySrcLength;
+        if (captureFrequency == outputFrequency) {
+            copySrcBuffer = samples.begin();
+            copySrcLength = samples.size();
+        } else {
+            copySrcBuffer = _resampleBuffer.begin();
+            copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, outputFrequency);
+        }
+
+        // Continuously write to encode buffer until it reaches the target frame length, then encode
+        for (auto i = 0; i < copySrcLength; i++) {
+            _encodeSampleBuffer[_encodeSampleIndex++] = copySrcBuffer[i];
             if (_encodeSampleIndex != FrameLength) continue;
 
             auto encodedLength = _opusEncoder->Encode(_encodeSampleBuffer, FrameLength, _encodeOutputBuffer);

@@ -28,10 +28,10 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, MicrophoneManager, Il2C
 
     DECLARE_CTOR(ctor);
     public:
-        static constexpr const int TargetFrequency = 44100;
+        static constexpr const int TargetFrequency = 48000;
         static constexpr const int SamplesPerFragment = 512;
 
-        UnorderedEventCallback<ArrayW<float>> onFragmentReadyEvent;
+        UnorderedEventCallback<ArrayW<float>, int> onFragmentReadyEvent;
         UnorderedEventCallback<> onCaptureEndEvent;
 
         StringW get_selectedDeviceName() const { return _selectedDeviceName; }

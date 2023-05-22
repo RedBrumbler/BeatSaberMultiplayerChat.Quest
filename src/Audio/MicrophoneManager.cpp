@@ -51,7 +51,7 @@ namespace MultiplayerChat::Audio {
                 memcpy(_fragmentBuffer.begin(), _micBuffer.begin() + _micBufferPos, SamplesPerFragment * sizeof(float));
             }
 
-            onFragmentReadyEvent.invoke(_fragmentBuffer);
+            onFragmentReadyEvent.invoke(_fragmentBuffer, _captureClip->get_frequency());
 
             _micBufferPos += SamplesPerFragment;
 
