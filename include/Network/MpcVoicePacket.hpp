@@ -24,6 +24,8 @@ DECLARE_CLASS_CUSTOM_INTERFACES(MultiplayerChat::Network, MpcVoicePacket, MpcBas
 
         void AllocatePooledBuffer(std::size_t encodedSize);
         void ReturnPooledBuffer();
+
+        GlobalNamespace::IPoolablePacket* i_IPoolablePacket() { return reinterpret_cast<GlobalNamespace::IPoolablePacket*>(this); }
     private:
         static GlobalNamespace::PacketPool_1<MpcVoicePacket*>* get_pool();
         static Pooling::ArrayPool<uint8_t>* get_bytePool();

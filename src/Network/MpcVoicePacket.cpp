@@ -28,7 +28,10 @@ namespace MultiplayerChat::Network {
     void MpcVoicePacket::Deserialize(LiteNetLib::Utils::NetDataReader* reader) {
         MpcBasePacket::Deserialize(reader);
 
-        data = reader->GetBytesWithLength();
+        // use pooled buffer
+        auto length = reader->GetInt();
+        AllocatePooledBuffer(length);
+        reader->GetBytes(data, 0, length);
     }
 
     GlobalNamespace::PacketPool_1<MpcVoicePacket*>* MpcVoicePacket::get_pool() {
