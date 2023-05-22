@@ -91,6 +91,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
         MicrophoneManager* _microphoneManager;
 
         void HandleSessionDisconnected(GlobalNamespace::DisconnectedReason reason);
+        void EnsureResampleBufferSize(std::size_t minimumSize);
         void HandleMicrophoneFragment(ArrayW<float> samples, int captureFrequency);
         void HandleMicrophoneEnd();
         void HandleVoicePacket(Network::MpcVoicePacket* packet, GlobalNamespace::IConnectedPlayer* source);

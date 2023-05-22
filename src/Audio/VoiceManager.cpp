@@ -106,6 +106,12 @@ namespace MultiplayerChat::Audio {
         StopLoopbackTest();
     }
 
+    void VoiceManager::EnsureResampleBufferSize(std::size_t minimumSize) {
+        if (_resampleBuffer.size() < minimumSize) {
+            _resampleBuffer = ArrayW<float>(il2cpp_array_size_t(minimumSize));
+        }
+    }
+
     void VoiceManager::HandleMicrophoneFragment(ArrayW<float> samples, int captureFrequency) {
         // Apply Gain
         Audio::AudioGain::Apply(samples, config.microphoneGain);
@@ -120,7 +126,14 @@ namespace MultiplayerChat::Audio {
             copySrcLength = samples.size();
         } else {
             copySrcBuffer = _resampleBuffer.begin();
-            copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, outputFrequency);
+            try {
+                EnsureResampleBufferSize(Audio::AudioResample::ResampledSampleCount(samples.size(), captureFrequency, outputFrequency));
+
+                copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, outputFrequency);
+            } catch (std::runtime_error& e) {
+                ERROR("Error thrown while resampling buffer: {}", e.what());
+                return;
+            }
         }
 
         // Continuously write to encode buffer until it reaches the target frame length, then encode
