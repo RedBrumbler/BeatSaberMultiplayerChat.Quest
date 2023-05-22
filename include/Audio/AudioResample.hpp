@@ -25,7 +25,7 @@ namespace MultiplayerChat::Audio {
             int writtenLength = 0;
             auto remainder = std::fmodf(sampleRatio, 1);
             if (remainder < 0.0001f) { // remainder nearly 0, basically an integer
-                int intSampleRatio = int(sampleRatio);
+                int intSampleRatio = int(std::roundf(sampleRatio));
                 for (int i = 0; i < targetLength && i * intSampleRatio < sourceLength; i++) {
                     target[i] = source[i * intSampleRatio];
                     writtenLength++;

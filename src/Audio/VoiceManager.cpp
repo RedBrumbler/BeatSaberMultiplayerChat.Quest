@@ -125,10 +125,10 @@ namespace MultiplayerChat::Audio {
             copySrcBuffer = samples.begin();
             copySrcLength = samples.size();
         } else {
-            copySrcBuffer = _resampleBuffer.begin();
             try {
                 EnsureResampleBufferSize(Audio::AudioResample::ResampledSampleCount(samples.size(), captureFrequency, outputFrequency));
 
+                copySrcBuffer = _resampleBuffer.begin();
                 copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, outputFrequency);
             } catch (std::runtime_error& e) {
                 ERROR("Error thrown while resampling buffer: {}", e.what());
