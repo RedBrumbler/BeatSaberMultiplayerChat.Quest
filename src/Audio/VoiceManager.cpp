@@ -25,20 +25,17 @@ namespace MultiplayerChat::Audio {
     void VoiceManager::ctor() {
         INVOKE_CTOR();
 
-        // WARN: the encoder needs to be set to 16000 because of https://issuetracker.unity3d.com/issues/mobile-incorrect-values-returned-from-microphone-dot-getdevicecaps
-        _opusEncoder = UnityOpus::Encoder::New_ctor(
-            OpusFrequency, OpusChannels, UnityOpus::OpusApplication::VoIP
-        );
-        _opusEncoder->set_Bitrate(Bitrate);
-        _opusEncoder->set_Complexity(OpusComplexity);
-        _opusEncoder->set_Signal(UnityOpus::OpusSignal::Voice);
+        _opusEncoder = nullptr;
+        _opusDecoder = UnityOpus::Decoder::New_ctor(DecodeFrequency, OpusChannels);
+        _captureFrequency = 0;
+        _encodeFrequency = UnityOpus::SamplingFrequency::Frequency_48000;
 
-        _opusDecoder = UnityOpus::Decoder::New_ctor(OpusFrequency, OpusChannels);
-
-        _encodeSampleBuffer = ArrayW<float>(il2cpp_array_size_t(FrameLength));
-        _resampleBuffer = ArrayW<float>(il2cpp_array_size_t(FrameLength));
-        _encodeOutputBuffer = ArrayW<uint8_t>(il2cpp_array_size_t(FrameByteSize));
+        _encodeSampleBuffer = ArrayW<float>(il2cpp_array_size_t(MaxFrameLength));
+        _resampleBuffer = ArrayW<float>(il2cpp_array_size_t(MaxFrameLength));
+        _encodeOutputBuffer = ArrayW<uint8_t>(il2cpp_array_size_t(MaxFrameLength * sizeof(float)));
         _encodeSampleIndex = 0;
+
+        _encodeFrameLength = GetFrameLength(UnityOpus::SamplingFrequency::Frequency_48000);
 
         _decodeSampleBuffer = ArrayW<float>(UnityOpus::Decoder::_get_maximumPacketDuration() * (int)OpusChannels);
         _isLoopbackTesting = false;
@@ -93,7 +90,7 @@ namespace MultiplayerChat::Audio {
 
         _packetSerializer->UnregisterCallback<Network::MpcVoicePacket*>();
 
-        _opusEncoder->Dispose();
+        if (_opusEncoder) _opusEncoder->Dispose();
         _opusDecoder->Dispose();
 
         _isLoopbackTesting = false;
@@ -106,6 +103,58 @@ namespace MultiplayerChat::Audio {
         StopLoopbackTest();
     }
 
+    int VoiceManager::GetFrameLength(int frequency) {
+        return frequency / (1000 / MsPerFrame);
+    }
+
+    UnityOpus::SamplingFrequency VoiceManager::GetEncodeFrequency(int inputFrequency) {
+        static std::array<UnityOpus::SamplingFrequency, 4> opusFrequencies {
+            UnityOpus::SamplingFrequency::Frequency_24000,
+            UnityOpus::SamplingFrequency::Frequency_16000,
+            UnityOpus::SamplingFrequency::Frequency_12000,
+            UnityOpus::SamplingFrequency::Frequency_8000
+        };
+
+        // check all the available frequencies starting from 24000.
+        auto lastFreq = UnityOpus::SamplingFrequency::Frequency_48000;
+        for (auto freq : opusFrequencies) {
+            // return the upper bound frequency of our currently checked
+            if (inputFrequency > freq.value)
+                return lastFreq;
+            lastFreq = freq;
+        }
+
+        return UnityOpus::SamplingFrequency::Frequency_8000;
+    }
+
+    int VoiceManager::get_encodeFrameLength() const { return _encodeFrameLength; }
+
+    void VoiceManager::EnsureEncoderForCaptureFrequency(int captureFrequency) {
+        // if we have no encoder or the frequencies don't match, we should reinitialize
+        if (!_opusEncoder || _captureFrequency != captureFrequency) {
+            _captureFrequency = captureFrequency;
+            _encodeFrequency = GetEncodeFrequency(captureFrequency);
+
+            _encodeFrameLength = GetFrameLength(_encodeFrequency);
+
+            // ensure the encode sample buffer can't be too small
+            if (_encodeSampleBuffer.size() < _encodeFrameLength) {
+                _encodeSampleBuffer = ArrayW<float>(il2cpp_array_size_t(_encodeFrameLength));
+            }
+
+            // dispose of old encoder and make a new one
+            if (_opusEncoder) _opusEncoder->Dispose();
+            _opusEncoder = UnityOpus::Encoder::New_ctor(
+                _encodeFrequency, OpusChannels, UnityOpus::OpusApplication::VoIP
+            );
+            _opusEncoder->set_Bitrate(Bitrate);
+            _opusEncoder->set_Complexity(OpusComplexity);
+            _opusEncoder->set_Signal(UnityOpus::OpusSignal::Voice);
+
+            INFO("(Re)Initialized Opus encoder (captureFrequency={}, encodeFrequency={}, encodeFrameLength={})", captureFrequency, _encodeFrequency.value, get_encodeFrameLength());
+        }
+    }
+
     void VoiceManager::EnsureResampleBufferSize(std::size_t minimumSize) {
         if (_resampleBuffer.size() < minimumSize) {
             _resampleBuffer = ArrayW<float>(il2cpp_array_size_t(minimumSize));
@@ -116,20 +165,23 @@ namespace MultiplayerChat::Audio {
         // Apply Gain
         Audio::AudioGain::Apply(samples, config.microphoneGain);
 
+        // ensure we have the correct encoder for this capture freq
+        EnsureEncoderForCaptureFrequency(captureFrequency);
+
         // if frequency does not match target, resample audio
-        auto outputFrequency = (int)OpusFrequency;
+        auto encodeFrequencyInt = _encodeFrequency.value;
 
         float* copySrcBuffer;
         int copySrcLength;
-        if (captureFrequency == outputFrequency) {
+        if (captureFrequency == encodeFrequencyInt) {
             copySrcBuffer = samples.begin();
             copySrcLength = samples.size();
         } else {
             try {
-                EnsureResampleBufferSize(Audio::AudioResample::ResampledSampleCount(samples.size(), captureFrequency, outputFrequency));
+                EnsureResampleBufferSize(Audio::AudioResample::ResampledSampleCount(samples.size(), captureFrequency, encodeFrequencyInt));
 
                 copySrcBuffer = _resampleBuffer.begin();
-                copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, outputFrequency);
+                copySrcLength = Audio::AudioResample::Resample(samples, _resampleBuffer, captureFrequency, encodeFrequencyInt);
             } catch (std::runtime_error& e) {
                 ERROR("Error thrown while resampling buffer: {}", e.what());
                 return;
@@ -139,9 +191,9 @@ namespace MultiplayerChat::Audio {
         // Continuously write to encode buffer until it reaches the target frame length, then encode
         for (auto i = 0; i < copySrcLength; i++) {
             _encodeSampleBuffer[_encodeSampleIndex++] = copySrcBuffer[i];
-            if (_encodeSampleIndex != FrameLength) continue;
+            if (_encodeSampleIndex != get_encodeFrameLength()) continue;
 
-            auto encodedLength = _opusEncoder->Encode(_encodeSampleBuffer, FrameLength, _encodeOutputBuffer);
+            auto encodedLength = _opusEncoder->Encode(_encodeSampleBuffer, get_encodeFrameLength(), _encodeOutputBuffer);
             HandleEncodedFrame(encodedLength);
 
             _encodeSampleIndex = 0;
@@ -227,6 +279,9 @@ namespace MultiplayerChat::Audio {
 
         if (get_isTransmitting()) return true;
 
+        if (!Audio::MicrophoneManager::get_hasMicrophonePermission())
+            return false;
+
         _isTransmitting = true;
         _microphoneManager->StartCapture();
 
@@ -279,7 +334,8 @@ namespace MultiplayerChat::Audio {
         SetupLoopback();
 
         _isLoopbackTesting = true;
-        _microphoneManager->StartCapture();
+        if (Audio::MicrophoneManager::get_hasMicrophonePermission())
+            _microphoneManager->StartCapture();
     }
 
     void VoiceManager::StopLoopbackTest() {

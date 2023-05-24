@@ -15,7 +15,7 @@ namespace MultiplayerChat::Audio {
 
         _spatialBlend = spatialBlend;
         _audioSource = nullptr;
-        _audioClip = UnityEngine::AudioClip::Create("JitterBufferClip", get_clipSampleSize(), (int)VoiceManager::OpusChannels, (int)VoiceManager::OpusFrequency, false);
+        _audioClip = UnityEngine::AudioClip::Create("JitterBufferClip", get_clipSampleSize(), (int)VoiceManager::OpusChannels, (int)VoiceManager::DecodeFrequency, false);
         _playbackBuffer = ArrayW<float>(il2cpp_array_size_t(get_clipFeedSize()));
 
         StopImmediate();
@@ -185,9 +185,9 @@ namespace MultiplayerChat::Audio {
         }
     }
 
-    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::OpusFrequency; }
+    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::DecodeFrequency; }
 
-    int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::FrameLength; }
+    int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::MaxFrameLength; }
 
     ArrayW<float> PlayerVoicePlayer::get_emptyClipSamples() {
         static SafePtr<Array<float>> emptyClipSamples;

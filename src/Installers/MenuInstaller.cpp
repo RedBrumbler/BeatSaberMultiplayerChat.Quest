@@ -33,6 +33,6 @@ namespace MultiplayerChat::Installers {
         container->BindInterfacesAndSelfTo<Core::LobbyIntegrator*>()->AsSingle();
 
         // HUD
-        FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle();
+        FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle()->NonLazy();
     }
 }

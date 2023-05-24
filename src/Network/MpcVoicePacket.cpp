@@ -57,7 +57,8 @@ namespace MultiplayerChat::Network {
     }
 
     Pooling::ArrayPool<uint8_t>*  MpcVoicePacket::get_bytePool() {
-        static Pooling::ArrayPool<uint8_t> pool(Audio::VoiceManager::FrameByteSize);
+        // Frame byte size should be ~240 bytes, based on 20ms @ 96000 bitrate. this may vary in practice
+        static Pooling::ArrayPool<uint8_t> pool(512);
         return &pool;
     }
 
@@ -67,7 +68,7 @@ namespace MultiplayerChat::Network {
         data = get_bytePool()->Spawn();
 
         if (data.size() < encodedSize)
-            throw std::runtime_error("This should never happen: rented buffer is too smol");
+            throw std::runtime_error(fmt::format("rented buffer is too small (need={}, got={})", encodedSize, data.size()));
 
         isRentedBuffer = true;
         bufferContentSize = encodedSize;

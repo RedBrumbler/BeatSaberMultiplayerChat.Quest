@@ -5,6 +5,7 @@
 #include "bsml/shared/macros.hpp"
 
 #include "HMUI/ViewController.hpp"
+#include "UnityEngine/GameObject.hpp"
 
 #include "Utilities/SpriteManager.hpp"
 #include "Audio/VoiceManager.hpp"
@@ -26,6 +27,8 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_FIELD_PRIVATE(Audio::SoundNotifier*, _soundNotifier);
     DECLARE_INSTANCE_FIELD_PRIVATE(Core::InputManager*, _inputManager);
 
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::GameObject*, noVoiceSettingsNotice);
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::GameObject*, voiceSettings);
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::UI::Button*, btnTestMic);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::DropdownListSetting*, dropdownNotification);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::ToggleSetting*, toggleVoice);
@@ -48,6 +51,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_FIELD_PRIVATE(bool, _bsmlReady);
 
     DECLARE_INSTANCE_METHOD(void, PostParse);
+    DECLARE_INSTANCE_METHOD(void, HandleRecheckMicrophonesClick);
     DECLARE_INSTANCE_METHOD(void, HandleBtnTestMicClick);
     DECLARE_INSTANCE_METHOD(void, HandleBtnResetHudOffsetClick);
 
@@ -66,6 +70,8 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_BSML_PROPERTY(float, hudOffsetCamX);
     DECLARE_BSML_PROPERTY(float, hudOffsetCamY);
     DECLARE_BSML_PROPERTY(float, hudOffsetCamZ);
+    DECLARE_INSTANCE_METHOD(bool, get_hasNoPermission);
+    DECLARE_INSTANCE_METHOD(bool, get_hasPermission);
 
     DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_soundNotificationOptions);
     DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_microphoneOptions);

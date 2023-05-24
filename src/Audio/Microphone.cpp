@@ -1,6 +1,6 @@
 #include "Audio/Microphone.hpp"
-
 namespace MultiplayerChat::Audio {
+
     UnityEngine::AudioClip* Microphone::Start(StringW deviceName, bool loop, int lengthSec, int frequency) {
         int microphoneDeviceIDFromName = GetMicrophoneDeviceIDFromName(deviceName);
         if (microphoneDeviceIDFromName == -1)

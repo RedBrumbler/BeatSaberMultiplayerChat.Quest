@@ -15,6 +15,6 @@ namespace MultiplayerChat::Installers {
         auto container = get_Container();
 
         container->BindInterfacesAndSelfTo<Core::GameplayIntegrator*>()->AsSingle();
-        FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle();
+        FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle()->NonLazy();
     }
 }

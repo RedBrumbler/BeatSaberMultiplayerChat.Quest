@@ -50,6 +50,12 @@ namespace MultiplayerChat::Audio {
                 return getDevices();
             }
 
+            static bool HasUserAuthorizedPerrmission(StringW permission) {
+                using UserGrantedPermssion_fun = function_ptr_t<bool, StringW>;
+                static auto hasUserAuthorizedPerrmission = reinterpret_cast<UserGrantedPermssion_fun>(il2cpp_functions::resolve_icall("UnityEngine.Android.Permission::HasUserAuthorizedPermission"));
+                return hasUserAuthorizedPerrmission(permission);
+            }
+
             static UnityEngine::AudioClip* Start(StringW deviceName, bool loop, int lengthSec, int frequency);
             static void End(StringW deviceName);
             static bool IsRecording(StringW deviceName);

@@ -60,7 +60,31 @@ namespace MultiplayerChat::Audio {
         }
     }
 
+    ArrayW<StringW> MicrophoneManager::GetAvailableDeviceNames(bool ignorePermission) {
+        if (!get_hasMicrophonePermission() && !ignorePermission) {
+            return ArrayW<StringW>(il2cpp_array_size_t(0));
+        }
+
+        auto actualDevices = Microphone::get_devices();
+        std::vector<StringW> devices;
+        if (actualDevices.size() > 0) {
+            // we remove devices we don't want to show, but if the user connects for example a headset or bluetooth, it should still show those
+            for (auto device : actualDevices) {
+                if (device != "Android camcorder input" && device != "Android voice recognition input") {
+                    devices.emplace_back(device);
+                }
+            }
+        }
+
+        return il2cpp_utils::vectorToArray(devices);
+    }
+
     bool MicrophoneManager::TryAutoSelectDevice() {
+        if (!get_hasMicrophonePermission()) {
+            ERROR("User has not granted microphone permission, not auto selecting device!");
+            return false;
+        }
+
         if (!config.microphoneDevice.empty() && TrySelectDevice(config.microphoneDevice))
             return true;
 
@@ -72,12 +96,17 @@ namespace MultiplayerChat::Audio {
     }
 
     bool MicrophoneManager::TrySelectDevice(StringW deviceName) {
+        if (!get_hasMicrophonePermission()) {
+            ERROR("User has not granted microphone permission, not selecting device!");
+            return false;
+        }
+
         if (deviceName && deviceName == "Default") deviceName = nullptr;
 
         if (get_isCapturing())
             StopCapture();
 
-        if (!deviceName || deviceName == "None") {
+        if (deviceName && deviceName == "None") {
             _selectedDeviceName = nullptr;
             _haveSelectedDevice = false;
             _minFreq = 0;
@@ -102,6 +131,7 @@ namespace MultiplayerChat::Audio {
 
     void MicrophoneManager::StartCapture() {
         StopCapture();
+
         if (!get_haveSelectedDevice())
             throw std::runtime_error("Cannot start capture without a selected device");
 

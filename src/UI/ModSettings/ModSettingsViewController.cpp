@@ -52,6 +52,15 @@ namespace MultiplayerChat::UI::ModSettings {
         RefreshUIState();
     }
 
+    void ModSettingsViewController::HandleRecheckMicrophonesClick() {
+        if (_microphoneManager->GetAvailableDeviceNames(true).size() > 0) {
+            _microphoneManager->TryAutoSelectDevice();
+
+            noVoiceSettingsNotice->SetActive(get_hasNoPermission());
+            voiceSettings->SetActive(get_hasPermission());
+        }
+    }
+
     void ModSettingsViewController::HandleBtnTestMicClick() {
         if (_voiceManager->get_isLoopbackTesting())
             _voiceManager->StopLoopbackTest();
@@ -68,6 +77,11 @@ namespace MultiplayerChat::UI::ModSettings {
         set_hudOffsetCamX(Config::defaultHudOffsetCamX);
         set_hudOffsetCamY(Config::defaultHudOffsetCamY);
         set_hudOffsetCamZ(Config::defaultHudOffsetCamZ);
+
+        sliderHudOpacity->ReceiveValue();
+        sliderHudOffsetCamX->ReceiveValue();
+        sliderHudOffsetCamY->ReceiveValue();
+        sliderHudOffsetCamZ->ReceiveValue();
 
         RefreshUIState();
     }
@@ -261,6 +275,15 @@ namespace MultiplayerChat::UI::ModSettings {
         SaveConfig();
         RefreshUIState();
     }
+
+    bool ModSettingsViewController::get_hasNoPermission() {
+        return !Audio::MicrophoneManager::get_hasMicrophonePermission();
+    }
+
+    bool ModSettingsViewController::get_hasPermission() {
+        return Audio::MicrophoneManager::get_hasMicrophonePermission();
+    }
+
 
 #pragma endregion // Settings/Bindings
 

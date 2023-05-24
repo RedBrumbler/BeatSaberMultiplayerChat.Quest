@@ -38,9 +38,13 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityOpus::Encoder*, _opusEncoder);
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityOpus::Decoder*, _opusDecoder);
 
+    DECLARE_INSTANCE_FIELD_PRIVATE(int, _captureFrequency);
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityOpus::SamplingFrequency, _encodeFrequency);
+
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _encodeSampleBuffer);
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _resampleBuffer);
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<uint8_t>, _encodeOutputBuffer);
+    DECLARE_INSTANCE_FIELD_PRIVATE(int, _encodeFrameLength);
     DECLARE_INSTANCE_FIELD_PRIVATE(int, _encodeSampleIndex);
 
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _decodeSampleBuffer);
@@ -62,11 +66,15 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
     DECLARE_CTOR(ctor);
     public:
         static constexpr const UnityOpus::NumChannels OpusChannels = UnityOpus::NumChannels::Mono;
-        static constexpr const UnityOpus::SamplingFrequency OpusFrequency = UnityOpus::SamplingFrequency::Frequency_48000;
+        static constexpr const UnityOpus::SamplingFrequency DecodeFrequency = UnityOpus::SamplingFrequency::Frequency_48000;
         static constexpr const int OpusComplexity = 10;
+        static constexpr const int MsPerFrame = 20;
         static constexpr const int Bitrate = 96000;
-        static constexpr const int FrameLength = 960; // = 20ms per voice fragment
-        static constexpr const int FrameByteSize = FrameLength * sizeof(float);
+        static constexpr const int MaxFrameLength = 960;
+
+        int get_encodeFrameLength() const;
+
+        static int GetFrameLength(int frequency);
 
         bool get_isTransmitting() const { return _isTransmitting; }
         bool get_isLoopbackTesting() const {return _isLoopbackTesting; }
@@ -92,12 +100,14 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
 
         void HandleSessionDisconnected(GlobalNamespace::DisconnectedReason reason);
         void EnsureResampleBufferSize(std::size_t minimumSize);
+        void EnsureEncoderForCaptureFrequency(int captureFrequency);
         void HandleMicrophoneFragment(ArrayW<float> samples, int captureFrequency);
         void HandleMicrophoneEnd();
         void HandleVoicePacket(Network::MpcVoicePacket* packet, GlobalNamespace::IConnectedPlayer* source);
 
         UnityEngine::AudioSource* SetupLoopback();
 
+        static UnityOpus::SamplingFrequency GetEncodeFrequency(int inputFrequency);
         void HandleEncodedFrame(int encodedLength);
         void HandleVoiceFragment(int decodedLength, GlobalNamespace::IConnectedPlayer* source);
         PlayerVoicePlayer* EnsurePlayerVoicePlayer(StringW userId);

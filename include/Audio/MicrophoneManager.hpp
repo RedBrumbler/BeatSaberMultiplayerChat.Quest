@@ -38,9 +38,12 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, MicrophoneManager, Il2C
         bool get_isCapturing() const { return _isCapturing; }
         bool get_haveSelectedDevice() const { return _haveSelectedDevice; }
 
-
         static inline bool AnyDevicesAvailable() { return Microphone::get_devices().size() > 0; }
-        static inline ArrayW<StringW> GetAvailableDeviceNames() { return Microphone::get_devices(); }
+        static ArrayW<StringW> GetAvailableDeviceNames(bool ignorePermission = false);
+        static bool get_hasMicrophonePermission() {
+            static ConstString microphonePermission("android.permission.RECORD_AUDIO");
+            return Microphone::HasUserAuthorizedPerrmission(microphonePermission);
+        }
 
         bool TryAutoSelectDevice();
         bool TrySelectDevice(StringW deviceName);

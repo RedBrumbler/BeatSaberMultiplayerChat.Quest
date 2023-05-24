@@ -109,6 +109,7 @@ namespace MultiplayerChat::UI::Hud {
 
 #pragma region State
     void HudVoiceIndicator::RefreshStatus() {
+
         auto isPlayingOrTesting = _sessionManager->get_isConnected() || _inputManager->get_testMode();
         auto canActivate = _voiceManager->get_canTransmit()|| _inputManager->get_testMode();
 
