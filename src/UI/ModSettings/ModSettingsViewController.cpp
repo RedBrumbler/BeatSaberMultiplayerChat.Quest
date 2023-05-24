@@ -246,7 +246,6 @@ namespace MultiplayerChat::UI::ModSettings {
 
     float ModSettingsViewController::get_hudOpacity() { return config.hudOpacity; }
     void ModSettingsViewController::set_hudOpacity(float value) {
-        // TODO: update hud
         config.hudOpacity = value;
         SaveConfig();
         RefreshUIState();
@@ -254,7 +253,6 @@ namespace MultiplayerChat::UI::ModSettings {
 
     float ModSettingsViewController::get_hudOffsetCamX() { return config.hudOffsetCamX; }
     void ModSettingsViewController::set_hudOffsetCamX(float value) {
-        // TODO: update hud
         config.hudOffsetCamX = value;
         SaveConfig();
         RefreshUIState();
@@ -262,7 +260,6 @@ namespace MultiplayerChat::UI::ModSettings {
 
     float ModSettingsViewController::get_hudOffsetCamY() { return config.hudOffsetCamY; }
     void ModSettingsViewController::set_hudOffsetCamY(float value) {
-        // TODO: update hud
         config.hudOffsetCamY = value;
         SaveConfig();
         RefreshUIState();
@@ -270,7 +267,6 @@ namespace MultiplayerChat::UI::ModSettings {
 
     float ModSettingsViewController::get_hudOffsetCamZ() { return config.hudOffsetCamZ; }
     void ModSettingsViewController::set_hudOffsetCamZ(float value) {
-        // TODO: update hud
         config.hudOffsetCamZ = value;
         SaveConfig();
         RefreshUIState();
