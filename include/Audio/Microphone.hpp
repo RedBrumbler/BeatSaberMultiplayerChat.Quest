@@ -6,7 +6,6 @@
 
 namespace MultiplayerChat::Audio {
     class Microphone {
-        // TODO: check all these icalls
         public:
             static int GetMicrophoneDeviceIDFromName(StringW name) {
                 using GetMicrophoneDeviceIDFromName_fun = function_ptr_t<int, StringW>;

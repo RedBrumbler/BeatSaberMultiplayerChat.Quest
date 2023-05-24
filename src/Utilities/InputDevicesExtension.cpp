@@ -1,7 +1,6 @@
 #include "Utilities/InputDevicesExtension.hpp"
 
 namespace MultiplayerChat::Utilities {
-    // TODO: verify icalls
     bool InputDevicesExtension::IsDeviceValid(UnityEngine::XR::InputDevice device) {
         return device.m_DeviceId != std::numeric_limits<uint64_t>::max() && IsDeviceValid(device.m_DeviceId);
     }
