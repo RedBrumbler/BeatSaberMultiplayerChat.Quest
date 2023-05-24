@@ -1,5 +1,6 @@
 #include "Models/ChatMessage.hpp"
 #include <fmt/core.h>
+#include <regex>
 
 #include "Network/MpcTextChatPacket.hpp"
 #include "bsml/shared/Helpers/utilities.hpp"
@@ -33,8 +34,8 @@ namespace MultiplayerChat::Models {
     }
 
     std::string ChatMessage::StripTags(const std::string& input) {
-        // TODO: regex replace: `Regex.Replace(input, "<.*?>", String.Empty);`
-        return input;
+        std::regex tags_re("<.*?>");
+        return std::regex_replace(input, tags_re, "");
     }
 
     ChatMessage ChatMessage::CreateForLocalPlayer(GlobalNamespace::IConnectedPlayer* player, std::string text) {
