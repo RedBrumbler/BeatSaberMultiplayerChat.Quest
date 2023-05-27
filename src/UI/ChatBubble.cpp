@@ -123,7 +123,7 @@ namespace MultiplayerChat::UI {
                 auto avatarCaptionName = avatarCaptionBg->get_transform()->Find("Name");
 
             if (avatarCaptionName) {
-                auto avatarCaptionText = avatarCaptionBg->get_transform()->Find("Name")->GetComponent<HMUI::CurvedTextMeshPro*>();
+                auto avatarCaptionText = avatarCaptionName->GetComponent<HMUI::CurvedTextMeshPro*>();
                 _textMesh->set_fontMaterial(avatarCaptionText->get_fontMaterial());
             }
         }
