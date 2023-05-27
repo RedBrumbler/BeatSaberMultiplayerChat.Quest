@@ -10,6 +10,8 @@
 #include "Core/ChatManager.hpp"
 #include "Core/InputManager.hpp"
 
+#include "Models/QuickChatOptions.hpp"
+
 #include "Utilities/SpriteManager.hpp"
 
 #include "lapiz/shared/utilities/ZenjectExtensions.hpp"
@@ -30,5 +32,7 @@ namespace MultiplayerChat::Installers {
 
         container->BindInterfacesAndSelfTo<Core::ChatManager*>()->AsSingle();
         container->BindInterfacesAndSelfTo<Audio::VoiceManager*>()->AsSingle();
+
+        container->BindInterfacesAndSelfTo<Models::QuickChatOptions*>()->AsSingle();
     }
 }

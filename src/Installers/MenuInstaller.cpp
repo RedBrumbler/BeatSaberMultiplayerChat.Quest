@@ -9,6 +9,7 @@
 #include "UI/Hud/HudVoiceIndicator.hpp"
 
 #include "UI/Lobby/ChatViewController.hpp"
+#include "UI/Lobby/QuickChatModal.hpp"
 #include "UI/ModSettings/ModSettingsViewController.hpp"
 #include "UI/ModSettings/ModSettingsFlowCoordinator.hpp"
 #include "UI/ModSettings/ModSettingsMenuController.hpp"
@@ -34,5 +35,6 @@ namespace MultiplayerChat::Installers {
 
         // HUD
         FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle()->NonLazy();
+        FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Lobby::QuickChatModal*>())->AsSingle();
     }
 }

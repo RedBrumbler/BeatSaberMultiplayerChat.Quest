@@ -21,6 +21,10 @@ namespace MultiplayerChat::Utilities {
         _micOnIcon->set_name("MicOnIcon");
         _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::UnreadBadge_png);
         _unreadBadgeIcon->set_name("UnreadBadgeIcon");
+        _bgMask = BSML::Utilities::LoadSpriteRaw(IncludedAssets::BG_Mask_png);
+        _bgMask->set_name("BG_Mask");
+        _radialButton = BSML::Utilities::LoadSpriteRaw(IncludedAssets::RadialButton_png);
+        _radialButton->set_name("RadialButton");
     }
 
     void SpriteManager::Dispose() {
@@ -29,5 +33,7 @@ namespace MultiplayerChat::Utilities {
         CLEAN_SPRITE(_micOffIcon);
         CLEAN_SPRITE(_micOnIcon);
         CLEAN_SPRITE(_unreadBadgeIcon);
+        CLEAN_SPRITE(_bgMask);
+        CLEAN_SPRITE(_radialButton);
     }
 }

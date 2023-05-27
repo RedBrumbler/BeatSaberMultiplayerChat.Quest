@@ -15,9 +15,11 @@
 
 #include "Core/ChatManager.hpp"
 #include "Models/ChatMessage.hpp"
+#include "QuickChatModal.hpp"
 #include <vector>
 
 DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::ViewController,
+    DECLARE_INSTANCE_FIELD_PRIVATE(QuickChatModal*, _quickChatModal);
     DECLARE_INSTANCE_FIELD_PRIVATE(Core::ChatManager*, _chatManager);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::Backgroundable*, chatViewBg);
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::ScrollableContainer*, scrollableContainer);
@@ -25,10 +27,11 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
     DECLARE_INSTANCE_FIELD_PRIVATE(BSML::StringSetting*, chatInput);
 
     DECLARE_INSTANCE_METHOD(void, PostParse);
+    DECLARE_INSTANCE_METHOD(void, OpenQuickChat);
 
     DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
-    DECLARE_INJECT_METHOD(void, Inject, Core::ChatManager* chatManager);
+    DECLARE_INJECT_METHOD(void, Inject, Core::ChatManager* chatManager, QuickChatModal* quickChatModal);
     DECLARE_CTOR(ctor);
     public:
         void ClearMessages(bool visualOnly = false);

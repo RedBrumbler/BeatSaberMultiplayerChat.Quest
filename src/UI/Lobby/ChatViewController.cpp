@@ -27,8 +27,9 @@ namespace MultiplayerChat::UI::Lobby {
         INVOKE_CTOR();
     }
 
-    void ChatViewController::Inject(Core::ChatManager* chatManager) {
+    void ChatViewController::Inject(Core::ChatManager* chatManager, QuickChatModal* quickChatModal) {
         _chatManager = chatManager;
+        _quickChatModal = quickChatModal;
     }
 
 #pragma region Core Events
@@ -49,6 +50,11 @@ namespace MultiplayerChat::UI::Lobby {
         FillChat();
 
         chatInput->modalKeyboard->keyboard->enterPressed = std::bind(&ChatViewController::HandleKeyboardInput, this, std::placeholders::_1);
+    }
+
+    void ChatViewController::OpenQuickChat() {
+        _quickChatModal->get_transform()->SetParent(get_transform(), false);
+        _quickChatModal->Show();
     }
 
     void ChatViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
@@ -98,7 +104,7 @@ namespace MultiplayerChat::UI::Lobby {
 
         // > Stretch the input element to span the full width
         auto valuePickerRect = reinterpret_cast<UnityEngine::RectTransform*>(inputT->Find("ValuePicker"));
-        valuePickerRect->set_offsetMin({-105, 0});
+        valuePickerRect->set_offsetMin({-85, 0});
 
         // > Make the background look nice
         auto buttonLeftSide = reinterpret_cast<UnityEngine::RectTransform*>(valuePickerRect->Find("DecButton"));
