@@ -251,7 +251,7 @@ namespace MultiplayerChat::Core {
         _playerAvatars->set_Item(userId, playerAvatarController);
 
         UI::ChatBubble* previousBubble = nullptr;
-        if (TryGetValue(_perUserBubbles, userId, previousBubble))
+        if (TryGetValue(_perUserBubbles, userId, previousBubble) && previousBubble && previousBubble->m_CachedPtr.m_value)
             UnityEngine::Object::Destroy(previousBubble->get_gameObject());
 
         auto avatarCaption = playerAvatarController->get_transform()->Find("AvatarCaption");
