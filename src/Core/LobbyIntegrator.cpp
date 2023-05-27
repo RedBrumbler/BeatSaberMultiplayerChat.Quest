@@ -173,6 +173,8 @@ namespace MultiplayerChat::Core {
             std::bind(&LobbyIntegrator::HandleMuteToggleClick, this, std::string(userId))
         )));
         mutePlayerButton->set_onClick(onClick);
+
+        UpdatePlayerListState(userId);
     }
 
     void LobbyIntegrator::HandleMuteToggleClick(std::string userId) {
