@@ -146,7 +146,14 @@ namespace MultiplayerChat::Core {
 
 #pragma region Player list
     void LobbyIntegrator::PostfixPlayerCellSetData(GlobalNamespace::IConnectedPlayer* player, UnityEngine::UI::Button* mutePlayerButton) {
-        _playerListButtons->set_Item(player->get_userId(), mutePlayerButton);
+        auto userId = player->get_userId();
+        _playerListButtons->set_Item(userId, mutePlayerButton);
+
+        // don't allow muting self
+        if (player->get_isMe()) {
+            mutePlayerButton->get_gameObject()->SetActive(false);
+            return;
+        }
 
         mutePlayerButton->get_gameObject()->SetActive(true);
 
@@ -163,7 +170,7 @@ namespace MultiplayerChat::Core {
 
         auto onClick = UnityEngine::UI::Button::ButtonClickedEvent::New_ctor();
         onClick->AddListener(custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>(
-            std::bind(&LobbyIntegrator::HandleMuteToggleClick, this, std::string(player->get_userId()))
+            std::bind(&LobbyIntegrator::HandleMuteToggleClick, this, std::string(userId))
         )));
         mutePlayerButton->set_onClick(onClick);
     }
