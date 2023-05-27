@@ -128,6 +128,8 @@ namespace MultiplayerChat::Core {
     }
 
     void ChatManager::SetIsPlayerMuted(std::string userId, bool isMuted) {
+        if (userId == _sessionManager->get_localPlayer()->get_userId()) return;
+
         auto userIsAlreadyMuted = std::find(config.mutedUserIds.begin(), config.mutedUserIds.end(), userId) != config.mutedUserIds.end();
 
         if (isMuted && !userIsAlreadyMuted)
