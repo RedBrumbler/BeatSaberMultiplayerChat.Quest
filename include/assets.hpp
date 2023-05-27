@@ -43,6 +43,7 @@ struct IncludedAsset {
 
 namespace IncludedAssets {
 
+	DECLARE_FILE(BG_Mask_png)
 	DECLARE_FILE(Chat_png)
 	DECLARE_FILE(ChatViewController_bsml)
 	DECLARE_FILE(ClubPing_ogg)
@@ -54,6 +55,9 @@ namespace IncludedAssets {
 	DECLARE_FILE(MicOn_ogg)
 	DECLARE_FILE(MicOn_png)
 	DECLARE_FILE(ModSettingsViewController_bsml)
+	DECLARE_FILE(QuickChatModal_bsml)
+	DECLARE_FILE(RadialButton_png)
 	DECLARE_FILE(UnreadBadge_png)
+	DECLARE_FILE(quickchat_json)
 
 }

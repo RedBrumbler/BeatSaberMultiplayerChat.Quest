@@ -12,6 +12,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Utilities, SpriteManager, Il2C
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _micOffIcon);
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _micOnIcon);
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _unreadBadgeIcon);
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _bgMask);
+    DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _radialButton);
 
     DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
     DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
@@ -24,4 +26,6 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Utilities, SpriteManager, Il2C
         UnityEngine::Sprite* get_micOffIcon() const { return _micOffIcon; }
         UnityEngine::Sprite* get_micOnIcon() const { return _micOnIcon; }
         UnityEngine::Sprite* get_unreadBadgeIcon() const { return _unreadBadgeIcon; }
+        UnityEngine::Sprite* get_bgMask() const { return _bgMask; }
+        UnityEngine::Sprite* get_radialButton() const { return _radialButton; }
 )

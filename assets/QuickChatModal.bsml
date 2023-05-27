@@ -1,0 +1,3 @@
+<modal id='modal' click-off-closes='false' size-delta-x='80' size-delta-y='80' move-to-center='true'>
+	<clickable-image id='backButton' ignore-layout='true' src='#HorizontalArrowIcon' on-click='BackButtonClick' preserve-aspect='true'/>
+</modal>
