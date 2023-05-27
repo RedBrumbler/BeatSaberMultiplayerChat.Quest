@@ -8,7 +8,7 @@
             <vertical id='noVoiceSettingsNotice' active='~hasNoPermission' anchor-pos-y='-5' child-control-height='false' spacing="1" pad="3">
                 <horizontal><text font-color='#f66' font-align='Center' label="You do not have mic permissions set!"/></horizontal>
                 <horizontal><text font-color='#f66' font-align='Center' label="Voice chat transmission will not work!"/></horizontal>
-                <horizontal><text/></horizontal>
+                <horizontal><text label=''/></horizontal>
                 <horizontal><text font-align='Center' label="If you didn't patch the game with those permissions, please repatch your game with those."/></horizontal>
                 <horizontal><text font-align='Center' label="If you didn't grant the permission, use the button below to attempt granting it."/></horizontal>
                 <horizontal><text font-align='Center' label="If that doesn't work or you denied the permission, please grant it in the Home menu, and restart the game."/></horizontal>
