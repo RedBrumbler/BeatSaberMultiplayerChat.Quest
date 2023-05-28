@@ -58,7 +58,8 @@ namespace MultiplayerChat::UI::Lobby {
     }
 
     void ChatViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-        BSML::parse_and_construct(IncludedAssets::ChatViewController_bsml, get_transform(), this);
+        if (firstActivation)
+            BSML::parse_and_construct(IncludedAssets::ChatViewController_bsml, get_transform(), this);
 
         if (!_bsmlReady || firstActivation) return;
 
@@ -204,6 +205,8 @@ namespace MultiplayerChat::UI::Lobby {
         image->set_sprite(message.SpriteForMessage());
 
         _chatLockedToBottom = true;
+
+        scrollableContainer->ScrollTo(std::numeric_limits<float>::max(), false);
     }
 
     std::pair<TMPro::TextMeshProUGUI*, HMUI::ImageView*> ChatViewController::AddMessageObject() {
