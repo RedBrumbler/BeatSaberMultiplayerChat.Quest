@@ -9,3 +9,4 @@ qpm_defines.cmake
 tombstone_*
 *.log
 .vscode/
+*.qmod

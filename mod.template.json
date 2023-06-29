@@ -1,0 +1,16 @@
+{
+    "_QPVersion": "0.1.1",
+    "name": "${mod_name}",
+    "id": "${mod_id}",
+    "author": "LookAtHippo",
+    "porter": "RedBrumbler",
+    "version": "${version}",
+    "packageId": "com.beatgames.beatsaber",
+    "packageVersion": "1.28.0_4124311467",
+    "description": "Port of MultiplayerChat, a mod that allows voice chat & text chat in multiplayer",
+    "dependencies": [],
+    "modFiles": [],
+    "libraryFiles": [],
+    "fileCopies": [],
+    "copyExtensions": []
+}
