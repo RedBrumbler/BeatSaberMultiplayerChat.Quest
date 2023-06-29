@@ -18,9 +18,36 @@ set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # compile options used
 add_compile_options(-frtti -fPIE -fPIC -fexceptions)
+
+# get git info
+execute_process(COMMAND git config user.name OUTPUT_VARIABLE GIT_USER)
+execute_process(COMMAND git branch --show-current OUTPUT_VARIABLE GIT_BRANCH)
+execute_process(COMMAND git rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHORT_COMMIT)
+execute_process(COMMAND git rev-parse HEAD OUTPUT_VARIABLE GIT_COMMIT)
+execute_process(COMMAND git diff-index --quiet HEAD RESULT_VARIABLE GIT_MODIFIED)
+
+string(STRIP ${GIT_USER} GIT_USER)
+string(STRIP ${GIT_BRANCH} GIT_BRANCH)
+string(STRIP ${GIT_SHORT_COMMIT} GIT_SHORT_COMMIT)
+string(STRIP ${GIT_COMMIT} GIT_COMMIT)
+string(STRIP ${GIT_MODIFIED} GIT_MODIFIED)
+
+message(STATUS "GIT_USER: ${GIT_USER}")
+message(STATUS "GIT_BRANCH: ${GIT_BRANCH}")
+message(STATUS "GIT_COMMIT: ${GIT_COMMIT}")
+message(STATUS "GIT_SHORT_COMMIT: ${GIT_SHORT_COMMIT}")
+message(STATUS "GIT_MODIFIED: ${GIT_MODIFIED}")
+
 # compile definitions used
 add_compile_definitions(VERSION=\"${MOD_VERSION}\")
 add_compile_definitions(MOD_ID=\"${MOD_ID}\")
+
+# some git defines
+add_compile_definitions(GIT_USER=\"${GIT_USER}\")
+add_compile_definitions(GIT_BRANCH=\"${GIT_BRANCH}\")
+add_compile_definitions(GIT_COMMIT=\"${GIT_COMMIT}\")
+add_compile_definitions(GIT_SHORT_COMMIT=\"${GIT_SHORT_COMMIT}\")
+add_compile_definitions(GIT_MODIFIED=${GIT_MODIFIED})
 
 # recursively get all src files
 RECURSE_FILES(cpp_file_list ${SOURCE_DIR}/*.cpp)

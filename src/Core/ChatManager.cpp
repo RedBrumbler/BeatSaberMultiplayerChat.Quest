@@ -68,7 +68,7 @@ namespace MultiplayerChat::Core {
 
         if (!get_textChatEnabled()) return;
 
-        ShowSystemMessage(fmt::format("MultiplayerChat v{}", Network::MpcVersionInfo::SoVersion));
+        ShowSystemMessage(fmt::format("MultiplayerChat v{} <color=#95a5a6>({})</color>", Network::MpcVersionInfo::SoVersion, Network::MpcVersionInfo::GitVersionInfo));
     }
 
     void ChatManager::ShowSystemMessage(std::string text) {
