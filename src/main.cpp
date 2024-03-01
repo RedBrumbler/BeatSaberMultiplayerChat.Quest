@@ -14,7 +14,7 @@
 
 #include <fstream>
 
-ModInfo modInfo{MOD_ID, VERSION};
+modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 
 Logger& getLogger() {
     static auto logger = new Logger(modInfo, LoggerOptions(false, true));
@@ -30,7 +30,7 @@ void write_bytes(std::string_view path, std::span<uint8_t> data) {
 
 #define WRITE_SOUND(identifier) \
     INFO("Writing out sound '"  #identifier ".ogg'"); \
-    write_bytes("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/" #identifier ".ogg", IncludedAssets::identifier##_ogg)
+    write_bytes("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/" #identifier ".ogg", Assets::Sounds::identifier##_ogg)
 
 void ExportSoundFiles() {
     mkpath("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/");
@@ -41,11 +41,13 @@ void ExportSoundFiles() {
     WRITE_SOUND(MicOff);
 }
 
-extern "C" void setup(ModInfo& info) {
-    info = modInfo;
+extern "C" __attribute__((visibility("default"))) void setup(CModInfo* info) {
+    info->id = MOD_ID;
+    info->version = VERSION;
+    info->version_long = 0;
 }
 
-extern "C" void load() {
+extern "C" __attribute__((visibility("default"))) void late_load() {
     if (!LoadConfig())
         SaveConfig();
 
@@ -66,4 +68,4 @@ extern "C" void load() {
     zenjector->Install<MultiplayerChat::Installers::MultiplayerInstaller*>(Lapiz::Zenject::Location::AlwaysMultiPlayer);
 }
 
-BSML_DATACACHE(keyboard) { return IncludedAssets::Keyboard_png; }
+BSML_DATACACHE(keyboard) { return Assets::Icons::Keyboard_png; }

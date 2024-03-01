@@ -19,7 +19,7 @@ namespace MultiplayerChat::UI::ModSettings {
 
     void ModSettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
         if (firstActivation)
-            BSML::parse_and_construct(IncludedAssets::ModSettingsViewController_bsml, get_transform(), this);
+            BSML::parse_and_construct(Assets::Views::ModSettingsViewController_bsml, get_transform(), this);
 
         RefreshUIState();
 
@@ -43,9 +43,9 @@ namespace MultiplayerChat::UI::ModSettings {
         _voiceManager->StopLoopbackTest();
 
         // Make dropdown bigger
-        auto trDropdownOuter = reinterpret_cast<UnityEngine::RectTransform*>(dropdownMic->get_transform());
+        auto trDropdownOuter = dropdownMic->transform.cast<UnityEngine::RectTransform>();
         trDropdownOuter->set_sizeDelta({64, 0});
-        auto trDropdownText = reinterpret_cast<UnityEngine::RectTransform*>(trDropdownOuter->Find("DropDownButton/Text"));
+        auto trDropdownText = trDropdownOuter->Find("DropDownButton/Text").cast<UnityEngine::RectTransform>();
         trDropdownText->set_anchorMin({0, .5f});
         trDropdownText->set_anchorMax({1, .5f});
 
@@ -114,12 +114,12 @@ namespace MultiplayerChat::UI::ModSettings {
 
         if (_voiceManager->get_isLoopbackTesting()) {
             btnTestMic->set_interactable(true);
-            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ff3b3b>Testing mic</color>");
+            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ff3b3b>Testing mic</color>", false);
             imgTestMic->set_sprite(_spriteManager->get_micOnIcon());
             imgTestMic->set_color(MpcColors::Green);
         } else {
             btnTestMic->set_interactable(get_enableVoiceChat() && _microphoneManager->get_haveSelectedDevice());
-            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ffffff>Test mic</color>");
+            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ffffff>Test mic</color>", false);
             imgTestMic->set_sprite(_spriteManager->get_micOffIcon());
             imgTestMic->set_color({0.5, 0.5, 0.5, 1});
         }
@@ -190,7 +190,7 @@ namespace MultiplayerChat::UI::ModSettings {
         if (config.microphoneDevice == "None" && (!selectedDevice || selectedDevice == "None")) return "None";
         selectedDevice = selectedDevice ? selectedDevice : "Default";
 
-        return get_microphoneOptions()->Contains(selectedDevice) ? selectedDevice : "None";
+        return get_microphoneOptions()->Contains(static_cast<System::Object*>(selectedDevice.convert())) ? selectedDevice : "None";
     }
 
     float ModSettingsViewController::get_micGain() { return config.microphoneGain; }
@@ -284,61 +284,63 @@ namespace MultiplayerChat::UI::ModSettings {
 #pragma endregion // Settings/Bindings
 
 #pragma region Option lists
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_soundNotificationOptions() {
+    ListW<System::Object*> ModSettingsViewController::get_soundNotificationOptions() {
         auto availableSounds = _soundNotifier->GetAvailableClipNames();
 
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+        auto list = ListW<System::Object*>::New();
         list->EnsureCapacity(availableSounds.size() + 1);
-        list->Add(StringW("None"));
-        for (const auto& sound : availableSounds) list->Add(StringW(sound));
+        list->Add(static_cast<System::Object*>(StringW("None").convert()));
+        for (auto sound : availableSounds) list->Add(static_cast<System::Object*>(StringW(sound).convert()));
 
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_microphoneOptions() {
+    ListW<System::Object*> ModSettingsViewController::get_microphoneOptions() {
         auto availableDevices = _microphoneManager->GetAvailableDeviceNames();
 
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
-        list->EnsureCapacity(availableDevices.size() + 1);
-        list->Add(StringW("None"));
-        list->Add(StringW("Default"));
-        for (auto sound : availableDevices) list->Add(sound);
+        auto list = ListW<System::Object*>::New();
+        list->EnsureCapacity(availableDevices.size() + 2);
+        list->Add(static_cast<System::Object*>(StringW("None").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Default").convert()));
+        for (auto sound : availableDevices) list->Add(static_cast<System::Object*>(sound.convert()));
 
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_activationOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<System::Object*> ModSettingsViewController::get_activationOptions() {
+        auto list = ListW<System::Object*>::New();
         list->EnsureCapacity(2);
-        list->Add(StringW("Hold"));
-        list->Add(StringW("Toggle"));
+        list->Add(static_cast<System::Object*>(StringW("Hold").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Toggle").convert()));
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_keybindOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<System::Object*> ModSettingsViewController::get_keybindOptions() {
+        auto list = ListW<System::Object*>::New();
         list->EnsureCapacity(4);
-        list->Add(StringW("PrimaryButton"));
-        list->Add(StringW("SecondaryButton"));
-        list->Add(StringW("Trigger"));
-        list->Add(StringW("StickPress"));
+
+        list->Add(static_cast<System::Object*>(StringW("PrimaryButton").convert()));
+        list->Add(static_cast<System::Object*>(StringW("SecondaryButton").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Trigger").convert()));
+        list->Add(static_cast<System::Object*>(StringW("StickPress").convert()));
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_controllerOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<System::Object*> ModSettingsViewController::get_controllerOptions() {
+        auto list = ListW<System::Object*>::New();
         list->EnsureCapacity(3);
-        list->Add(StringW("Left"));
-        list->Add(StringW("Right"));
-        list->Add(StringW("Either"));
+
+        list->Add(static_cast<System::Object*>(StringW("Left").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Right").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Either").convert()));
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_controllerOptionsAlt() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
-        list->EnsureCapacity(3);
-        list->Add(StringW("Left"));
-        list->Add(StringW("Right"));
+    ListW<System::Object*> ModSettingsViewController::get_controllerOptionsAlt() {
+        auto list = ListW<System::Object*>::New();
+        list->EnsureCapacity(2);
+        list->Add(static_cast<System::Object*>(StringW("Left").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Right").convert()));
         return list;
     }
 

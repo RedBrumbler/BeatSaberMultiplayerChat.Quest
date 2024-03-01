@@ -8,7 +8,7 @@
 #include "System/IDisposable.hpp"
 
 #include "Audio/VoiceManager.hpp"
-#include "GlobalNamespace/HapticFeedbackController.hpp"
+#include "GlobalNamespace/HapticFeedbackManager.hpp"
 #include "Audio/SoundNotifier.hpp"
 
 #include "UnityEngine/XR/XRNode.hpp"
@@ -19,7 +19,7 @@
 
 DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, InputManager, UnityEngine::MonoBehaviour, std::vector<Il2CppClass*>({ classof(Zenject::IInitializable*), classof(System::IDisposable*)}),
     DECLARE_INSTANCE_FIELD_PRIVATE(Audio::VoiceManager*, _voiceManager);
-    DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::HapticFeedbackController*, _hapticFeedback);
+    DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::HapticFeedbackManager*, _hapticFeedback);
     DECLARE_INSTANCE_FIELD_PRIVATE(Audio::SoundNotifier*, _soundNotifier);
 
     DECLARE_INSTANCE_FIELD_PRIVATE(System::Action_1<UnityEngine::XR::InputDevice>*, _deviceConnectedAction);
@@ -27,14 +27,14 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, InputManager, UnityEngin
 
     DECLARE_INSTANCE_FIELD_PRIVATE(Libraries::HM::HMLib::VR::HapticPresetSO*, _hapticPulsePreset);
 
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_INSTANCE_METHOD(void, OnEnable);
     DECLARE_INSTANCE_METHOD(void, OnDisable);
     DECLARE_INSTANCE_METHOD(void, Update);
 
-    DECLARE_INJECT_METHOD(void, Inject, Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackController* hapticFeedback, Audio::SoundNotifier* soundNotifier);
+    DECLARE_INJECT_METHOD(void, Inject, Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackManager* hapticFeedback, Audio::SoundNotifier* soundNotifier);
 
     DECLARE_CTOR(ctor);
     public:

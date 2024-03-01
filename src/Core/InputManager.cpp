@@ -20,7 +20,7 @@ namespace MultiplayerChat::Core {
         _hapticPulsePreset = CreateHapticPreset();
     }
 
-    void InputManager::Inject(Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackController* hapticFeedback, Audio::SoundNotifier* soundNotifier) {
+    void InputManager::Inject(Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackManager* hapticFeedback, Audio::SoundNotifier* soundNotifier) {
         _voiceManager = voiceManager;
         _hapticFeedback = hapticFeedback;
         _soundNotifier = soundNotifier;
@@ -30,18 +30,18 @@ namespace MultiplayerChat::Core {
         _leftController = Utilities::InputDevicesExtension::GetDeviceAtXRNode(UnityEngine::XR::XRNode::LeftHand);
         _rightController = Utilities::InputDevicesExtension::GetDeviceAtXRNode(UnityEngine::XR::XRNode::RightHand);
 
-        _deviceConnectedAction = custom_types::MakeDelegate<decltype(_deviceConnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
+        _deviceConnectedAction = custom_types::MakeDelegate<decltype(___backing_field__deviceConnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
             std::bind(&InputManager::HandleInputDeviceConnected, this, std::placeholders::_1)
         ));
-        _deviceDisconnectedAction = custom_types::MakeDelegate<decltype(_deviceDisconnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
+        _deviceDisconnectedAction = custom_types::MakeDelegate<decltype(___backing_field__deviceDisconnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
             std::bind(&InputManager::HandleInputDeviceDisconnected, this, std::placeholders::_1)
         ));
 
-        auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceConnected(combinedConnectedAction);
+        auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::getStaticF_deviceConnected(), _deviceConnectedAction));
+        UnityEngine::XR::InputDevices::setStaticF_deviceConnected(combinedConnectedAction);
 
-        auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceDisconnected(combinedDisconnectedAction);
+        auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::getStaticF_deviceDisconnected(), _deviceDisconnectedAction));
+        UnityEngine::XR::InputDevices::setStaticF_deviceDisconnected(combinedDisconnectedAction);
 
         PreloadSounds();
 
@@ -53,18 +53,18 @@ namespace MultiplayerChat::Core {
     }
 
     void InputManager::Dispose() {
-        auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceConnected(unCombinedConnectedAction);
+        auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::getStaticF_deviceConnected(), _deviceConnectedAction));
+        UnityEngine::XR::InputDevices::setStaticF_deviceConnected(unCombinedConnectedAction);
 
-        auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceDisconnected(unCombinedDisconnectedAction);
+        auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::getStaticF_deviceDisconnected(), _deviceDisconnectedAction));
+        UnityEngine::XR::InputDevices::setStaticF_deviceDisconnected(unCombinedDisconnectedAction);
 
         _triggerConditionIsActive = false;
         _debugKeyIsDown = false;
 
         set_testMode(false);
 
-        if (_hapticPulsePreset && _hapticPulsePreset->m_CachedPtr.m_value)
+        if (_hapticPulsePreset && _hapticPulsePreset->m_CachedPtr)
             UnityEngine::Object::Destroy(_hapticPulsePreset);
         _hapticPulsePreset = nullptr;
     }
@@ -291,10 +291,10 @@ namespace MultiplayerChat::Core {
 #pragma region Haptics
     Libraries::HM::HMLib::VR::HapticPresetSO* InputManager::CreateHapticPreset() {
         auto hapticPulsePreset = UnityEngine::ScriptableObject::CreateInstance<Libraries::HM::HMLib::VR::HapticPresetSO*>();
-        hapticPulsePreset->continuous = false;
-        hapticPulsePreset->duration = 0.1f;
-        hapticPulsePreset->frequency = 0.25f;
-        hapticPulsePreset->strength = 0.5f;
+        hapticPulsePreset->_continuous = false;
+        hapticPulsePreset->_duration = 0.1f;
+        hapticPulsePreset->_frequency = 0.25f;
+        hapticPulsePreset->_strength = 0.5f;
         return hapticPulsePreset;
     }
 

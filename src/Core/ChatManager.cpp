@@ -26,16 +26,16 @@ namespace MultiplayerChat::Core {
 
         _sessionConnected = false;
 
-        _sessionConnectedAction = custom_types::MakeDelegate<decltype(_sessionConnectedAction)>(std::function<void()>(
+        _sessionConnectedAction = custom_types::MakeDelegate<decltype(___backing_field__sessionConnectedAction)>(std::function<void()>(
             std::bind(&ChatManager::HandleSessionConnected, this)
         ));
-        _sessionDisconnectedAction = custom_types::MakeDelegate<decltype(_sessionDisconnectedAction)>(std::function<void(GlobalNamespace::DisconnectedReason)>(
+        _sessionDisconnectedAction = custom_types::MakeDelegate<decltype(___backing_field__sessionDisconnectedAction)>(std::function<void(GlobalNamespace::DisconnectedReason)>(
             std::bind(&ChatManager::HandleSessionDisconnected, this, std::placeholders::_1)
         ));
-        _sessionPlayerConnectedAction = custom_types::MakeDelegate<decltype(_sessionPlayerConnectedAction)>(std::function<void(GlobalNamespace::IConnectedPlayer*)>(
+        _sessionPlayerConnectedAction = custom_types::MakeDelegate<decltype(___backing_field__sessionPlayerConnectedAction)>(std::function<void(GlobalNamespace::IConnectedPlayer*)>(
             std::bind(&ChatManager::HandleSessionPlayerConnected, this, std::placeholders::_1)
         ));
-        _sessionPlayerDisconnectedAction = custom_types::MakeDelegate<decltype(_sessionPlayerDisconnectedAction)>(std::function<void(GlobalNamespace::IConnectedPlayer*)>(
+        _sessionPlayerDisconnectedAction = custom_types::MakeDelegate<decltype(___backing_field__sessionPlayerDisconnectedAction)>(std::function<void(GlobalNamespace::IConnectedPlayer*)>(
             std::bind(&ChatManager::HandleSessionPlayerDisconnected, this, std::placeholders::_1)
         ));
 
@@ -236,7 +236,7 @@ namespace MultiplayerChat::Core {
 
 #pragma region Utils
     std::string ChatManager::DescribeServerName() {
-        if (_sessionManager->get_connectionOwner() && !Il2CppString::IsNullOrWhiteSpace(_sessionManager->get_connectionOwner()->get_userName())) {
+        if (_sessionManager->get_connectionOwner() && !System::String::IsNullOrWhiteSpace(_sessionManager->get_connectionOwner()->get_userName())) {
             return _sessionManager->get_connectionOwner()->get_userName();
         }
 

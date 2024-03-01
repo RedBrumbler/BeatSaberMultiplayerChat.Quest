@@ -5,8 +5,8 @@
 
 #include <unordered_map>
 #include <string>
-DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Models, QuickChatOptions, Il2CppObject, classof(Zenject::IInitializable*),
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
+DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Models, QuickChatOptions, System::Object, classof(Zenject::IInitializable*),
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
     DECLARE_CTOR(ctor);
 
     public:

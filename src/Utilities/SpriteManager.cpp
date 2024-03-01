@@ -5,25 +5,25 @@
 DEFINE_TYPE(MultiplayerChat::Utilities, SpriteManager);
 
 #define CLEAN_SPRITE(sprite) \
-    if (sprite && sprite->m_CachedPtr.m_value)\
+    if (sprite && sprite->m_CachedPtr)\
         UnityEngine::Object::Destroy(sprite);\
     sprite = nullptr
 
 namespace MultiplayerChat::Utilities {
     void SpriteManager::Initialize() {
-        _chatIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::Chat_png);
+        _chatIcon = BSML::Utilities::LoadSpriteRaw(Assets::Icons::Chat_png);
         _chatIcon->set_name("ChatIcon");
-        _keyboardIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::Keyboard_png);
+        _keyboardIcon = BSML::Utilities::LoadSpriteRaw(Assets::Icons::Keyboard_png);
         _keyboardIcon->set_name("KeyboardIcon");
-        _micOffIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MicOff_png);
+        _micOffIcon = BSML::Utilities::LoadSpriteRaw(Assets::Icons::MicOff_png);
         _micOffIcon->set_name("MicOffIcon");
-        _micOnIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MicOn_png);
+        _micOnIcon = BSML::Utilities::LoadSpriteRaw(Assets::Icons::MicOn_png);
         _micOnIcon->set_name("MicOnIcon");
-        _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::UnreadBadge_png);
+        _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(Assets::Icons::UnreadBadge_png);
         _unreadBadgeIcon->set_name("UnreadBadgeIcon");
-        _bgMask = BSML::Utilities::LoadSpriteRaw(IncludedAssets::BG_Mask_png);
+        _bgMask = BSML::Utilities::LoadSpriteRaw(Assets::Radial::BG_Mask_png);
         _bgMask->set_name("BG_Mask");
-        _radialButton = BSML::Utilities::LoadSpriteRaw(IncludedAssets::RadialButton_png);
+        _radialButton = BSML::Utilities::LoadSpriteRaw(Assets::Radial::Button_png);
         _radialButton->set_name("RadialButton");
     }
 

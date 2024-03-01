@@ -7,6 +7,7 @@
 #include "config.hpp"
 
 #include "UnityEngine/GameObject.hpp"
+#include "UnityOpus/OpusApplication.hpp"
 
 #include "custom-types/shared/delegate.hpp"
 
@@ -35,9 +36,9 @@ namespace MultiplayerChat::Audio {
         _encodeOutputBuffer = ArrayW<uint8_t>(il2cpp_array_size_t(MaxFrameLength * sizeof(float)));
         _encodeSampleIndex = 0;
 
-        _encodeFrameLength = GetFrameLength(UnityOpus::SamplingFrequency::Frequency_48000);
+        _encodeFrameLength = GetFrameLength(UnityOpus::SamplingFrequency::Frequency_48000.value__);
 
-        _decodeSampleBuffer = ArrayW<float>(UnityOpus::Decoder::_get_maximumPacketDuration() * (int)OpusChannels);
+        _decodeSampleBuffer = ArrayW<float>(UnityOpus::Decoder::maximumPacketDuration * OpusChannels.value__);
         _isLoopbackTesting = false;
 
         _loopbackVoicePlayer = PlayerVoicePlayer::New_ctor("loopback", 250, 0);
@@ -94,7 +95,7 @@ namespace MultiplayerChat::Audio {
         _opusDecoder->Dispose();
 
         _isLoopbackTesting = false;
-        if (_loopbackTester && _loopbackTester->m_CachedPtr.m_value)
+        if (_loopbackTester && _loopbackTester->m_CachedPtr)
             UnityEngine::Object::Destroy(_loopbackTester);
     }
 
@@ -119,7 +120,7 @@ namespace MultiplayerChat::Audio {
         auto lastFreq = UnityOpus::SamplingFrequency::Frequency_48000;
         for (auto freq : opusFrequencies) {
             // return the upper bound frequency of our currently checked
-            if (inputFrequency > freq.value)
+            if (inputFrequency > freq.value__)
                 return lastFreq;
             lastFreq = freq;
         }
@@ -135,7 +136,7 @@ namespace MultiplayerChat::Audio {
             _captureFrequency = captureFrequency;
             _encodeFrequency = GetEncodeFrequency(captureFrequency);
 
-            _encodeFrameLength = GetFrameLength(_encodeFrequency);
+            _encodeFrameLength = GetFrameLength(_encodeFrequency.value__);
 
             // ensure the encode sample buffer can't be too small
             if (_encodeSampleBuffer.size() < _encodeFrameLength) {
@@ -151,7 +152,7 @@ namespace MultiplayerChat::Audio {
             _opusEncoder->set_Complexity(OpusComplexity);
             _opusEncoder->set_Signal(UnityOpus::OpusSignal::Voice);
 
-            INFO("(Re)Initialized Opus encoder (captureFrequency={}, encodeFrequency={}, encodeFrameLength={})", captureFrequency, _encodeFrequency.value, get_encodeFrameLength());
+            INFO("(Re)Initialized Opus encoder (captureFrequency={}, encodeFrequency={}, encodeFrameLength={})", captureFrequency, _encodeFrequency.value__, get_encodeFrameLength());
         }
     }
 
@@ -169,7 +170,7 @@ namespace MultiplayerChat::Audio {
         EnsureEncoderForCaptureFrequency(captureFrequency);
 
         // if frequency does not match target, resample audio
-        auto encodeFrequencyInt = _encodeFrequency.value;
+        auto encodeFrequencyInt = _encodeFrequency.value__;
 
         float* copySrcBuffer;
         int copySrcLength;
@@ -317,7 +318,7 @@ namespace MultiplayerChat::Audio {
     }
 
     UnityEngine::AudioSource* VoiceManager::SetupLoopback() {
-        if (!_loopbackTester || !_loopbackTester->m_CachedPtr.m_value) {
+        if (!_loopbackTester || !_loopbackTester->m_CachedPtr) {
             auto go = UnityEngine::GameObject::New_ctor("VoiceLoopbackTester");
             _loopbackTester = go->AddComponent<UnityEngine::AudioSource*>();
         }
@@ -369,8 +370,8 @@ namespace MultiplayerChat::Audio {
         _chatManager->SetPlayerIsSpeaking(voicePlayer->get_playerUserId(), false);
     }
 
-    void VoiceManager::ProvideAvatarAudio(GlobalNamespace::MultiplayerAvatarAudioController* avatarAudio) {
-        auto player = avatarAudio->connectedPlayer;
+    void VoiceManager::ProvideAvatarAudio(BeatSaber::AvatarCore::MultiplayerAvatarAudioController* avatarAudio) {
+        auto player = avatarAudio->_connectedPlayer;
 
         auto voicePlayer = EnsurePlayerVoicePlayer(player->get_userId());
         voicePlayer->SetMultiplayerAvatarAudioController(avatarAudio);

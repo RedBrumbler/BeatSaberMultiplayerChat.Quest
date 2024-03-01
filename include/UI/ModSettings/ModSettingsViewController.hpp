@@ -73,15 +73,15 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_METHOD(bool, get_hasNoPermission);
     DECLARE_INSTANCE_METHOD(bool, get_hasPermission);
 
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_soundNotificationOptions);
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_microphoneOptions);
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_activationOptions);
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_keybindOptions);
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_controllerOptions);
-    DECLARE_INSTANCE_METHOD(ListWrapper<Il2CppObject*>, get_controllerOptionsAlt);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_soundNotificationOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_microphoneOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_activationOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_keybindOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_controllerOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_controllerOptionsAlt);
 
-    DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
-    DECLARE_OVERRIDE_METHOD(void, DidDeactivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidDeactivate>::get(), bool removedFromHierarchy, bool screenSystemDisabling);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &::HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &::HMUI::ViewController::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);
 
     DECLARE_INJECT_METHOD(void, Inject, Utilities::SpriteManager* spriteManager, Audio::VoiceManager* voiceManager, Audio::MicrophoneManager* microphoneManager, Audio::SoundNotifier* soundNotifier, Core::InputManager* inputManager);
     public:

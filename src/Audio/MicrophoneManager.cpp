@@ -18,17 +18,17 @@ namespace MultiplayerChat::Audio {
     }
 
     void MicrophoneManager::Dispose() {
-        if (_captureClip && _captureClip->m_CachedPtr.m_value)
+        if (_captureClip && _captureClip->m_CachedPtr)
             UnityEngine::Object::Destroy(_captureClip);
         _captureClip = nullptr;
     }
 
     static inline bool is_null(UnityEngine::Object* obj) {
-        return !obj || !obj->m_CachedPtr.m_value;
+        return !obj || !obj->m_CachedPtr;
     }
 
     static inline bool not_null(UnityEngine::Object* obj) {
-        return obj && obj->m_CachedPtr.m_value;
+        return obj && obj->m_CachedPtr;
     }
 
     void MicrophoneManager::Tick() {
@@ -154,7 +154,7 @@ namespace MultiplayerChat::Audio {
         Microphone::End(get_selectedDeviceName());
         _isCapturing = false;
 
-        if (_captureClip && _captureClip->m_CachedPtr.m_value)
+        if (_captureClip && _captureClip->m_CachedPtr)
             UnityEngine::Object::Destroy(_captureClip);
         _captureClip = nullptr;
 

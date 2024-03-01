@@ -1,80 +1,83 @@
 {
+  "version": "0.1.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
     "name": "MultiplayerChat",
     "id": "mpchat",
-    "version": "0.1.0",
+    "version": "0.1.0-Dev",
     "url": "https://github.com/RedBrumbler/BeatSaberMultiplayerChat.Quest",
     "additionalData": {
-      "overrideSoName": "libmpchat.so"
+      "overrideSoName": "libmpchat.so",
+      "cmake": true
     }
   },
-  "dependencies": [
-    {
-      "id": "libil2cpp",
-      "versionRange": "^0.2.3",
-      "additionalData": {}
-    },
-    {
-      "id": "beatsaber-hook",
-      "versionRange": "^3.14.0",
-      "additionalData": {
-        "extraFiles": [
-          "src/inline-hook"
-        ]
-      }
-    },
-    {
-      "id": "codegen",
-      "versionRange": "^0.33.0",
-      "additionalData": {}
-    },
-    {
-      "id": "custom-types",
-      "versionRange": "^0.15.24",
-      "additionalData": {}
-    },
-    {
-      "id": "lapiz",
-      "versionRange": "^0.1.11",
-      "additionalData": {}
-    },
-    {
-      "id": "bsml",
-      "versionRange": "^0.3.2",
-      "additionalData": {}
-    },
-    {
-      "id": "multiplayer-core",
-      "versionRange": "^1.5.0",
-      "additionalData": {}
-    },
-    {
-      "id": "paper",
-      "versionRange": "^1.2.12",
-      "additionalData": {}
-    }
-  ],
   "workspace": {
     "scripts": {
       "build": [
         "pwsh ./scripts/build.ps1"
       ],
+      "clean": [
+        "pwsh ./scripts/build.ps1 -clean"
+      ],
       "copy": [
         "pwsh ./scripts/copy.ps1"
-      ],
-      "qmod": [
-        "pwsh ./scripts/build.ps1 -clean",
-        "qpm-rust qmod build",
-        "pwsh ./scripts/createqmod.ps1 MultiplayerChat -clean"
       ],
       "log": [
         "pwsh ./scripts/log.ps1"
       ],
-      "clean": [
-        "pwsh ./scripts/build.ps1 -clean"
+      "qmod": [
+        "pwsh ./scripts/build.ps1 -clean",
+        "qpm qmod build",
+        "pwsh ./scripts/createqmod.ps1 MultiplayerChat -clean"
       ]
     }
-  }
+  },
+  "dependencies": [
+    {
+      "id": "libil2cpp",
+      "versionRange": "^0.3.0",
+      "additionalData": {}
+    },
+    {
+      "id": "beatsaber-hook",
+      "versionRange": "^5.0.0",
+      "additionalData": {}
+    },
+    {
+      "id": "bs-cordl",
+      "versionRange": "3402.*",
+      "additionalData": {}
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.16.0",
+      "additionalData": {}
+    },
+    {
+      "id": "lapiz",
+      "versionRange": "^0.2.0",
+      "additionalData": {}
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.4.0",
+      "additionalData": {}
+    },
+    {
+      "id": "multiplayer-core",
+      "versionRange": "^1.6.0",
+      "additionalData": {}
+    },
+    {
+      "id": "paper",
+      "versionRange": "^3.0.0",
+      "additionalData": {}
+    },
+    {
+      "id": "kaleb",
+      "versionRange": "^0.1.9",
+      "additionalData": {}
+    }
+  ]
 }

@@ -7,10 +7,19 @@
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/Canvas.hpp"
+#include "UnityEngine/Quaternion.hpp"
 #include "HMUI/HoverHintController.hpp"
 #include "HMUI/HoverHintPanel.hpp"
 
 DEFINE_TYPE(MultiplayerChat::UI, ChatBubble);
+
+static constexpr UnityEngine::Vector3 operator+(UnityEngine::Vector3 a, UnityEngine::Vector3 b) {
+    return {
+        a.x + b.x,
+        a.y + b.y,
+        a.z + b.z,
+    };
+}
 
 namespace MultiplayerChat::UI {
     void ChatBubble::ctor() {
@@ -18,7 +27,7 @@ namespace MultiplayerChat::UI {
     }
     ChatBubble* ChatBubble::Create(Zenject::DiContainer* container, UnityEngine::Transform* parent, AlignStyle style) {
         auto hhc = container->Resolve<HMUI::HoverHintController*>();
-        auto hhPrefab = hhc->hoverHintPanelPrefab;
+        auto hhPrefab = hhc->_hoverHintPanelPrefab;
 
         auto instance = UnityEngine::Object::Instantiate(hhPrefab->get_gameObject(), parent, false);
         instance->get_transform()->SetAsLastSibling();
@@ -32,7 +41,7 @@ namespace MultiplayerChat::UI {
     }
 
     void ChatBubble::Awake() {
-        _rectTransform = reinterpret_cast<UnityEngine::RectTransform*>(get_transform());
+        _rectTransform = transform.cast<UnityEngine::RectTransform>();
         _rectTransform->set_pivot({0.5f, 0.5f});
         _rectTransform->set_anchorMin({0.5f, 0.5f});
         _rectTransform->set_anchorMax({0.5f, 0.5f});
@@ -49,7 +58,7 @@ namespace MultiplayerChat::UI {
         _textMesh->set_fontSize(4.8f);
         _textMesh->set_richText(true);
 
-        auto textMeshRect = reinterpret_cast<UnityEngine::RectTransform*>(_textMesh->get_transform());
+        auto textMeshRect = _textMesh->transform.cast<UnityEngine::RectTransform>();
         textMeshRect->set_offsetMin({-60, 0});
         textMeshRect->set_offsetMax({60, 0});
 
@@ -81,9 +90,9 @@ namespace MultiplayerChat::UI {
 
     void ChatBubble::RefreshSize() {
         if (!_rectTransform || !_textMesh) return;
-        _textMesh->ForceMeshUpdate();
+        _textMesh->ForceMeshUpdate(false, false);
 
-        auto vector = _textMesh->get_bounds().get_size() + UnityEngine::Vector3(Padding.x, Padding.y, 0);
+        auto vector = _textMesh->bounds.size + UnityEngine::Vector3(Padding.x, Padding.y, 0);
         _rectTransform->set_sizeDelta({vector.x, vector.y});
 
         auto localPosition = _rectTransform->get_localPosition();

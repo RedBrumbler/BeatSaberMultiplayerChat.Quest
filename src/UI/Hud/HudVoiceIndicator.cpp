@@ -10,10 +10,15 @@
 #include "UnityEngine/RenderMode.hpp"
 #include "UnityEngine/CanvasGroup.hpp"
 #include "UnityEngine/UI/CanvasScaler.hpp"
+#include "UnityEngine/Quaternion.hpp"
+#include "UnityEngine/Vector3.hpp"
 #include "HMUI/CurvedCanvasSettings.hpp"
-#include "UnityEngine/Camera_MonoOrStereoscopicEye.hpp"
 
 DEFINE_TYPE(MultiplayerChat::UI::Hud, HudVoiceIndicator);
+
+static UnityEngine::Quaternion operator *(UnityEngine::Quaternion a, UnityEngine::Quaternion b) {
+    return UnityEngine::Quaternion::op_Multiply(a, b);
+}
 
 static constexpr inline UnityEngine::Color lerp(UnityEngine::Color a, UnityEngine::Color b, float t) {
     return {
@@ -28,11 +33,11 @@ namespace MultiplayerChat::UI::Hud {
     void HudVoiceIndicator::ctor() {
         INVOKE_CTOR();
 
-        _connectedAction = custom_types::MakeDelegate<decltype(_connectedAction)>(std::function<void()>(
+        _connectedAction = custom_types::MakeDelegate<decltype(___backing_field__connectedAction)>(std::function<void()>(
             std::bind(&HudVoiceIndicator::RefreshStatus, this)
         ));
 
-        _disconnectedAction = custom_types::MakeDelegate<decltype(_disconnectedAction)>(std::function<void(GlobalNamespace::DisconnectedReason)>(
+        _disconnectedAction = custom_types::MakeDelegate<decltype(___backing_field__disconnectedAction)>(std::function<void(GlobalNamespace::DisconnectedReason)>(
             std::bind(&HudVoiceIndicator::RefreshStatus_Disconnected, this, std::placeholders::_1)
         ));
     }
@@ -141,7 +146,7 @@ namespace MultiplayerChat::UI::Hud {
             // Fully hidden, do nothing
             return;
 
-        if (_mainCamera && _mainCamera->m_CachedPtr.m_value) {
+        if (_mainCamera && _mainCamera->m_CachedPtr) {
             // Stick to main cam
             auto selfTransform = get_transform();
             selfTransform->set_position(_mainCamera->ViewportToWorldPoint(get_hudOffset(), UnityEngine::Camera::MonoOrStereoscopicEye::Mono));
@@ -163,22 +168,23 @@ namespace MultiplayerChat::UI::Hud {
 
         switch (_targetDisplayState)
         {
-            case DisplayState::Hidden:
+            using enum DisplayState;
+            case Hidden:
                 targetOpacity = 0;
                 targetColor = MpcColors::Red;
-                targetSprite = _spriteManager->get_micOffIcon();
+                targetSprite = _spriteManager->MicOffIcon;
                 break;
             default:
-            case DisplayState::VisibleActive:
+            case VisibleActive:
                 targetOpacity = config.hudOpacity;
                 targetColor = MpcColors::Green;
-                targetSprite = _spriteManager->get_micOnIcon();
+                targetSprite = _spriteManager->MicOnIcon;
                 break;
-            case DisplayState::VisibleMuted:
-            case DisplayState::VisibleLocked:
+            case VisibleMuted:
+            case VisibleLocked:
                 targetOpacity = config.hudOpacity * .5f;
                 targetColor = MpcColors::Red;
-                targetSprite = _spriteManager->get_micOffIcon();
+                targetSprite = _spriteManager->MicOffIcon;
                 break;
         }
 

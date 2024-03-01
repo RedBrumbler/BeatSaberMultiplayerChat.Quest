@@ -9,7 +9,7 @@
 
 #include "Microphone.hpp"
 
-DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, MicrophoneManager, Il2CppObject,  std::vector<Il2CppClass*>({classof(System::IDisposable*), classof(Zenject::IInitializable*), classof(Zenject::ITickable*)}),
+DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, MicrophoneManager, System::Object,  std::vector<Il2CppClass*>({classof(System::IDisposable*), classof(Zenject::IInitializable*), classof(Zenject::ITickable*)}),
     DECLARE_INSTANCE_FIELD_PRIVATE(StringW, _selectedDeviceName);
     DECLARE_INSTANCE_FIELD_PRIVATE(bool, _haveSelectedDevice);
 
@@ -22,9 +22,9 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, MicrophoneManager, Il2C
     DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<float>, _micBuffer);
     DECLARE_INSTANCE_FIELD_PRIVATE(bool, _isCapturing);
 
-    DECLARE_OVERRIDE_METHOD(void, Tick, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::ITickable::Tick>::get());
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Tick, &::Zenject::ITickable::Tick);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_CTOR(ctor);
     public:

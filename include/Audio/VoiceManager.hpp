@@ -15,7 +15,7 @@
 #include "GlobalNamespace/DisconnectedReason.hpp"
 #include "GlobalNamespace/IConnectedPlayer.hpp"
 #include "GlobalNamespace/IMultiplayerSessionManager.hpp"
-#include "GlobalNamespace/MultiplayerAvatarAudioController.hpp"
+#include "BeatSaber/AvatarCore/MultiplayerAvatarAudioController.hpp"
 #include "System/Collections/Generic/Dictionary_2.hpp"
 #include "System/Action_1.hpp"
 #include "Zenject/DiContainer.hpp"
@@ -30,7 +30,7 @@ namespace MultiplayerChat {
     namespace Audio { class MicrophoneManager; }
 }
 
-DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObject, std::vector<Il2CppClass*>({classof(System::IDisposable*), classof(Zenject::IInitializable*), classof(Zenject::ITickable*)}),
+DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, System::Object, std::vector<Il2CppClass*>({classof(System::IDisposable*), classof(Zenject::IInitializable*), classof(Zenject::ITickable*)}),
     DECLARE_INSTANCE_FIELD_PRIVATE(MultiplayerCore::Networking::MpPacketSerializer*, _packetSerializer);
     DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::IMultiplayerSessionManager*, _sessionManager);
 
@@ -58,9 +58,9 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
     using VoicePlayerDict = System::Collections::Generic::Dictionary_2<StringW, PlayerVoicePlayer*>;
     DECLARE_INSTANCE_FIELD_PRIVATE(VoicePlayerDict*, _voicePlayers);
 
-    DECLARE_OVERRIDE_METHOD(void, Tick, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::ITickable::Tick>::get());
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Tick, &::Zenject::ITickable::Tick);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_INJECT_METHOD(void, Inject, MultiplayerCore::Networking::MpPacketSerializer* packetSerializer, GlobalNamespace::IMultiplayerSessionManager* sessionManager, Zenject::DiContainer* container);
     DECLARE_CTOR(ctor);
@@ -92,7 +92,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, VoiceManager, Il2CppObj
         void StartLoopbackTest();
         void StopLoopbackTest();
 
-        void ProvideAvatarAudio(GlobalNamespace::MultiplayerAvatarAudioController* avatarAudio);
+        void ProvideAvatarAudio(BeatSaber::AvatarCore::MultiplayerAvatarAudioController* avatarAudio);
     private:
         /* Circular dependencies be like: */
         Core::ChatManager* _chatManager;

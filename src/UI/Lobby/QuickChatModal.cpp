@@ -12,6 +12,9 @@
 
 DEFINE_TYPE(MultiplayerChat::UI::Lobby, QuickChatModal);
 
+static constexpr UnityEngine::Vector2 operator +(UnityEngine::Vector2 a, UnityEngine::Vector2 b) {
+    return { a.x + b.x, a.y + b.y };
+}
 namespace MultiplayerChat::UI::Lobby {
     void QuickChatModal::ctor() {
         INVOKE_CTOR();
@@ -25,11 +28,11 @@ namespace MultiplayerChat::UI::Lobby {
     }
 
     void QuickChatModal::Initialize() {
-        BSML::parse_and_construct(IncludedAssets::QuickChatModal_bsml, get_transform(), this);
+        BSML::parse_and_construct(Assets::QuickChatModal_bsml, get_transform(), this);
     }
 
     void QuickChatModal::Dispose() {
-        if (modal && modal->m_CachedPtr.m_value) {
+        if (modal && modal->m_CachedPtr) {
             Destroy(modal->get_gameObject());
         }
     }
@@ -133,7 +136,7 @@ namespace MultiplayerChat::UI::Lobby {
         for (int i = 0; i < 8; i++) {
             auto btnText = _buttonTexts[i];
             btnText->set_text(i < textsLen ? texts[i] : "");
-            btnText->get_transform()->get_parent()->get_gameObject()->SetActive(!Il2CppString::IsNullOrEmpty(btnText->get_text()));
+            btnText->get_transform()->get_parent()->get_gameObject()->SetActive(!System::String::IsNullOrEmpty(btnText->text));
         }
     }
 

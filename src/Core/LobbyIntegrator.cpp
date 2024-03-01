@@ -8,7 +8,6 @@
 #include "UnityEngine/Events/UnityAction.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
-#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 
 DEFINE_TYPE(MultiplayerChat::Core, LobbyIntegrator);
 
@@ -66,20 +65,20 @@ namespace MultiplayerChat::Core {
         _playerAvatars->Clear();
         _playerListButtons->Clear();
 
-        if (_centerBubble && _centerBubble->m_CachedPtr.m_value)
+        if (_centerBubble && _centerBubble->m_CachedPtr)
             UnityEngine::Object::Destroy(_centerBubble);
         _centerBubble = nullptr;
 
         auto enumerator = _perUserBubbles->GetEnumerator();
         while (enumerator.MoveNext()) {
             auto bubble = enumerator.get_Current().get_Value();
-            if (bubble && bubble->m_CachedPtr.m_value)
+            if (bubble && bubble->m_CachedPtr)
                 UnityEngine::Object::Destroy(bubble);
         }
         enumerator.Dispose();
         _perUserBubbles->Clear();
 
-        if (_chatTitleButton && _chatTitleButton->m_CachedPtr.m_value) {
+        if (_chatTitleButton && _chatTitleButton->m_CachedPtr) {
             _chatTitleButton->onClick -= {&LobbyIntegrator::HandleChatTitleButtonClick, this};
             UnityEngine::Object::Destroy(_chatTitleButton);
         }
@@ -92,12 +91,12 @@ namespace MultiplayerChat::Core {
         auto enumerator = _perUserBubbles->GetEnumerator();
         while (enumerator.MoveNext()) {
             auto [key, userBubble] = enumerator.get_Current();
-            if (userBubble && userBubble->m_CachedPtr.m_value)
+            if (userBubble && userBubble->m_CachedPtr)
                 userBubble->HideImmediate();
         }
         enumerator.Dispose();
 
-        if (_centerBubble && _centerBubble->m_CachedPtr.m_value)
+        if (_centerBubble && _centerBubble->m_CachedPtr)
             _centerBubble->HideImmediate();
 
         _chatViewController->ClearMessages();
@@ -109,7 +108,7 @@ namespace MultiplayerChat::Core {
         // Player bubble
         auto showPlayerBubble = config.enablePlayerBubbles && !message.get_senderIsHost() && !message.get_senderIsMe();
         UI::ChatBubble* userBubble = nullptr;
-        if (showPlayerBubble && TryGetValue(_perUserBubbles, StringW(message.get_userId()), userBubble) && userBubble && userBubble->m_CachedPtr.m_value) {
+        if (showPlayerBubble && TryGetValue(_perUserBubbles, StringW(message.get_userId()), userBubble) && userBubble && userBubble->m_CachedPtr) {
             if (userBubble->get_isShowing())
                 userBubble->HideImmediate();
 
@@ -119,7 +118,7 @@ namespace MultiplayerChat::Core {
         // Center bubble
         auto showCenterBubble = config.enableCenterBubbles && !message.get_senderIsMe();
 
-        if (showCenterBubble && _centerBubble && _centerBubble->m_CachedPtr.m_value) {
+        if (showCenterBubble && _centerBubble && _centerBubble->m_CachedPtr) {
             if (_centerBubble->get_isShowing())
                 _centerBubble->HideImmediate();
 
@@ -159,11 +158,11 @@ namespace MultiplayerChat::Core {
 
         auto spriteSwap = mutePlayerButton->GetComponent<HMUI::ButtonSpriteSwapToggle*>();
         if (spriteSwap) {
-            if (!_nativeIconSpeakerSound || !_nativeIconSpeakerSound->m_CachedPtr.m_value)
-                _nativeIconSpeakerSound = spriteSwap->normalStateSprite;
+            if (!_nativeIconSpeakerSound || !_nativeIconSpeakerSound->m_CachedPtr)
+                _nativeIconSpeakerSound = spriteSwap->_normalStateSprite;
 
-            if (!_nativeIconMuted || !_nativeIconMuted->m_CachedPtr.m_value)
-                _nativeIconMuted = spriteSwap->pressedStateSprite;
+            if (!_nativeIconMuted || !_nativeIconMuted->m_CachedPtr)
+                _nativeIconMuted = spriteSwap->_pressedStateSprite;
 
             spriteSwap->set_enabled(false);
         }
@@ -260,14 +259,14 @@ namespace MultiplayerChat::Core {
         _playerAvatars->set_Item(userId, playerAvatarController);
 
         UI::ChatBubble* previousBubble = nullptr;
-        if (TryGetValue(_perUserBubbles, userId, previousBubble) && previousBubble && previousBubble->m_CachedPtr.m_value)
+        if (TryGetValue(_perUserBubbles, userId, previousBubble) && previousBubble && previousBubble->m_CachedPtr)
             UnityEngine::Object::Destroy(previousBubble->get_gameObject());
 
         auto avatarCaption = playerAvatarController->get_transform()->Find("AvatarCaption");
         auto chatBubble = UI::ChatBubble::Create(_diContainer, avatarCaption, UI::AlignStyle::LobbyAvatar);
         _perUserBubbles->set_Item(userId, chatBubble);
 
-        _voiceManager->ProvideAvatarAudio(playerAvatarController->GetComponent<GlobalNamespace::MultiplayerAvatarAudioController*>());
+        _voiceManager->ProvideAvatarAudio(playerAvatarController->GetComponent<BeatSaber::AvatarCore::MultiplayerAvatarAudioController*>());
     }
 
 #pragma endregion // Lobby avatars
@@ -278,7 +277,7 @@ namespace MultiplayerChat::Core {
     }
 
     void LobbyIntegrator::PostfixLobbySetupDeactivation() {
-        if (_chatTitleButton && _chatTitleButton->m_CachedPtr.m_value)
+        if (_chatTitleButton && _chatTitleButton->m_CachedPtr)
             _chatTitleButton->get_gameObject()->SetActive(false);
     }
 

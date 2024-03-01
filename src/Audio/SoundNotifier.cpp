@@ -37,14 +37,14 @@ namespace MultiplayerChat::Audio {
     }
 
     void SoundNotifier::Dispose() {
-        if (_audioSource && _audioSource->m_CachedPtr.m_value) {
+        if (_audioSource && _audioSource->m_CachedPtr) {
             _audioSource->Stop();
         }
 
         auto enumerator = _loadedClips->GetEnumerator();
         while (enumerator.MoveNext()) {
             auto clip = enumerator.get_Current().get_Value();
-            if (clip && clip->m_CachedPtr.m_value)
+            if (clip && clip->m_CachedPtr)
                 UnityEngine::Object::Destroy(clip);
         }
         enumerator.Dispose();
@@ -61,7 +61,7 @@ namespace MultiplayerChat::Audio {
         if (clipName == "None") return;
         _previewMode = false;
 
-        if (!_audioSource || !_audioSource->m_CachedPtr.m_value) return;
+        if (!_audioSource || !_audioSource->m_CachedPtr) return;
 
         if (!clipName.ends_with(".ogg")) clipName += ".ogg";
 
@@ -139,7 +139,7 @@ namespace MultiplayerChat::Audio {
         while(!webreq->get_isDone()) co_yield nullptr;
         DEBUG("request for '{}' is marked done", clipName);
 
-        if (!Il2CppString::IsNullOrEmpty(req->get_error())) {
+        if (!System::String::IsNullOrEmpty(req->get_error())) {
             ERROR("Error trying to load {}: {}", clipPath, req->get_error());
             co_return;
         }

@@ -16,7 +16,7 @@
 
 #include "multiplayer-core/shared/Networking/MpPacketSerializer.hpp"
 
-DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, ChatManager, Il2CppObject, std::vector<Il2CppClass*>({ classof(Zenject::IInitializable*), classof(System::IDisposable*)}),
+DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, ChatManager, System::Object, std::vector<Il2CppClass*>({ classof(Zenject::IInitializable*), classof(System::IDisposable*)}),
     DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::IMultiplayerSessionManager*, _sessionManager);
     DECLARE_INSTANCE_FIELD_PRIVATE(MultiplayerCore::Networking::MpPacketSerializer*, _packetSerializer);
     DECLARE_INSTANCE_FIELD_PRIVATE(Audio::MicrophoneManager*, _microphoneManager);
@@ -30,8 +30,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, ChatManager, Il2CppObjec
     DECLARE_INSTANCE_FIELD_PRIVATE(System::Action_1<GlobalNamespace::IConnectedPlayer*>*, _sessionPlayerConnectedAction);
     DECLARE_INSTANCE_FIELD_PRIVATE(System::Action_1<GlobalNamespace::IConnectedPlayer*>*, _sessionPlayerDisconnectedAction);
 
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_CTOR(ctor, GlobalNamespace::IMultiplayerSessionManager* sessionManager, MultiplayerCore::Networking::MpPacketSerializer* packetSerializer, Audio::MicrophoneManager* microphoneManager, InputManager* inputManager);
     public:

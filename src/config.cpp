@@ -4,7 +4,7 @@
 
 Config config;
 
-extern ModInfo modInfo;
+extern modloader::ModInfo modInfo;
 
 Configuration& get_config() {
     static Configuration cfg(modInfo);

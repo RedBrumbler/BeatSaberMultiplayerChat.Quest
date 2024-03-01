@@ -15,7 +15,7 @@ namespace MultiplayerChat::Audio {
 
         _spatialBlend = spatialBlend;
         _audioSource = nullptr;
-        _audioClip = UnityEngine::AudioClip::Create("JitterBufferClip", get_clipSampleSize(), (int)VoiceManager::OpusChannels, (int)VoiceManager::DecodeFrequency, false);
+        _audioClip = UnityEngine::AudioClip::Create("JitterBufferClip", get_clipSampleSize(), VoiceManager::OpusChannels.value__, VoiceManager::DecodeFrequency.value__, false);
         _playbackBuffer = ArrayW<float>(il2cpp_array_size_t(get_clipFeedSize()));
 
         StopImmediate();
@@ -23,7 +23,7 @@ namespace MultiplayerChat::Audio {
 
     void PlayerVoicePlayer::StopImmediate() {
         _audioClip->SetData(get_emptyClipSamples(), 0);
-        if (_audioSource && _audioSource->m_CachedPtr.m_value) {
+        if (_audioSource && _audioSource->m_CachedPtr) {
             _audioSource->set_loop(false);
             _audioSource->set_timeSamples(0);
             _audioSource->set_volume(0.0f);
@@ -51,7 +51,7 @@ namespace MultiplayerChat::Audio {
 
     void PlayerVoicePlayer::Dispose() {
         _streamBuffer.Close();
-        if (_audioClip && _audioClip->m_CachedPtr.m_value)
+        if (_audioClip && _audioClip->m_CachedPtr)
             UnityEngine::Object::Destroy(_audioClip);
         _isPlaying = false;
     }
@@ -87,12 +87,12 @@ namespace MultiplayerChat::Audio {
         }
     }
 
-    void PlayerVoicePlayer::SetMultiplayerAvatarAudioController(GlobalNamespace::MultiplayerAvatarAudioController* avatarAudio) {
-        ConfigureAudioSource(avatarAudio->audioSource);
+    void PlayerVoicePlayer::SetMultiplayerAvatarAudioController(BeatSaber::AvatarCore::MultiplayerAvatarAudioController* avatarAudio) {
+        ConfigureAudioSource(avatarAudio->_audioSource);
     }
 
     void PlayerVoicePlayer::StartPlayback() {
-        if (!_audioSource || !_audioSource->m_CachedPtr.m_value || get_isPlaying()) return;
+        if (!_audioSource || !_audioSource->m_CachedPtr || get_isPlaying()) return;
 
         _audioSource->set_timeSamples(0);
         _audioSource->set_loop(true);
@@ -104,7 +104,7 @@ namespace MultiplayerChat::Audio {
     }
 
     void PlayerVoicePlayer::Update() {
-        if (!_audioSource || !_audioSource->m_CachedPtr.m_value) {
+        if (!_audioSource || !_audioSource->m_CachedPtr) {
             if (_havePendingFragments || _isWritingBuffer)
                 StopImmediate();
             return;
@@ -160,8 +160,8 @@ namespace MultiplayerChat::Audio {
 
                 // buffer depleted, playback caught up
                 // audio will loop, stale samples could be played which we want to avoid
-
-                if (++_deadFrames < 5)
+                _deadFrames++;
+                if (_deadFrames < 5)
                     return;
 
                 StopImmediate();
@@ -185,7 +185,7 @@ namespace MultiplayerChat::Audio {
         }
     }
 
-    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::DecodeFrequency; }
+    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::DecodeFrequency.value__; }
 
     int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::MaxFrameLength; }
 
