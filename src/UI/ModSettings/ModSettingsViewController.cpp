@@ -190,7 +190,7 @@ namespace MultiplayerChat::UI::ModSettings {
         if (config.microphoneDevice == "None" && (!selectedDevice || selectedDevice == "None")) return "None";
         selectedDevice = selectedDevice ? selectedDevice : "Default";
 
-        return get_microphoneOptions()->Contains(selectedDevice) ? selectedDevice : "None";
+        return get_microphoneOptions()->Contains(static_cast<System::Object*>(selectedDevice.convert())) ? selectedDevice : "None";
     }
 
     float ModSettingsViewController::get_micGain() { return config.microphoneGain; }
@@ -284,61 +284,61 @@ namespace MultiplayerChat::UI::ModSettings {
 #pragma endregion // Settings/Bindings
 
 #pragma region Option lists
-    ListW<StringW> ModSettingsViewController::get_soundNotificationOptions() {
+    ListW<System::Object*> ModSettingsViewController::get_soundNotificationOptions() {
         auto availableSounds = _soundNotifier->GetAvailableClipNames();
 
-        ListW<StringW> list = ListW<StringW>::New();
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(availableSounds.size() + 1);
-        list->Add(StringW("None"));
-        for (const auto& sound : availableSounds) list->Add(StringW(sound));
+        list->Add(static_cast<System::Object*>(StringW("None").convert()));
+        for (const auto& sound : availableSounds) list->Add(static_cast<System::Object*>(StringW(sound).convert()));
 
         return list;
     }
 
-    ListW<StringW> ModSettingsViewController::get_microphoneOptions() {
+    ListW<System::Object*> ModSettingsViewController::get_microphoneOptions() {
         auto availableDevices = _microphoneManager->GetAvailableDeviceNames();
 
-        ListW<StringW> list = ListW<StringW>::New();
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(availableDevices.size() + 1);
-        list->Add(StringW("None"));
-        list->Add(StringW("Default"));
-        for (auto sound : availableDevices) list->Add(sound);
+        list->Add(static_cast<System::Object*>(StringW("None").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Default").convert()));
+        for (auto sound : availableDevices) list->Add(static_cast<System::Object*>(sound.convert()));
 
         return list;
     }
 
-    ListW<StringW> ModSettingsViewController::get_activationOptions() {
-        ListW<StringW> list = ListW<StringW>::New();
+    ListW<System::Object*> ModSettingsViewController::get_activationOptions() {
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(2);
-        list->Add(StringW("Hold"));
-        list->Add(StringW("Toggle"));
+        list->Add(static_cast<System::Object*>(StringW("Hold").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Toggle").convert()));
         return list;
     }
 
-    ListW<StringW> ModSettingsViewController::get_keybindOptions() {
-        ListW<StringW> list = ListW<StringW>::New();
+    ListW<System::Object*> ModSettingsViewController::get_keybindOptions() {
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(4);
-        list->Add(StringW("PrimaryButton"));
-        list->Add(StringW("SecondaryButton"));
-        list->Add(StringW("Trigger"));
-        list->Add(StringW("StickPress"));
+        list->Add(static_cast<System::Object*>(StringW("PrimaryButton").convert()));
+        list->Add(static_cast<System::Object*>(StringW("SecondaryButton").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Trigger").convert()));
+        list->Add(static_cast<System::Object*>(StringW("StickPress").convert()));
         return list;
     }
 
-    ListW<StringW> ModSettingsViewController::get_controllerOptions() {
-        ListW<StringW> list = ListW<StringW>::New();
+    ListW<System::Object*> ModSettingsViewController::get_controllerOptions() {
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(3);
-        list->Add(StringW("Left"));
-        list->Add(StringW("Right"));
-        list->Add(StringW("Either"));
+        list->Add(static_cast<System::Object*>(StringW("Left").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Right").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Either").convert()));
         return list;
     }
 
-    ListW<StringW> ModSettingsViewController::get_controllerOptionsAlt() {
-        ListW<StringW> list = ListW<StringW>::New();
+    ListW<System::Object*> ModSettingsViewController::get_controllerOptionsAlt() {
+        ListW<System::Object*> list = ListW<System::Object*>::New();
         list->EnsureCapacity(3);
-        list->Add(StringW("Left"));
-        list->Add(StringW("Right"));
+        list->Add(static_cast<System::Object*>(StringW("Left").convert()));
+        list->Add(static_cast<System::Object*>(StringW("Right").convert()));
         return list;
     }
 

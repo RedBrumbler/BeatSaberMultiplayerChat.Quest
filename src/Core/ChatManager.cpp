@@ -87,7 +87,7 @@ namespace MultiplayerChat::Core {
         }
         bool isCommand = text[0] == CommandPrefix;
         if (isCommand)
-            _sessionManager->SendToPlayer(textPacket->i_INetSerializable(), _sessionManager->get_connectionOwner());
+            _packetSerializer->SendToServer(textPacket);
         else
             _packetSerializer->Send(textPacket);
 
@@ -176,7 +176,7 @@ namespace MultiplayerChat::Core {
 
     void ChatManager::HandleSessionPlayerConnected(GlobalNamespace::IConnectedPlayer* player) {
         if (!get_sessionConnected()) return;
-        _sessionManager->SendToPlayer(_localCapabilities->i_INetSerializable(), player);
+        _packetSerializer->SendToPlayer(_localCapabilities, player);
     }
 
     void ChatManager::HandleSessionPlayerDisconnected(GlobalNamespace::IConnectedPlayer* player) {

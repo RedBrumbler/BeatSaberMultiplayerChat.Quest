@@ -41,19 +41,20 @@ namespace MultiplayerChat::Core {
             std::bind(&InputManager::HandleInputDeviceDisconnected, this, std::placeholders::_1)
         ));
 
-        // TODO: Figure out why we get linker errors when using the commented out code, for now we call the underlying functions directly
+        // TODO: Check if cordl fixed the linker errors
         // auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceConnectedAction));
+        // UnityEngine::XR::InputDevices::deviceConnected = combinedConnectedAction;
         auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
                                            ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceConnectedAction));
         
         ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
                                     ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
                                     std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(combinedConnectedAction));
-        // UnityEngine::XR::InputDevices::deviceConnected = combinedConnectedAction;
+        
         // auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceDisconnectedAction));
+        // UnityEngine::XR::InputDevices::deviceDisconnected = combinedDisconnectedAction;
         auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
                                            ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceDisconnectedAction));
-        // UnityEngine::XR::InputDevices::deviceDisconnected = combinedDisconnectedAction;
         ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
                                     ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
                                     std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(combinedDisconnectedAction));
@@ -68,7 +69,7 @@ namespace MultiplayerChat::Core {
     }
 
     void InputManager::Dispose() {
-        // TODO: Figure out why we get linker errors when using the commented out code, for now we call the underlying functions directly
+        // TODO: Check if cordl fixed the linker errors
         // auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::deviceConnected, _deviceConnectedAction));
         // UnityEngine::XR::InputDevices::deviceConnected = unCombinedConnectedAction;
 

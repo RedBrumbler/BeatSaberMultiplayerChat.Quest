@@ -73,12 +73,12 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::ModSettings, ModSettingsViewControlle
     DECLARE_INSTANCE_METHOD(bool, get_hasNoPermission);
     DECLARE_INSTANCE_METHOD(bool, get_hasPermission);
 
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_soundNotificationOptions);
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_microphoneOptions);
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_activationOptions);
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_keybindOptions);
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_controllerOptions);
-    DECLARE_INSTANCE_METHOD(ListW<StringW>, get_controllerOptionsAlt);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_soundNotificationOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_microphoneOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_activationOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_keybindOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_controllerOptions);
+    DECLARE_INSTANCE_METHOD(ListW<System::Object*>, get_controllerOptionsAlt);
 
     DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &::HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
     DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &::HMUI::ViewController::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);

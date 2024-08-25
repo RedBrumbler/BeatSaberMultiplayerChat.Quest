@@ -82,7 +82,8 @@ namespace MultiplayerChat::UI::Lobby {
         // load the sprite
         auto radialButtonSprite = _spriteManager->get_radialButton();
 
-        static constexpr auto deg2rad = (2 * 3.141592654) / 360.0f;
+        // static constexpr auto deg2rad = (2 * 3.141592654) / 360.0f;
+        static constexpr auto deg2rad = 0.0174532924f;
 
         for (int i = 0; i < 8; i++) {
             auto btn = imageTag.CreateObject(parent)->GetComponent<BSML::ClickableImage*>();
