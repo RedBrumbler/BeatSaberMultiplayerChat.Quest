@@ -92,9 +92,7 @@ namespace MultiplayerChat::UI::Lobby {
             float unitAngle = 1.0f / 16.0f + float(i) / 8.0f;
             auto btnT = btn->get_rectTransform();
             auto centerAdd = GlobalNamespace::ExtensionMethods::Rotate(offsetVector, (unitAngle * 360.0f * deg2rad));
-            center.x += centerAdd.x;
-            center.y += centerAdd.y;
-            btnT->set_anchoredPosition(center);
+            btnT->set_anchoredPosition({center.x + centerAdd.x, center.y + centerAdd.y});
             btnT->set_localRotation(UnityEngine::Quaternion::Euler(0, 0, unitAngle * 360));
             btnT->set_localScale({1.25, 1.25, 1.25});
 
