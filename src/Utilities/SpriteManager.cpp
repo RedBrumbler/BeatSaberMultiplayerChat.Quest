@@ -21,9 +21,9 @@ namespace MultiplayerChat::Utilities {
         _micOnIcon->set_name("MicOnIcon");
         _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(Assets::UnreadBadge_png);
         _unreadBadgeIcon->set_name("UnreadBadgeIcon");
-        _bgMask = BSML::Utilities::LoadSpriteRaw(IncludedAssets::BG_Mask_png);
+        _bgMask = BSML::Utilities::LoadSpriteRaw(Assets::BG_Mask_png);
         _bgMask->set_name("BG_Mask");
-        _radialButton = BSML::Utilities::LoadSpriteRaw(IncludedAssets::RadialButton_png);
+        _radialButton = BSML::Utilities::LoadSpriteRaw(Assets::RadialButton_png);
         _radialButton->set_name("RadialButton");
     }
 

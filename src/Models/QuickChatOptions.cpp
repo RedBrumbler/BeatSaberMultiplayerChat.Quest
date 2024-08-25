@@ -40,6 +40,6 @@ namespace MultiplayerChat::Models {
         std::string path(QuickChatOptionsPath);
         mkpath(path.substr(0, path.find_last_of('/')));
 
-        writefile(QuickChatOptionsPath, IncludedAssets::quickchat_json);
+        writefile(QuickChatOptionsPath, Assets::quickchat_json);
     }
 }

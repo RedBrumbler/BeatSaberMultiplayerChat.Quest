@@ -25,7 +25,7 @@ namespace MultiplayerChat::UI::Lobby {
     }
 
     void QuickChatModal::Initialize() {
-        BSML::parse_and_construct(IncludedAssets::QuickChatModal_bsml, get_transform(), this);
+        BSML::parse_and_construct(Assets::QuickChatModal_bsml, get_transform(), this);
     }
 
     void QuickChatModal::Dispose() {
@@ -90,7 +90,10 @@ namespace MultiplayerChat::UI::Lobby {
             // positioning & rotation
             float unitAngle = 1.0f / 16.0f + float(i) / 8.0f;
             auto btnT = btn->get_rectTransform();
-            btnT->set_anchoredPosition(center + GlobalNamespace::ExtensionMethods::Rotate(offsetVector, (unitAngle * 360.0f * deg2rad)));
+            auto centerAdd = GlobalNamespace::ExtensionMethods::Rotate(offsetVector, (unitAngle * 360.0f * deg2rad));
+            center.x += centerAdd.x;
+            center.y += centerAdd.y;
+            btnT->set_anchoredPosition(center);
             btnT->set_localRotation(UnityEngine::Quaternion::Euler(0, 0, unitAngle * 360));
             btnT->set_localScale({1.25, 1.25, 1.25});
 
@@ -133,7 +136,7 @@ namespace MultiplayerChat::UI::Lobby {
         for (int i = 0; i < 8; i++) {
             auto btnText = _buttonTexts[i];
             btnText->set_text(i < textsLen ? texts[i] : "");
-            btnText->get_transform()->get_parent()->get_gameObject()->SetActive(!Il2CppString::IsNullOrEmpty(btnText->get_text()));
+            btnText->get_transform()->get_parent()->get_gameObject()->SetActive(!System::String::IsNullOrEmpty(btnText->get_text()));
         }
     }
 
