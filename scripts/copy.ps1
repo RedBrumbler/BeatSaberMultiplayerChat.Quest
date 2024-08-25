@@ -2,7 +2,9 @@ param (
     [Parameter(Mandatory=$false)]
     [Switch]$debug_so,
     [Parameter(Mandatory=$false)]
-    [Switch]$log
+    [Switch]$log,
+    [Parameter(Mandatory=$false)]
+    [Switch]$NoStart
 )
 
 & $PSScriptRoot/build.ps1
@@ -18,6 +20,9 @@ if ($debug_so.IsPresent) {
 }
 
 & adb shell am force-stop com.beatgames.beatsaber
+if ($NoStart.IsPresent) {
+    exit
+}
 & adb shell am start com.beatgames.beatsaber/com.unity3d.player.UnityPlayerActivity
 Start-Sleep -Seconds 1.0
 & adb shell am start com.beatgames.beatsaber/com.unity3d.player.UnityPlayerActivity

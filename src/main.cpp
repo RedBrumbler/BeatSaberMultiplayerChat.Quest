@@ -2,6 +2,7 @@
 #include "logging.hpp"
 #include "config.hpp"
 #include "assets.hpp"
+#include "_config.h"
 
 #include "custom-types/shared/register.hpp"
 #include "bsml/shared/BSML.hpp"
@@ -14,12 +15,7 @@
 
 #include <fstream>
 
-ModInfo modInfo{MOD_ID, VERSION};
-
-Logger& getLogger() {
-    static auto logger = new Logger(modInfo, LoggerOptions(false, true));
-    return *logger;
-}
+modloader::ModInfo modInfo{MOD_ID, VERSION, VERSION_LONG};
 
 void write_bytes(std::string_view path, std::span<uint8_t> data) {
     std::ofstream file;
@@ -30,7 +26,7 @@ void write_bytes(std::string_view path, std::span<uint8_t> data) {
 
 #define WRITE_SOUND(identifier) \
     INFO("Writing out sound '"  #identifier ".ogg'"); \
-    write_bytes("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/" #identifier ".ogg", IncludedAssets::identifier##_ogg)
+    write_bytes("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/" #identifier ".ogg", Assets::identifier##_ogg)
 
 void ExportSoundFiles() {
     mkpath("/sdcard/ModData/com.beatgames.beatsaber/Mods/MultiplayerChat/Sounds/");
@@ -41,11 +37,15 @@ void ExportSoundFiles() {
     WRITE_SOUND(MicOff);
 }
 
-extern "C" void setup(ModInfo& info) {
-    info = modInfo;
+MPCHAT_EXPORT_FUNC void setup(CModInfo* info) {
+    info->id = MOD_ID;
+    info->version = VERSION;
+    info->version_long = VERSION_LONG;
+
+    INFO("Mod '{}' with version '{}' version long '{}' finished setup", MOD_ID, VERSION, VERSION_LONG);
 }
 
-extern "C" void load() {
+MPCHAT_EXPORT_FUNC void late_load() {
     if (!LoadConfig())
         SaveConfig();
 
@@ -53,10 +53,11 @@ extern "C" void load() {
 
     il2cpp_functions::Init();
 
-    auto& logger = getLogger();
+    // auto& logger = getLogger();
 
     custom_types::Register::AutoRegister();
-    Hooks::InstallHooks(logger);
+    // Hooks::InstallHooks(logger);
+    MultiplayerChat::Hooking::InstallHooks();
     BSML::Init();
 
     auto zenjector = Lapiz::Zenject::Zenjector::Get();
@@ -66,4 +67,4 @@ extern "C" void load() {
     zenjector->Install<MultiplayerChat::Installers::MultiplayerInstaller*>(Lapiz::Zenject::Location::AlwaysMultiPlayer);
 }
 
-BSML_DATACACHE(keyboard) { return IncludedAssets::Keyboard_png; }
+BSML_DATACACHE(keyboard) { return Assets::Keyboard_png; }

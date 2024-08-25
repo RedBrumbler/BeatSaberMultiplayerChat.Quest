@@ -10,7 +10,7 @@
 #include "UnityEngine/UI/LayoutElement.hpp"
 #include "UnityEngine/UI/ContentSizeFitter.hpp"
 #include "UnityEngine/UI/Button.hpp"
-#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
+// #include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 #include "UnityEngine/UI/HorizontalLayoutGroup.hpp"
 #include "HMUI/CurvedTextMeshPro.hpp"
 
@@ -39,10 +39,10 @@ namespace MultiplayerChat::UI::Lobby {
 
         _bsmlReady = true;
 
-        scrollableContainer->pageUpButton->get_onClick()->AddListener(custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>(
+        scrollableContainer->_pageUpButton->get_onClick()->AddListener(custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>(
             std::bind(&ChatViewController::HandleScrollablePageUp, this)
         )));
-        scrollableContainer->pageDownButton->get_onClick()->AddListener(custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>(
+        scrollableContainer->_pageDownButton->get_onClick()->AddListener(custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>(
             std::bind(&ChatViewController::HandleScrollablePageDown, this)
         )));
 
@@ -59,7 +59,7 @@ namespace MultiplayerChat::UI::Lobby {
 
     void ChatViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
         if (firstActivation)
-            BSML::parse_and_construct(IncludedAssets::ChatViewController_bsml, get_transform(), this);
+            BSML::parse_and_construct(Assets::ChatViewController_bsml, get_transform(), this);
 
         if (!_bsmlReady || firstActivation) return;
 
@@ -80,7 +80,7 @@ namespace MultiplayerChat::UI::Lobby {
         ResetChatInputText();
         input = input->Trim();
 
-        if (Il2CppString::IsNullOrWhiteSpace(input)) co_return;
+        if (System::String::IsNullOrWhiteSpace(input)) co_return;
 
         _chatManager->SendTextChat(input);
 
@@ -95,7 +95,7 @@ namespace MultiplayerChat::UI::Lobby {
 
         // Remove skew from main chat background
         auto bgImage = chatViewBg->GetComponent<HMUI::ImageView*>();
-        bgImage->skew = 0;
+        bgImage->_skew = 0;
         bgImage->__Refresh();
 
         // Make the keyboard input look nice
@@ -104,13 +104,13 @@ namespace MultiplayerChat::UI::Lobby {
         inputT->Find("NameText")->get_gameObject()->SetActive(false);
 
         // > Stretch the input element to span the full width
-        auto valuePickerRect = reinterpret_cast<UnityEngine::RectTransform*>(inputT->Find("ValuePicker"));
+        auto valuePickerRect = inputT->Find("ValuePicker").cast<UnityEngine::RectTransform>();
         valuePickerRect->set_offsetMin({-85, 0});
 
         // > Make the background look nice
-        auto buttonLeftSide = reinterpret_cast<UnityEngine::RectTransform*>(valuePickerRect->Find("DecButton"));
-        auto buttonRightSide = reinterpret_cast<UnityEngine::RectTransform*>(valuePickerRect->Find("IncButton"));
-        auto valueText = reinterpret_cast<UnityEngine::RectTransform*>(valuePickerRect->Find("ValueText"));
+        auto buttonLeftSide = valuePickerRect->Find("DecButton").cast<UnityEngine::RectTransform>();
+        auto buttonRightSide = valuePickerRect->Find("IncButton").cast<UnityEngine::RectTransform>();
+        auto valueText = valuePickerRect->Find("ValueText").cast<UnityEngine::RectTransform>();
 
         const float leftSideWidth = 0.05f;
 
@@ -134,11 +134,11 @@ namespace MultiplayerChat::UI::Lobby {
 
         // > Remove skew from backgrounds
         auto bgLeft = buttonLeftSide->Find("BG")->GetComponent<HMUI::ImageView*>();
-        bgLeft->skew = 0;
+        bgLeft->_skew = 0;
         bgLeft->__Refresh();
 
         auto bgRight = buttonRightSide->Find("BG")->GetComponent<HMUI::ImageView*>();
-        bgRight->skew = 0;
+        bgRight->_skew = 0;
         bgRight->__Refresh();
 
         // > Remove ugly edit icon
@@ -200,7 +200,7 @@ namespace MultiplayerChat::UI::Lobby {
 
         // FIXME: messages that are too long without newlines seem to spill over into the next message, find a way to prevent that (or add newlines)
         text->set_text(message.FormatMessage(false, true));
-        text->ForceMeshUpdate();
+        text->ForceMeshUpdate(false, false);
 
         image->set_sprite(message.SpriteForMessage());
 
@@ -214,7 +214,7 @@ namespace MultiplayerChat::UI::Lobby {
         auto layout = layoutGo->GetComponent<UnityEngine::UI::HorizontalLayoutGroup*>();
 
         auto imageGo = BSML::ImageTag().CreateObject(layoutGo->get_transform());
-        auto imageRect = reinterpret_cast<UnityEngine::RectTransform*>(imageGo->get_transform());
+        auto imageRect = imageGo->get_transform().cast<UnityEngine::RectTransform>();
         imageRect->set_pivot({0, 1});
         imageRect->set_anchorMin({0, 1});
         imageRect->set_anchorMax({0, 1});
@@ -226,7 +226,7 @@ namespace MultiplayerChat::UI::Lobby {
         // set image data
         auto imageView = imageGo->GetComponent<HMUI::ImageView*>();
         imageView->set_preserveAspect(true);
-        imageView->skew = 0;
+        imageView->_skew = 0;
         imageView->__Refresh();
 
         // create text
@@ -249,7 +249,7 @@ namespace MultiplayerChat::UI::Lobby {
 
     void ChatViewController::HandleScrollablePageDown() {
         if (!scrollableContainer) return;
-        _chatLockedToBottom = !scrollableContainer->pageDownButton->get_interactable();
+        _chatLockedToBottom = !scrollableContainer->_pageDownButton->get_interactable();
     }
 
 #pragma endregion // Scroll pain

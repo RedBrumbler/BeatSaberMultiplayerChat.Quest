@@ -13,7 +13,7 @@ template <> struct fmt::formatter<::StringW> : formatter<string_view> {
     }
 };
 
-Logger& getLogger();
+// Logger& getLogger();
 #define INFO(...) Paper::Logger::fmtLog<Paper::LogLevel::INF>(__VA_ARGS__)
 #define ERROR(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)
 #define CRITICAL(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)

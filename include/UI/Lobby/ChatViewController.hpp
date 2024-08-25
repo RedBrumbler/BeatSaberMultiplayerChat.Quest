@@ -4,8 +4,8 @@
 #include "lapiz/shared/macros.hpp"
 
 #include "HMUI/ViewController.hpp"
-#include "HMUI/ViewController_AnimationType.hpp"
-#include "HMUI/ViewController_AnimationDirection.hpp"
+// #include "HMUI/ViewController_AnimationType.hpp"
+// #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
 #include "HMUI/ImageView.hpp"
 
@@ -29,7 +29,7 @@ DECLARE_CLASS_CODEGEN(MultiplayerChat::UI::Lobby, ChatViewController, HMUI::View
     DECLARE_INSTANCE_METHOD(void, PostParse);
     DECLARE_INSTANCE_METHOD(void, OpenQuickChat);
 
-    DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &::HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
     DECLARE_INJECT_METHOD(void, Inject, Core::ChatManager* chatManager, QuickChatModal* quickChatModal);
     DECLARE_CTOR(ctor);

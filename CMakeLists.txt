@@ -3,6 +3,7 @@ include(qpm_defines.cmake)
 
 cmake_minimum_required(VERSION 3.22)
 project(${COMPILE_ID})
+include(${EXTERN_DIR}/includes/kaleb/shared/cmake/assets.cmake)
 
 # c++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -17,7 +18,8 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # compile options used
-add_compile_options(-frtti -fPIE -fPIC -fexceptions)
+add_compile_options(-frtti -fexceptions -fvisibility=hidden)
+add_compile_options(-Ofast)
 
 # get git info
 execute_process(COMMAND git config user.name OUTPUT_VARIABLE GIT_USER)
@@ -26,28 +28,11 @@ execute_process(COMMAND git rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHORT_COM
 execute_process(COMMAND git rev-parse HEAD OUTPUT_VARIABLE GIT_COMMIT)
 execute_process(COMMAND git diff-index --quiet HEAD RESULT_VARIABLE GIT_MODIFIED)
 
-string(STRIP ${GIT_USER} GIT_USER)
-string(STRIP ${GIT_BRANCH} GIT_BRANCH)
-string(STRIP ${GIT_SHORT_COMMIT} GIT_SHORT_COMMIT)
-string(STRIP ${GIT_COMMIT} GIT_COMMIT)
-string(STRIP ${GIT_MODIFIED} GIT_MODIFIED)
-
-message(STATUS "GIT_USER: ${GIT_USER}")
-message(STATUS "GIT_BRANCH: ${GIT_BRANCH}")
-message(STATUS "GIT_COMMIT: ${GIT_COMMIT}")
-message(STATUS "GIT_SHORT_COMMIT: ${GIT_SHORT_COMMIT}")
-message(STATUS "GIT_MODIFIED: ${GIT_MODIFIED}")
-
 # compile definitions used
 add_compile_definitions(VERSION=\"${MOD_VERSION}\")
 add_compile_definitions(MOD_ID=\"${MOD_ID}\")
-
-# some git defines
-add_compile_definitions(GIT_USER=\"${GIT_USER}\")
-add_compile_definitions(GIT_BRANCH=\"${GIT_BRANCH}\")
-add_compile_definitions(GIT_COMMIT=\"${GIT_COMMIT}\")
-add_compile_definitions(GIT_SHORT_COMMIT=\"${GIT_SHORT_COMMIT}\")
-add_compile_definitions(GIT_MODIFIED=${GIT_MODIFIED})
+add_compile_definitions(VERSION_LONG=0)
+add_compile_definitions(CORDL_RUNTIME_FIELD_NULL_CHECKS)
 
 # recursively get all src files
 RECURSE_FILES(cpp_file_list ${SOURCE_DIR}/*.cpp)
@@ -67,8 +52,11 @@ target_include_directories(${COMPILE_ID} PRIVATE ${SOURCE_DIR})
 target_include_directories(${COMPILE_ID} PRIVATE ${INCLUDE_DIR})
 # add shared dir as include dir
 target_include_directories(${COMPILE_ID} PUBLIC ${SHARED_DIR})
-# codegen includes 
-target_include_directories(${COMPILE_ID} PRIVATE ${EXTERN_DIR}/includes/${CODEGEN_ID}/include)
+# # codegen includes 
+# target_include_directories(${COMPILE_ID} PRIVATE ${EXTERN_DIR}/includes/${CODEGEN_ID}/include)
+
+add_assets(${COMPILE_ID}-assets STATIC ${CMAKE_CURRENT_LIST_DIR}/assets ${INCLUDE_DIR}/assets.hpp)
+target_link_libraries(${COMPILE_ID} PRIVATE -llog ${COMPILE_ID}-assets)
 
 target_link_libraries(${COMPILE_ID} PRIVATE -llog -lz)
 # add extern stuff like libs and other includes
@@ -114,5 +102,3 @@ add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${a_file} debug/${file}
     COMMENT "Copy a files for ndk stack")
 endforeach()
-
-include(assets_include.cmake)

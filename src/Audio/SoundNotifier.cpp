@@ -139,7 +139,7 @@ namespace MultiplayerChat::Audio {
         while(!webreq->get_isDone()) co_yield nullptr;
         DEBUG("request for '{}' is marked done", clipName);
 
-        if (!Il2CppString::IsNullOrEmpty(req->get_error())) {
+        if (!System::String::IsNullOrEmpty(req->get_error())) {
             ERROR("Error trying to load {}: {}", clipPath, req->get_error());
             co_return;
         }

@@ -3,7 +3,8 @@
 #include "custom-types/shared/macros.hpp"
 #include "System/IDisposable.hpp"
 #include "Zenject/ITickable.hpp"
-#include "GlobalNamespace/MultiplayerAvatarAudioController.hpp"
+#include "BeatSaber/AvatarCore/MultiplayerAvatarAudioController.hpp"
+
 #include "UnityEngine/AudioSource.hpp"
 #include "UnityEngine/AudioClip.hpp"
 
@@ -32,7 +33,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, PlayerVoicePlayer, Il2C
     DECLARE_INSTANCE_FIELD_PRIVATE(bool, _transmissionEnded);
     DECLARE_INSTANCE_FIELD_PRIVATE(int, _deadFrames);
 
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_CTOR(ctor, StringW playerUserId, int jitterBufferMs, float spatialBlend);
 
@@ -41,7 +42,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, PlayerVoicePlayer, Il2C
         void StopImmediate();
         void FeedFragment(ArrayW<float> decodeBuffer, int decodedLength);
 
-        void SetMultiplayerAvatarAudioController(GlobalNamespace::MultiplayerAvatarAudioController* avatarAudio);
+        void SetMultiplayerAvatarAudioController(BeatSaber::AvatarCore::MultiplayerAvatarAudioController* avatarAudio);
         void ConfigureAudioSource(UnityEngine::AudioSource* audioSource);
 
         UnorderedEventCallback<PlayerVoicePlayer*> startBufferingEvent;

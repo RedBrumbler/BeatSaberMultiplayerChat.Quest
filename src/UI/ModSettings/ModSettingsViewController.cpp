@@ -19,7 +19,7 @@ namespace MultiplayerChat::UI::ModSettings {
 
     void ModSettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
         if (firstActivation)
-            BSML::parse_and_construct(IncludedAssets::ModSettingsViewController_bsml, get_transform(), this);
+            BSML::parse_and_construct(Assets::ModSettingsViewController_bsml, get_transform(), this);
 
         RefreshUIState();
 
@@ -43,9 +43,9 @@ namespace MultiplayerChat::UI::ModSettings {
         _voiceManager->StopLoopbackTest();
 
         // Make dropdown bigger
-        auto trDropdownOuter = reinterpret_cast<UnityEngine::RectTransform*>(dropdownMic->get_transform());
+        auto trDropdownOuter = dropdownMic->get_transform().cast<UnityEngine::RectTransform>();
         trDropdownOuter->set_sizeDelta({64, 0});
-        auto trDropdownText = reinterpret_cast<UnityEngine::RectTransform*>(trDropdownOuter->Find("DropDownButton/Text"));
+        auto trDropdownText = trDropdownOuter->Find("DropDownButton/Text").cast<UnityEngine::RectTransform>();
         trDropdownText->set_anchorMin({0, .5f});
         trDropdownText->set_anchorMax({1, .5f});
 
@@ -114,12 +114,12 @@ namespace MultiplayerChat::UI::ModSettings {
 
         if (_voiceManager->get_isLoopbackTesting()) {
             btnTestMic->set_interactable(true);
-            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ff3b3b>Testing mic</color>");
+            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ff3b3b>Testing mic</color>", true);
             imgTestMic->set_sprite(_spriteManager->get_micOnIcon());
             imgTestMic->set_color(MpcColors::Green);
         } else {
             btnTestMic->set_interactable(get_enableVoiceChat() && _microphoneManager->get_haveSelectedDevice());
-            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ffffff>Test mic</color>");
+            btnTestMic->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("<color=#ffffff>Test mic</color>", true);
             imgTestMic->set_sprite(_spriteManager->get_micOffIcon());
             imgTestMic->set_color({0.5, 0.5, 0.5, 1});
         }
@@ -284,10 +284,10 @@ namespace MultiplayerChat::UI::ModSettings {
 #pragma endregion // Settings/Bindings
 
 #pragma region Option lists
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_soundNotificationOptions() {
+    ListW<StringW> ModSettingsViewController::get_soundNotificationOptions() {
         auto availableSounds = _soundNotifier->GetAvailableClipNames();
 
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(availableSounds.size() + 1);
         list->Add(StringW("None"));
         for (const auto& sound : availableSounds) list->Add(StringW(sound));
@@ -295,10 +295,10 @@ namespace MultiplayerChat::UI::ModSettings {
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_microphoneOptions() {
+    ListW<StringW> ModSettingsViewController::get_microphoneOptions() {
         auto availableDevices = _microphoneManager->GetAvailableDeviceNames();
 
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(availableDevices.size() + 1);
         list->Add(StringW("None"));
         list->Add(StringW("Default"));
@@ -307,16 +307,16 @@ namespace MultiplayerChat::UI::ModSettings {
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_activationOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<StringW> ModSettingsViewController::get_activationOptions() {
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(2);
         list->Add(StringW("Hold"));
         list->Add(StringW("Toggle"));
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_keybindOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<StringW> ModSettingsViewController::get_keybindOptions() {
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(4);
         list->Add(StringW("PrimaryButton"));
         list->Add(StringW("SecondaryButton"));
@@ -325,8 +325,8 @@ namespace MultiplayerChat::UI::ModSettings {
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_controllerOptions() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<StringW> ModSettingsViewController::get_controllerOptions() {
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(3);
         list->Add(StringW("Left"));
         list->Add(StringW("Right"));
@@ -334,8 +334,8 @@ namespace MultiplayerChat::UI::ModSettings {
         return list;
     }
 
-    ListWrapper<Il2CppObject*> ModSettingsViewController::get_controllerOptionsAlt() {
-        ListWrapper<Il2CppObject*> list = List<Il2CppObject*>::New_ctor();
+    ListW<StringW> ModSettingsViewController::get_controllerOptionsAlt() {
+        ListW<StringW> list = ListW<StringW>::New();
         list->EnsureCapacity(3);
         list->Add(StringW("Left"));
         list->Add(StringW("Right"));

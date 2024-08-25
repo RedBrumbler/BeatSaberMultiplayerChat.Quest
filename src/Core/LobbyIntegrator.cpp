@@ -8,7 +8,7 @@
 #include "UnityEngine/Events/UnityAction.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
-#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
+// #include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 
 DEFINE_TYPE(MultiplayerChat::Core, LobbyIntegrator);
 
@@ -160,10 +160,10 @@ namespace MultiplayerChat::Core {
         auto spriteSwap = mutePlayerButton->GetComponent<HMUI::ButtonSpriteSwapToggle*>();
         if (spriteSwap) {
             if (!_nativeIconSpeakerSound || !_nativeIconSpeakerSound->m_CachedPtr.m_value)
-                _nativeIconSpeakerSound = spriteSwap->normalStateSprite;
+                _nativeIconSpeakerSound = spriteSwap->_normalStateSprite;
 
             if (!_nativeIconMuted || !_nativeIconMuted->m_CachedPtr.m_value)
-                _nativeIconMuted = spriteSwap->pressedStateSprite;
+                _nativeIconMuted = spriteSwap->_pressedStateSprite;
 
             spriteSwap->set_enabled(false);
         }
@@ -267,7 +267,7 @@ namespace MultiplayerChat::Core {
         auto chatBubble = UI::ChatBubble::Create(_diContainer, avatarCaption, UI::AlignStyle::LobbyAvatar);
         _perUserBubbles->set_Item(userId, chatBubble);
 
-        _voiceManager->ProvideAvatarAudio(playerAvatarController->GetComponent<GlobalNamespace::MultiplayerAvatarAudioController*>());
+        _voiceManager->ProvideAvatarAudio(playerAvatarController->GetComponent<BeatSaber::AvatarCore::MultiplayerAvatarAudioController*>());
     }
 
 #pragma endregion // Lobby avatars

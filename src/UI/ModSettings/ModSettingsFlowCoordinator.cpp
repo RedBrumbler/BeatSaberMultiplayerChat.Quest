@@ -25,6 +25,6 @@ namespace MultiplayerChat::UI::ModSettings {
     }
 
     void ModSettingsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController) {
-        parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Vertical, nullptr, false);
+        _parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Vertical, nullptr, false);
     }
 }

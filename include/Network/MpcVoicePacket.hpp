@@ -11,9 +11,9 @@
 DECLARE_CLASS_CUSTOM_INTERFACES(MultiplayerChat::Network, MpcVoicePacket, MpcBasePacket, std::vector<Il2CppClass*>({classof(GlobalNamespace::IPoolablePacket*)}),
     DECLARE_INSTANCE_FIELD(ArrayW<uint8_t>, data);
 
-    DECLARE_OVERRIDE_METHOD(void, Serialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::LiteNetLib::Utils::INetSerializable::Serialize>::get(), LiteNetLib::Utils::NetDataWriter* writer);
-    DECLARE_OVERRIDE_METHOD(void, Deserialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::LiteNetLib::Utils::INetSerializable::Deserialize>::get(), LiteNetLib::Utils::NetDataReader* reader);
-    DECLARE_OVERRIDE_METHOD(void, Release, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::GlobalNamespace::IPoolablePacket::Release>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Serialize, &::LiteNetLib::Utils::INetSerializable::Serialize, LiteNetLib::Utils::NetDataWriter* writer);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Deserialize, &::LiteNetLib::Utils::INetSerializable::Deserialize, LiteNetLib::Utils::NetDataReader* reader);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Release, &::GlobalNamespace::IPoolablePacket::Release);
 
     DECLARE_CTOR(ctor);
 

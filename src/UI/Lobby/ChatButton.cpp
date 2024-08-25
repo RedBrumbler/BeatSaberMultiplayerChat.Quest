@@ -6,7 +6,6 @@
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/RectTransform.hpp"
 #include "UnityEngine/UI/Button.hpp"
-#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 #include "UnityEngine/Events/UnityAction.hpp"
 
 DEFINE_TYPE(MultiplayerChat::UI::Lobby, ChatButton);
@@ -40,7 +39,7 @@ namespace MultiplayerChat::UI::Lobby {
         auto icon = get_transform()->Find("Icon")->GetComponent<HMUI::ImageView*>();
         icon->set_sprite(_spriteManager->get_chatIcon());
 
-        auto rectTransform = reinterpret_cast<UnityEngine::RectTransform*>(get_transform());
+        auto rectTransform = get_transform().cast<UnityEngine::RectTransform>();
 
         auto localPosition = rectTransform->get_localPosition();
         localPosition.x = 68;

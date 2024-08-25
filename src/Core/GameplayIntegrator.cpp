@@ -3,7 +3,7 @@
 
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/GameObject.hpp"
-#include "GlobalNamespace/MultiplayerAvatarAudioController.hpp"
+#include "BeatSaber/AvatarCore/MultiplayerAvatarAudioController.hpp"
 
 DEFINE_TYPE(MultiplayerChat::Core, GameplayIntegrator);
 
@@ -15,7 +15,7 @@ namespace MultiplayerChat::Core {
     }
 
     void GameplayIntegrator::Initialize() {
-        _playersSpawnedAction = custom_types::MakeDelegate<decltype(_playersSpawnedAction)>(std::function<void()>(
+        _playersSpawnedAction = custom_types::MakeDelegate<std::decay_t<decltype(_playersSpawnedAction)>>(std::function<void()>(
             std::bind(&GameplayIntegrator::HandlePlayersSpawned, this)
         ));
 
@@ -35,7 +35,7 @@ namespace MultiplayerChat::Core {
             if (!_playersManager->TryGetConnectedPlayerController(player->get_userId(), byref(playerController))) continue;
 
             auto multiplayerGameAvatar = playerController->get_transform()->Find("MultiplayerGameAvatar");
-            _voiceManager->ProvideAvatarAudio(multiplayerGameAvatar->GetComponent<GlobalNamespace::MultiplayerAvatarAudioController*>());
+            _voiceManager->ProvideAvatarAudio(multiplayerGameAvatar->GetComponent<BeatSaber::AvatarCore::MultiplayerAvatarAudioController*>());
         }
     }
 }

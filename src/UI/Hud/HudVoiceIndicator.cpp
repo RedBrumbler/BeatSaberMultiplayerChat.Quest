@@ -9,9 +9,11 @@
 #include "UnityEngine/Canvas.hpp"
 #include "UnityEngine/RenderMode.hpp"
 #include "UnityEngine/CanvasGroup.hpp"
+#include "UnityEngine/Vector3.hpp"
+#include "UnityEngine/Quaternion.hpp"
 #include "UnityEngine/UI/CanvasScaler.hpp"
 #include "HMUI/CurvedCanvasSettings.hpp"
-#include "UnityEngine/Camera_MonoOrStereoscopicEye.hpp"
+// #include "UnityEngine/Camera_MonoOrStereoscopicEye.hpp"
 
 DEFINE_TYPE(MultiplayerChat::UI::Hud, HudVoiceIndicator);
 
@@ -28,11 +30,11 @@ namespace MultiplayerChat::UI::Hud {
     void HudVoiceIndicator::ctor() {
         INVOKE_CTOR();
 
-        _connectedAction = custom_types::MakeDelegate<decltype(_connectedAction)>(std::function<void()>(
+        _connectedAction = custom_types::MakeDelegate<std::decay_t<decltype(_connectedAction)>>(std::function<void()>(
             std::bind(&HudVoiceIndicator::RefreshStatus, this)
         ));
 
-        _disconnectedAction = custom_types::MakeDelegate<decltype(_disconnectedAction)>(std::function<void(GlobalNamespace::DisconnectedReason)>(
+        _disconnectedAction = custom_types::MakeDelegate<std::decay_t<decltype(_disconnectedAction)>>(std::function<void(GlobalNamespace::DisconnectedReason)>(
             std::bind(&HudVoiceIndicator::RefreshStatus_Disconnected, this, std::placeholders::_1)
         ));
     }
@@ -56,6 +58,7 @@ namespace MultiplayerChat::UI::Hud {
 
         using SetPlaneDistance_fun = function_ptr_t<void, UnityEngine::Canvas*, float>;
         static auto SetPlaneDistance = reinterpret_cast<SetPlaneDistance_fun>(il2cpp_functions::resolve_icall("UnityEngine.Canvas::set_planeDistance"));
+        DEBUG("Setting plane distance: {} func_ptr {}", 100.0f, fmt::ptr(SetPlaneDistance));
         SetPlaneDistance(canvas, 100.0f);
 
         gameObject->AddComponent<UnityEngine::CanvasRenderer*>();
@@ -145,7 +148,12 @@ namespace MultiplayerChat::UI::Hud {
             // Stick to main cam
             auto selfTransform = get_transform();
             selfTransform->set_position(_mainCamera->ViewportToWorldPoint(get_hudOffset(), UnityEngine::Camera::MonoOrStereoscopicEye::Mono));
-            selfTransform->set_rotation(_mainCamera->get_transform()->get_rotation() * get_baseRotation());
+            auto camRot = _mainCamera->get_transform()->get_rotation();
+            camRot.w *= get_baseRotation().w;
+            camRot.x *= get_baseRotation().x;
+            camRot.y *= get_baseRotation().y;
+            camRot.z *= get_baseRotation().z;
+            selfTransform->set_rotation(camRot);
         }
 
         if (!_inputManager->get_testMode() && _currentDisplayState == _targetDisplayState)

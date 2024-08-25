@@ -23,7 +23,7 @@
 #include "UnityEngine/Sprite.hpp"
 #include "UnityEngine/UI/Button.hpp"
 #include "HMUI/ViewController.hpp"
-#include "HMUI/ViewController_AnimationType.hpp"
+// #include "HMUI/ViewController_AnimationType.hpp"
 #include "UI/ChatBubble.hpp"
 #include "UI/Lobby/ChatButton.hpp"
 
@@ -47,7 +47,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, LobbyIntegrator, Il2CppO
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _nativeIconSpeakerSound);
     DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Sprite*, _nativeIconMuted);
 
-    using PlayerAvatarDict = System::Collections::Generic::Dictionary_2<StringW, GlobalNamespace::MultiplayerLobbyAvatarController*>;
+    using PlayerAvatarDict = ::System::Collections::Generic::Dictionary_2<::StringW, ::UnityW<::GlobalNamespace::MultiplayerLobbyAvatarController>>;
     DECLARE_INSTANCE_FIELD_PRIVATE(PlayerAvatarDict*, _playerAvatars);
     using ButtonDict = System::Collections::Generic::Dictionary_2<StringW, UnityEngine::UI::Button*>;
     DECLARE_INSTANCE_FIELD_PRIVATE(ButtonDict*, _playerListButtons);
@@ -56,8 +56,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, LobbyIntegrator, Il2CppO
     DECLARE_INSTANCE_FIELD_PRIVATE(BubbleDict*, _perUserBubbles);
     DECLARE_INSTANCE_FIELD_PRIVATE(UI::Lobby::ChatButton*, _chatTitleButton);
 
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
 
     DECLARE_CTOR(ctor, Zenject::DiContainer* diContainer, ChatManager* chatManager, Audio::VoiceManager* voiceManager, HMUI::HoverHintController* hoverHintController, Audio::SoundNotifier* soundNotifier, UI::Lobby::ChatViewController* chatViewController, GlobalNamespace::GameServerLobbyFlowCoordinator* lobbyFlowCoordinator, GlobalNamespace::GameplaySetupViewController* gameplaySetupViewController, GlobalNamespace::ServerPlayerListViewController* serverPlayerListViewController);
     public:

@@ -18,8 +18,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Audio, SoundNotifier, UnityEng
     DECLARE_INSTANCE_FIELD_PRIVATE(AudioClipDict*, _loadedClips);
     DECLARE_INSTANCE_FIELD_PRIVATE(bool, _previewMode);
 
-    DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
-    DECLARE_OVERRIDE_METHOD(void, Initialize, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::Zenject::IInitializable::Initialize>::get());
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
+    DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
 
     DECLARE_INSTANCE_METHOD(void, Awake);
     DECLARE_CTOR(ctor);

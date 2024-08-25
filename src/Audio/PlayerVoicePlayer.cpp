@@ -87,8 +87,8 @@ namespace MultiplayerChat::Audio {
         }
     }
 
-    void PlayerVoicePlayer::SetMultiplayerAvatarAudioController(GlobalNamespace::MultiplayerAvatarAudioController* avatarAudio) {
-        ConfigureAudioSource(avatarAudio->audioSource);
+    void PlayerVoicePlayer::SetMultiplayerAvatarAudioController(BeatSaber::AvatarCore::MultiplayerAvatarAudioController* avatarAudio) {
+        ConfigureAudioSource(avatarAudio->_audioSource);
     }
 
     void PlayerVoicePlayer::StartPlayback() {
@@ -161,7 +161,7 @@ namespace MultiplayerChat::Audio {
                 // buffer depleted, playback caught up
                 // audio will loop, stale samples could be played which we want to avoid
 
-                if (++_deadFrames < 5)
+                if (++___backing_field__deadFrames < 5)
                     return;
 
                 StopImmediate();
@@ -185,7 +185,7 @@ namespace MultiplayerChat::Audio {
         }
     }
 
-    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::DecodeFrequency; }
+    int PlayerVoicePlayer::get_clipSampleSize() { return VoiceManager::DecodeFrequency.value__; }
 
     int PlayerVoicePlayer::get_clipFeedSize() { return VoiceManager::MaxFrameLength; }
 

@@ -15,12 +15,16 @@ DEFINE_TYPE(MultiplayerChat::Core, InputManager);
 namespace MultiplayerChat::Core {
     UnityEngine::XR::InputDevice InputManager::_leftController;
     UnityEngine::XR::InputDevice InputManager::_rightController;
-    void InputManager::ctor() {
-        INVOKE_CTOR();
+    // void InputManager::ctor() {
+    //     INVOKE_CTOR();
+    //     _hapticPulsePreset = CreateHapticPreset();
+    // }
+
+    void InputManager::Awake() {
         _hapticPulsePreset = CreateHapticPreset();
     }
 
-    void InputManager::Inject(Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackController* hapticFeedback, Audio::SoundNotifier* soundNotifier) {
+    void InputManager::Inject(Audio::VoiceManager* voiceManager, GlobalNamespace::HapticFeedbackManager* hapticFeedback, Audio::SoundNotifier* soundNotifier) {
         _voiceManager = voiceManager;
         _hapticFeedback = hapticFeedback;
         _soundNotifier = soundNotifier;
@@ -30,18 +34,29 @@ namespace MultiplayerChat::Core {
         _leftController = Utilities::InputDevicesExtension::GetDeviceAtXRNode(UnityEngine::XR::XRNode::LeftHand);
         _rightController = Utilities::InputDevicesExtension::GetDeviceAtXRNode(UnityEngine::XR::XRNode::RightHand);
 
-        _deviceConnectedAction = custom_types::MakeDelegate<decltype(_deviceConnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
+        _deviceConnectedAction = custom_types::MakeDelegate<std::decay_t<decltype(_deviceConnectedAction)>>(std::function<void(UnityEngine::XR::InputDevice)>(
             std::bind(&InputManager::HandleInputDeviceConnected, this, std::placeholders::_1)
         ));
-        _deviceDisconnectedAction = custom_types::MakeDelegate<decltype(_deviceDisconnectedAction)>(std::function<void(UnityEngine::XR::InputDevice)>(
+        _deviceDisconnectedAction = custom_types::MakeDelegate<std::decay_t<decltype(_deviceDisconnectedAction)>>(std::function<void(UnityEngine::XR::InputDevice)>(
             std::bind(&InputManager::HandleInputDeviceDisconnected, this, std::placeholders::_1)
         ));
 
-        auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceConnected(combinedConnectedAction);
-
-        auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceDisconnected(combinedDisconnectedAction);
+        // TODO: Figure out why we get linker errors when using the commented out code, for now we call the underlying functions directly
+        // auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceConnectedAction));
+        auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
+                                           ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceConnectedAction));
+        
+        ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
+                                    ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
+                                    std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(combinedConnectedAction));
+        // UnityEngine::XR::InputDevices::deviceConnected = combinedConnectedAction;
+        // auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceDisconnectedAction));
+        auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
+                                           ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceDisconnectedAction));
+        // UnityEngine::XR::InputDevices::deviceDisconnected = combinedDisconnectedAction;
+        ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
+                                    ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
+                                    std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(combinedDisconnectedAction));
 
         PreloadSounds();
 
@@ -53,11 +68,29 @@ namespace MultiplayerChat::Core {
     }
 
     void InputManager::Dispose() {
-        auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceConnected(), _deviceConnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceConnected(unCombinedConnectedAction);
+        // TODO: Figure out why we get linker errors when using the commented out code, for now we call the underlying functions directly
+        // auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::deviceConnected, _deviceConnectedAction));
+        // UnityEngine::XR::InputDevices::deviceConnected = unCombinedConnectedAction;
 
-        auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::_get_deviceDisconnected(), _deviceDisconnectedAction));
-        UnityEngine::XR::InputDevices::_set_deviceDisconnected(unCombinedDisconnectedAction);
+        // auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(UnityEngine::XR::InputDevices::deviceConnected, _deviceDisconnectedAction));
+        // UnityEngine::XR::InputDevices::deviceConnected = unCombinedDisconnectedAction;
+
+                // auto combinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceConnectedAction));
+        auto unCombinedConnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
+                                           ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceConnectedAction));
+        
+        ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceConnected",
+                                    ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
+                                    std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(unCombinedConnectedAction));
+        // UnityEngine::XR::InputDevices::deviceConnected = combinedConnectedAction;
+        // auto combinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Combine(UnityEngine::XR::InputDevices::deviceConnected, _deviceDisconnectedAction));
+        auto unCombinedDisconnectedAction = reinterpret_cast<System::Action_1<UnityEngine::XR::InputDevice>*>(System::Delegate::Remove(::cordl_internals::getStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
+                                           ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(), _deviceDisconnectedAction));
+        // UnityEngine::XR::InputDevices::deviceDisconnected = combinedDisconnectedAction;
+        ::cordl_internals::setStaticField<::System::Action_1<::UnityEngine::XR::InputDevice>*, "deviceDisconnected",
+                                    ::il2cpp_utils::il2cpp_type_check::il2cpp_no_arg_class<::UnityEngine::XR::InputDevices*>::get>(
+                                    std::forward<::System::Action_1<::UnityEngine::XR::InputDevice>*>(unCombinedDisconnectedAction));
+
 
         _triggerConditionIsActive = false;
         _debugKeyIsDown = false;
@@ -291,10 +324,10 @@ namespace MultiplayerChat::Core {
 #pragma region Haptics
     Libraries::HM::HMLib::VR::HapticPresetSO* InputManager::CreateHapticPreset() {
         auto hapticPulsePreset = UnityEngine::ScriptableObject::CreateInstance<Libraries::HM::HMLib::VR::HapticPresetSO*>();
-        hapticPulsePreset->continuous = false;
-        hapticPulsePreset->duration = 0.1f;
-        hapticPulsePreset->frequency = 0.25f;
-        hapticPulsePreset->strength = 0.5f;
+        hapticPulsePreset->_continuous = false;
+        hapticPulsePreset->_duration = 0.1f;
+        hapticPulsePreset->_frequency = 0.25f;
+        hapticPulsePreset->_strength = 0.5f;
         return hapticPulsePreset;
     }
 

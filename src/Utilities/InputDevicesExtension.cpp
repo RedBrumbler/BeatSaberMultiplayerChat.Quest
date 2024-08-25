@@ -1,4 +1,5 @@
 #include "Utilities/InputDevicesExtension.hpp"
+#include "logging.hpp"
 
 namespace MultiplayerChat::Utilities {
     bool InputDevicesExtension::IsDeviceValid(UnityEngine::XR::InputDevice device) {
@@ -8,18 +9,21 @@ namespace MultiplayerChat::Utilities {
     bool InputDevicesExtension::IsDeviceValid(uint64_t deviceId) {
         using IsDeviceValid_fun = function_ptr_t<bool, uint64_t>;
         static auto isDeviceValid = reinterpret_cast<IsDeviceValid_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::IsDeviceValid"));
+        DEBUG("Checking if device is valid: {}, function ptr", deviceId, fmt::ptr(isDeviceValid));
         return isDeviceValid(deviceId);
     }
 
     bool InputDevicesExtension::TryGetFeatureValue(UnityEngine::XR::InputDevice& device, UnityEngine::XR::InputFeatureUsage usage, float& value) {
         using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, StringW, float*>;
         static auto tryGetFeatureValue = reinterpret_cast<TryGetFeatureValue_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::TryGetFeatureValue_float"));
+        DEBUG("Trying to get feature value: {}, {}, function ptr", device.m_DeviceId, usage.m_Name, fmt::ptr(tryGetFeatureValue));
         return tryGetFeatureValue(device.get_deviceId(), usage.m_Name, &value);
     }
 
     bool InputDevicesExtension::TryGetFeatureValue(UnityEngine::XR::InputDevice& device, UnityEngine::XR::InputFeatureUsage usage, bool& value) {
         using TryGetFeatureValue_fun = function_ptr_t<bool, uint64_t, StringW, bool*>;
         static auto tryGetFeatureValue = reinterpret_cast<TryGetFeatureValue_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::TryGetFeatureValue_bool"));
+        DEBUG("Trying to get feature value: {}, {}, function ptr", device.m_DeviceId, usage.m_Name, fmt::ptr(tryGetFeatureValue));
         return tryGetFeatureValue(device.get_deviceId(), usage.m_Name, &value);
     }
 
@@ -30,6 +34,7 @@ namespace MultiplayerChat::Utilities {
     StringW InputDevicesExtension::GetDeviceName(uint64_t deviceId) {
         using GetDeviceName_fun = function_ptr_t<StringW, uint64_t>;
         static auto getDeviceName = reinterpret_cast<GetDeviceName_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::GetDeviceName"));
+        DEBUG("Getting device name: {}, function ptr", deviceId, fmt::ptr(getDeviceName));
         return getDeviceName(deviceId);
     }
 
@@ -42,6 +47,7 @@ namespace MultiplayerChat::Utilities {
     uint64_t InputDevicesExtension::GetDeviceIdAtXRNode(UnityEngine::XR::XRNode node) {
         using GetDeviceIdAtXRNode_fun = function_ptr_t<uint64_t, UnityEngine::XR::XRNode>;
         static auto getDeviceIdAtXRNode = reinterpret_cast<GetDeviceIdAtXRNode_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputTracking::GetDeviceIdAtXRNode"));
+        DEBUG("Getting device ID at XR node: {}, function ptr", node.value__, fmt::ptr(getDeviceIdAtXRNode));
         return getDeviceIdAtXRNode(node);
     }
 
@@ -52,6 +58,7 @@ namespace MultiplayerChat::Utilities {
     InputDeviceCharacteristics InputDevicesExtension::GetDeviceCharacteristics(uint64_t deviceId) {
         using GetDeviceCharacteristics_fun = function_ptr_t<InputDeviceCharacteristics, uint64_t>;
         static auto getDeviceCharacteristics = reinterpret_cast<GetDeviceCharacteristics_fun>(il2cpp_functions::resolve_icall("UnityEngine.XR.InputDevices::GetDeviceCharacteristics"));
+        DEBUG("Getting device characteristics: {}, function ptr", deviceId, fmt::ptr(getDeviceCharacteristics));
         return getDeviceCharacteristics(deviceId);
     }
 }

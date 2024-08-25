@@ -11,15 +11,15 @@ DEFINE_TYPE(MultiplayerChat::Utilities, SpriteManager);
 
 namespace MultiplayerChat::Utilities {
     void SpriteManager::Initialize() {
-        _chatIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::Chat_png);
+        _chatIcon = BSML::Utilities::LoadSpriteRaw(Assets::Chat_png);
         _chatIcon->set_name("ChatIcon");
-        _keyboardIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::Keyboard_png);
+        _keyboardIcon = BSML::Utilities::LoadSpriteRaw(Assets::Keyboard_png);
         _keyboardIcon->set_name("KeyboardIcon");
-        _micOffIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MicOff_png);
+        _micOffIcon = BSML::Utilities::LoadSpriteRaw(Assets::MicOff_png);
         _micOffIcon->set_name("MicOffIcon");
-        _micOnIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MicOn_png);
+        _micOnIcon = BSML::Utilities::LoadSpriteRaw(Assets::MicOn_png);
         _micOnIcon->set_name("MicOnIcon");
-        _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(IncludedAssets::UnreadBadge_png);
+        _unreadBadgeIcon = BSML::Utilities::LoadSpriteRaw(Assets::UnreadBadge_png);
         _unreadBadgeIcon->set_name("UnreadBadgeIcon");
         _bgMask = BSML::Utilities::LoadSpriteRaw(IncludedAssets::BG_Mask_png);
         _bgMask->set_name("BG_Mask");
