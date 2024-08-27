@@ -1,9 +1,7 @@
 #pragma once
-#include "beatsaber-hook/shared/utils/logging.hpp"
-#include "beatsaber-hook/shared/utils/typedefs.h"
-#include <string_view>
+#include "beatsaber-hook/shared/utils/typedefs-string.hpp"
 
-#include "paper/shared/logger.hpp"
+// #include "paper/shared/logger.hpp"
 
 template <> struct fmt::formatter<::StringW> : formatter<string_view> {
     // parse is inherited from formatter<string_view>.
@@ -13,7 +11,6 @@ template <> struct fmt::formatter<::StringW> : formatter<string_view> {
     }
 };
 
-// Logger& getLogger();
 #define INFO(...) Paper::Logger::fmtLog<Paper::LogLevel::INF>(__VA_ARGS__)
 #define ERROR(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)
 #define CRITICAL(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)
