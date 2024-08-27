@@ -22,6 +22,16 @@ if ((-not ($cover -eq "./")) -and (Test-Path $cover))
     $fileList += ,$cover
 }
 
+foreach ($mod in $modJson.lateModFiles)
+{
+    $path = "./build/" + $mod
+    if (-not (Test-Path $path))
+    {
+        $path = "./extern/libs/" + $mod
+    }
+    $filelist += $path
+}
+
 foreach ($mod in $modJson.modFiles)
 {
     $path = "./build/" + $mod

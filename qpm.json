@@ -27,7 +27,7 @@
       ],
       "qmod": [
         "pwsh ./scripts/build.ps1 -clean",
-        "qpm-rust qmod build",
+        "qpm qmod manifest",
         "pwsh ./scripts/createqmod.ps1 MultiplayerChat -clean"
       ]
     },
@@ -83,7 +83,9 @@
     {
       "id": "multiplayer-core",
       "versionRange": "=1.5.0-Dev",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "paper",

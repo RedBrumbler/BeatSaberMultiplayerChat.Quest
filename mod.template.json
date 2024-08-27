@@ -6,7 +6,7 @@
     "porter": "RedBrumbler",
     "version": "${version}",
     "packageId": "com.beatgames.beatsaber",
-    "packageVersion": "1.28.0_4124311467",
+    "packageVersion": "1.37.0_9064817954",
     "description": "Port of MultiplayerChat, a mod that allows voice chat & text chat in multiplayer",
     "dependencies": [],
     "modFiles": [],
