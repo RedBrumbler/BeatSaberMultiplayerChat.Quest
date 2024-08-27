@@ -5,6 +5,8 @@
 #include "UnityEngine/GameObject.hpp"
 #include "BeatSaber/AvatarCore/MultiplayerAvatarAudioController.hpp"
 
+#include "logging.hpp"
+
 DEFINE_TYPE(MultiplayerChat::Core, GameplayIntegrator);
 
 namespace MultiplayerChat::Core {
@@ -26,7 +28,13 @@ namespace MultiplayerChat::Core {
     }
 
     void GameplayIntegrator::Dispose() {
-        _playersManager->remove_playerSpawningDidFinishEvent(_playersSpawnedAction);
+        // DEBUG("GameplayIntegrator ptr check pm = {} cptr = {}, delegate = {} mptr = {}", fmt::ptr(_playersManager), fmt::ptr(_playersManager->m_CachedPtr.m_value.convert()), fmt::ptr(_playersSpawnedAction), fmt::ptr(_playersSpawnedAction->___method_ptr.m_value.convert()));
+        if (_playersManager->m_CachedPtr.m_value) {
+            _playersManager->remove_playerSpawningDidFinishEvent(_playersSpawnedAction);
+        }
+        else {
+            WARNING("Failed to remove event: _playersManager is null");
+        }
     }
 
     void GameplayIntegrator::HandlePlayersSpawned() {
