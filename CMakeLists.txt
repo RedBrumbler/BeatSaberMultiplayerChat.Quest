@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 # In my experience, this can be highly unstable but it nets a huge size optimization and likely performance
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
+# Export compile commands for clangd
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # define that stores the actual source directory
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
