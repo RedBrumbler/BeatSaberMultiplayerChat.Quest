@@ -5,6 +5,7 @@
 #include "GlobalNamespace/ExtensionMethods.hpp"
 #include "UnityEngine/RectTransform.hpp"
 
+// NOTE: This is a hack to access the CreateObject method in the BSML::ClickableImageTag and BSML::TextTag classes
 #define protected public
 #include "bsml/shared/BSML/Tags/ClickableImageTag.hpp"
 #include "bsml/shared/BSML/Tags/TextTag.hpp"
