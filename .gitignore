@@ -10,3 +10,4 @@ tombstone_*
 *.log
 .vscode/
 *.qmod
+.cache/
