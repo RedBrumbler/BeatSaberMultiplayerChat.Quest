@@ -25,6 +25,8 @@ DECLARE_CLASS_CODEGEN_INTERFACES(MultiplayerChat::Core, InputManager, UnityEngin
     DECLARE_INSTANCE_FIELD_PRIVATE(System::Action_1<UnityEngine::XR::InputDevice>*, _deviceConnectedAction);
     DECLARE_INSTANCE_FIELD_PRIVATE(System::Action_1<UnityEngine::XR::InputDevice>*, _deviceDisconnectedAction);
 
+    DECLARE_INSTANCE_FIELD(bool, _isSongPlaying);
+
     DECLARE_INSTANCE_FIELD_PRIVATE(Libraries::HM::HMLib::VR::HapticPresetSO*, _hapticPulsePreset);
 
     DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);

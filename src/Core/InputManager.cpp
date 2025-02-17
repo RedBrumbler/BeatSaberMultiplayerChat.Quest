@@ -206,6 +206,8 @@ namespace MultiplayerChat::Core {
 
 #pragma region Device states
     bool InputManager::CheckTriggerCondition() {
+        if (_isSongPlaying) return false;
+
         switch(config.voiceKeybindController) {
             case VoiceKeybindController::Either:
                 return CheckTriggerConditionOnDevice(_leftController) || CheckTriggerConditionOnDevice(_rightController);

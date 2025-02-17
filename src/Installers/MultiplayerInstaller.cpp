@@ -5,6 +5,7 @@
 #include "Zenject/FromBinderNonGeneric.hpp"
 
 #include "Core/GameplayIntegrator.hpp"
+#include "Core/SongStartManager.hpp"
 #include "UI/Hud/HudVoiceIndicator.hpp"
 
 DEFINE_TYPE(MultiplayerChat::Installers, MultiplayerInstaller);
@@ -16,5 +17,7 @@ namespace MultiplayerChat::Installers {
 
         container->BindInterfacesAndSelfTo<Core::GameplayIntegrator*>()->AsSingle();
         FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<UI::Hud::HudVoiceIndicator*>())->AsSingle()->NonLazy();
+
+        container->BindInterfacesAndSelfTo<Core::SongStartManager*>()->AsSingle();
     }
 }
