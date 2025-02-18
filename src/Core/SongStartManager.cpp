@@ -1,6 +1,8 @@
 #include "Core/SongStartManager.hpp"
 #include "custom-types/shared/delegate.hpp"
 #include "System/Action_1.hpp"
+#include "logging.hpp"
+#include <exception>
 #include <functional>
 
 DEFINE_TYPE(MultiplayerChat::Core, SongStartManager);
@@ -20,18 +22,25 @@ namespace MultiplayerChat::Core {
             )
         );
 
-        _multiplayerController->add_stateChangedEvent(_stateChangedAction);
+        if (_multiplayerController) _multiplayerController->add_stateChangedEvent(_stateChangedAction);
+        else ERROR("MultiplayerController instance is null, cannot add Event");
     }
 
     void SongStartManager::Dispose() {
-        _multiplayerController->remove_stateChangedEvent(_stateChangedAction);
+        // TODO: Causes crash if just called directly, investigate and optimize this part
+        try {
+            if (_multiplayerController && _stateChangedAction) {
+                _multiplayerController->remove_stateChangedEvent(_stateChangedAction);
+                _stateChangedAction = nullptr;
+            }
+        }
+        catch(const std::exception e)
+        {
+            DEBUG("Exception caught: {}", e.what());
+        }
     }
 
     void SongStartManager::OnStateChanged(GlobalNamespace::MultiplayerController::State state) {
-        if (state == GlobalNamespace::MultiplayerController::State::Gameplay) {
-            _inputManager->set_enabled(true);
-        } else {
-            _inputManager->set_enabled(false);
-        }
+        if (_inputManager) _inputManager->_isSongPlaying = state == GlobalNamespace::MultiplayerController::State::Gameplay; 
     }
 }
