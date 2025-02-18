@@ -14,9 +14,9 @@ if (-not ($LastExitCode -eq 0)) {
 }
 
 if ($debug_so.IsPresent) {
-    & adb push build/debug/libmpchat.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libmpchat.so
+    & adb push build/debug/libmpchat.so /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/libmpchat.so
 } else {
-    & adb push build/libmpchat.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libmpchat.so
+    & adb push build/libmpchat.so /sdcard/ModData/com.beatgames.beatsaber/Modloader/mods/libmpchat.so
 }
 
 & adb shell am force-stop com.beatgames.beatsaber
