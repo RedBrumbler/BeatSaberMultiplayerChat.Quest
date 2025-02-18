@@ -2,7 +2,7 @@
     "_QPVersion": "0.1.1",
     "name": "${mod_name}",
     "id": "${mod_id}",
-    "author": "LookAtHippo",
+    "author": "LookAtHippo, EnderdracheLP",
     "porter": "RedBrumbler",
     "version": "${version}",
     "packageId": "com.beatgames.beatsaber",
