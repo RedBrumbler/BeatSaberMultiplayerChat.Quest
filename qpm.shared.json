@@ -32,6 +32,7 @@
           "pwsh ./scripts/createqmod.ps1 MultiplayerChat -clean"
         ]
       },
+      "ndk": "^27.2.12479018",
       "qmodIncludeDirs": [],
       "qmodIncludeFiles": [],
       "qmodOutput": null
@@ -53,11 +54,7 @@
       {
         "id": "beatsaber-hook",
         "versionRange": "^5.1.9",
-        "additionalData": {
-          "extraFiles": [
-            "src/inline-hook"
-          ]
-        }
+        "additionalData": {}
       },
       {
         "id": "bs-cordl",
@@ -255,17 +252,17 @@
     {
       "dependency": {
         "id": "multiplayer-core",
-        "versionRange": "=1.5.0-Dev",
+        "versionRange": "=1.5.0",
         "additionalData": {
-          "soLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.4.0/libMultiplayerCore.so",
-          "debugSoLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.4.0/debug_libMultiplayerCore.so",
+          "soLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.5.0/libMultiplayerCore.so",
+          "debugSoLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.5.0/debug_libMultiplayerCore.so",
           "overrideSoName": "libMultiplayerCore.so",
-          "modLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.4.0/MultiplayerCore_1.4.0.qmod",
-          "branchName": "version-1.6.0",
+          "modLink": "https://github.com/EnderdracheLP/MultiplayerCore.Quest/releases/download/1.5.0/MultiplayerCore_1.5.0.qmod",
+          "branchName": "version-1.5.0",
           "cmake": true
         }
       },
-      "version": "1.5.0-Dev"
+      "version": "1.5.0"
     },
     {
       "dependency": {
